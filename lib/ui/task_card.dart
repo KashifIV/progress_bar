@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:progress_bar/domain/redux.dart';
 import 'package:redux/redux.dart';
 import 'package:progress_bar/domain/actions.dart';
+import 'package:progress_bar/ui/task_page.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:progress_bar/data/Task.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
@@ -47,6 +48,9 @@ class _TaskCard extends State<TaskCard> with SingleTickerProviderStateMixin {
               if (drag.delta.dx > 5){
                 //controller.forward();
               }
+            },
+            onTap:(){
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>TaskPage(widget.index,model.projects[widget.index].tasks.indexOf(widget.task), task:widget.task)));
             },
             onHorizontalDragEnd: (drag){
               if (drag.velocity.pixelsPerSecond.dx > 100){

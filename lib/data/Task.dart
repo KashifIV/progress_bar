@@ -5,7 +5,7 @@ class Task{
   List<String> urls;
   int order; 
   bool complete = false;
-  Task({this.id, this.name, this.complete, this.stage, this.phase,this.order});
+  Task({this.id, this.name, this.complete, this.stage, this.phase,this.order, this.notes, this.urls});
   Map<String, dynamic> mapTo(){
      var dataMap = new Map<String, dynamic>();
      if (order != null) {

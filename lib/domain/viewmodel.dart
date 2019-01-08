@@ -72,7 +72,7 @@ class ViewModel {
       whiteList: store.state.whiteList,
       onCreateProject: _onCreateProject,
       onGetProject: _onGetProject,
-    onRemoveProject: _onRemoveProject,
+      onRemoveProject: _onRemoveProject,
       onUpdateProject: _onUpdateProject,
       onAddTask: _onAddTask,
       onUpdateTask: _onUpdateTask,

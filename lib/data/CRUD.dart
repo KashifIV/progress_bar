@@ -57,7 +57,7 @@ Future<void> UpdateProject(Project proj) async{
     List<Task> t = []; 
     s.documents.forEach((task){
       if (task['name'] != null){
-          t.add(new Task(id: task.documentID, name: task['name'], complete: task['complete'], phase: task['phase'],stage: task['stage']));
+          t.add(new Task(id: task.documentID, name: task['name'], complete: task['complete'], phase: task['phase'],stage: task['stage'], notes:task['notes'], order: task['order'], urls: task['urls']));
       }
     }); 
     return t; 

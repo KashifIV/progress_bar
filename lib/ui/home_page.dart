@@ -115,6 +115,13 @@ class HomePage extends StatelessWidget{
     }
     return a;
   }
+  Future<bool> _onRefresh(ViewModel model) async {
+    await model.onGetProject(auth);
+    if (model.pageType == PageType.VAL)
+    {
+      return true;
+    }
+  }
   @override
     Widget build(BuildContext context) {
       return StoreConnector<AppState, ViewModel>(
@@ -136,7 +143,10 @@ class HomePage extends StatelessWidget{
               ),
               child: Scaffold(    
                 backgroundColor: Colors.transparent,             
-                body: CustomScrollView(
+                body: RefreshIndicator(
+
+                  onRefresh: () => _onRefresh(model),
+                  child: CustomScrollView(
                   slivers: <Widget>[
                     SliverAppBar(
                       expandedHeight: 250,
@@ -146,12 +156,12 @@ class HomePage extends StatelessWidget{
                       ),
                     ),
                     new SliverList(
-                      delegate: SliverChildListDelegate(
+                      delegate: SliverChildListDelegate(                      
                         _getProjectCards(context, model)
                       ),
                     )
                   ],
-                ),
+                )),
                 floatingActionButton: _FloatingActionButtonTemplate(context, model),
             ));
           }

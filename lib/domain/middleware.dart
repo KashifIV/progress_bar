@@ -6,6 +6,7 @@ import 'package:progress_bar/domain/redux.dart';
 void appStateMiddleware(Store<AppState> store, action, NextDispatcher next) async{
   next(action);
   if (action is GetProjectsAction){
+    store.dispatch(UpdatePageAction(PageType.UND));
     await getProjects(action.auth).then((state) => store.dispatch(LoadedProjectsAction(state)));
     store.dispatch(UpdatePageAction(PageType.VAL));
 

@@ -17,7 +17,7 @@ class _TaskPage extends State<TaskPage>{
     void initState() {
       // TODO: implement initState
       super.initState();
-      if (widget.task.notes == null){
+      if (widget.task.notes != null){
         notes.text = widget.task.notes;
       }
     }
@@ -28,10 +28,11 @@ class _TaskPage extends State<TaskPage>{
         builder: (BuildContext context, ViewModel model) => Scaffold(
           body: Column(
             children: <Widget>[
+              new SizedBox(height: 100,),
               new Text(model.projects[widget.projIndex].tasks[widget.taskIndex].name,
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 25,
+                  fontSize: 35,
                 ),
               ),
               new TextField(
@@ -39,6 +40,13 @@ class _TaskPage extends State<TaskPage>{
                 maxLines: 15,
                 controller: notes,
                 onEditingComplete: (){
+                  widget.task.notes = notes.text;
+                  model.onUpdateTask(model.projects[widget.projIndex], widget.task);
+                },
+              ),
+              new FloatingActionButton(
+                child: Icon(Icons.refresh),
+                onPressed: (){
                   widget.task.notes = notes.text;
                   model.onUpdateTask(model.projects[widget.projIndex], widget.task);
                 },
