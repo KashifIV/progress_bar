@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "368016660522",
+    "firebase_url": "https://progressbariv.firebaseio.com",
+    "project_id": "progressbariv",
+    "storage_bucket": "progressbariv.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368016660522:android:f0045bd667a692b8",
+        "android_client_info": {
+          "package_name": "com.kashif.progressbar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "368016660522-7u9rrugov8g3pqkie3qc605tjfgdguf3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHj2ke2eq970H-V-Gb_fsE1GNSpgCAYZw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
