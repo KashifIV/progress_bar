@@ -34,16 +34,16 @@ Future<void> UpdateProject(Project proj) async{
     });
   }
   Future<void> UpdateTasks(Project proj)async{
-        CollectionReference ref = Firestore.instance.collection('Projects/' + proj.id +'/tasks'); 
-        await ref.getDocuments().then((values){
-          values.documents.forEach((doc){
-            if (doc.exists){
-              Task t = proj.tasks.firstWhere((test) => test.id == doc.documentID);
-              Firestore.instance.document('Projects/' + proj.id +'/tasks' + doc.documentID)
-                .updateData(t.mapTo()).catchError((e) => print('UPDATE FAILED'));
-            }
-          });
-        });
+    CollectionReference ref = Firestore.instance.collection('Projects/' + proj.id +'/tasks'); 
+    await ref.getDocuments().then((values){
+      values.documents.forEach((doc){
+        if (doc.exists){
+          Task t = proj.tasks.firstWhere((test) => test.id == doc.documentID);
+          Firestore.instance.document('Projects/' + proj.id +'/tasks' + doc.documentID)
+            .updateData(t.mapTo()).catchError((e) => print('UPDATE FAILED'));
+        }
+      });
+    });
   }
   Future<void> UpdateTask(Project proj, Task task) async{
     if (task.name != null){
@@ -94,6 +94,4 @@ class CRUD{
   CRUD({this.auth}){
     projectCollection = db.collection('Projects');
   }
- 
-  
 }

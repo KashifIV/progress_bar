@@ -44,8 +44,9 @@ class _TaskPage extends State<TaskPage>{
                   model.onUpdateTask(model.projects[widget.projIndex], widget.task);
                 },
               ),
+              new SizedBox(height: 20,),
               new FloatingActionButton(
-                child: Icon(Icons.refresh),
+                child: Icon(Icons.save),
                 onPressed: (){
                   widget.task.notes = notes.text;
                   model.onUpdateTask(model.projects[widget.projIndex], widget.task);
