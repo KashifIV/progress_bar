@@ -59,7 +59,9 @@ class _LoginPage extends State<LoginPage>{
     );
   }
   Widget _emailInput() {
-    return new TextFormField(
+    return new Container(
+      padding: EdgeInsets.all(10),
+      child: TextFormField(
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
       decoration: new InputDecoration(
@@ -70,11 +72,13 @@ class _LoginPage extends State<LoginPage>{
           )),
       validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
       onSaved: (value) => _email = value,
-    );
+    ));
   }
 
   Widget _passwordInput() {
-    return new TextFormField(
+    return new Container(
+      padding: EdgeInsets.all(10),
+      child:TextFormField(
       obscureText: true,
       autofocus: false,
       decoration: new InputDecoration(
@@ -86,7 +90,7 @@ class _LoginPage extends State<LoginPage>{
       validator: (value) =>
       value.isEmpty ? 'Password can\'t be empty' : null,
       onSaved: (value) => _password = value,
-    );
+    ));
   }
   Widget _label() {
     if (_formMode == FormMode.SIGNIN) {

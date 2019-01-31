@@ -6,6 +6,7 @@ import 'package:progress_bar/domain/redux.dart';
 import 'package:progress_bar/domain/reducers.dart';
 import 'package:progress_bar/domain/middleware.dart';
 import 'package:redux/redux.dart';
+//import 'package:flutter_redux_dev_tools/flutter_redux_dev_tools.dart';
 import 'package:flutter/services.dart';
 
 void main()
@@ -13,7 +14,15 @@ void main()
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
-  runApp(new MyApp());
+  final Store<AppState> store = Store<AppState>(
+    appStateReducer,
+    initialState: AppState.initialState(),
+    middleware: [appStateMiddleware]
+  );
+  runApp(StoreProvider<AppState>(
+    store: store,
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -21,32 +30,18 @@ class MyApp extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-     final Store<AppState> store = Store<AppState>(
-      appStateReducer,
-      initialState: AppState.initialState(),
-      middleware: [appStateMiddleware],
-    );
-    return StoreProvider<AppState>(
-      store: store,
-      child: MaterialApp(
+    return  MaterialApp(
         debugShowCheckedModeBanner: false,
-        
         title: 'Progress Bar',
         theme: new ThemeData(
           primarySwatch: Colors.pink
         ),
-        home: StoreBuilder<AppState>(
-          builder: (BuildContext context, Store<AppState> store)=>
-            MyHomePage(store),
-        )
-      )
+        home: MyHomePage(),        
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
-  Store<AppState> store;
-  MyHomePage(this.store);
   Widget build(BuildContext context) {
     return new MaterialApp(
         title: 'Progress Bar',

@@ -8,7 +8,9 @@ class AppState{
   final PageType page;
   final TaskViewType taskView;
   final WhiteList whiteList;
-  AppState(this.projects, this.taskView, this.auth, this.page, this.whiteList);
+  AppState(
+    this.projects, this.taskView, this.auth, this.page, this.whiteList
+    );
 
   factory AppState.initialState() => AppState(List.unmodifiable([]), TaskViewType.empty, new Auth(), PageType.UND, WhiteList.incomplete);
 }

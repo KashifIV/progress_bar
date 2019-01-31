@@ -5,7 +5,7 @@ import 'package:redux/redux.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
 import 'package:progress_bar/domain/redux.dart';
 import 'package:progress_bar/domain/actions.dart';
-
+import 'package:progress_bar/ui/account_page.dart';
 import 'package:progress_bar/ui/project_card.dart';
 import 'package:progress_bar/ui/create_project.dart';
 
@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget{
   HomePage({Key key, this.auth, this.onSignedOut}) : super(key: key);
   final Auth auth;
   final VoidCallback onSignedOut;
-   Widget _logo(ViewModel model){
+   Widget _logo(ViewModel model, BuildContext context){
     return Column (
       children: <Widget>[
         SizedBox(height: 50,),
@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget{
               //shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
               backgroundColor: Colors.blue,
               heroTag: 'Account',
-              onPressed:() => null,
+              onPressed:() => Navigator.push(context, MaterialPageRoute(builder: (context) => AccountPage(onSignedOut: onSignedOut,)),),
               elevation: 2.0,
             ),
             FloatingActionButton(
@@ -152,7 +152,7 @@ class HomePage extends StatelessWidget{
                       expandedHeight: 250,
                       backgroundColor: Colors.white12,
                       flexibleSpace: new FlexibleSpaceBar(
-                        background: _logo(model),
+                        background: _logo(model, context),
                       ),
                     ),
                     new SliverList(

@@ -15,17 +15,24 @@ class _TaskPage extends State<TaskPage>{
   final notes = TextEditingController();
   @override
     void initState() {
-      // TODO: implement initState
       super.initState();
       if (widget.task.notes != null){
         notes.text = widget.task.notes;
       }
     }
+  Future<bool> onPop(ViewModel model){
+    widget.task.notes = notes.text;
+    model.onUpdateTask(model.projects[widget.projIndex], widget.task);
+    return Future.value(true);
+  }
   @override
     Widget build(BuildContext context) {
       return StoreConnector<AppState, ViewModel>(
+        rebuildOnChange: true,
         converter: (Store<AppState> store) => ViewModel.create(store),
-        builder: (BuildContext context, ViewModel model) => Scaffold(
+        builder: (BuildContext context, ViewModel model) => WillPopScope(
+        onWillPop: () => onPop(model),
+        child: Scaffold(
           body: Column(
             children: <Widget>[
               new SizedBox(height: 100,),
@@ -46,15 +53,15 @@ class _TaskPage extends State<TaskPage>{
               ),
               new SizedBox(height: 20,),
               new FloatingActionButton(
-                child: Icon(Icons.save),
+                child: Icon(Icons.check),
                 onPressed: (){
-                  widget.task.notes = notes.text;
-                  model.onUpdateTask(model.projects[widget.projIndex], widget.task);
+                  //widget.task.notes = notes.text;
+                  //model.onUpdateTask(model.projects[widget.projIndex], widget.task);
                 },
               )
             ],
           ),
         )
-      );
+      ));
     }
 }
