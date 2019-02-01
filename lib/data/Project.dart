@@ -1,5 +1,6 @@
 import 'Task.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_bar/domain/redux.dart';
 class Project{
   String name;
   String id;
@@ -9,9 +10,11 @@ class Project{
   List<Task> tasks = [];
   List<String> stages;
   List<String> phases;
+  PageType state = PageType.UND;
   Project(this.name, this.description,this.color, this.projType, {this.id, this.tasks, this.index}){
     if (this.tasks == null) 
       tasks = [new Task()]; 
+    
   }
 
   Map<String, dynamic> mapTo(String id){

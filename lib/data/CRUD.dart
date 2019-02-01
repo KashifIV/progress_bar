@@ -10,7 +10,6 @@ Future<void> CreateProject(Project proj, Auth auth) async{
      auth.getCurrentUser().then((userid){
       Firestore.instance.runTransaction((transaction) async{
         ref = Firestore.instance.collection('Projects').document();
-        print("Ran 2"); 
         proj.id = ref.documentID;  
         await transaction.set(ref, proj.mapTo(userid));       
       });
@@ -19,7 +18,6 @@ Future<void> CreateProject(Project proj, Auth auth) async{
 }
 Future<void> CreateTask(Project proj, Task t) async{
     await Firestore.instance.runTransaction((transaction) async {
-      print(proj.id); 
       CollectionReference a = Firestore.instance.collection('Projects/' + proj.id +'/tasks');
       DocumentReference ref = a.document(); 
       t.id = ref.documentID; 
