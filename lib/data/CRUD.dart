@@ -81,8 +81,8 @@ Future<void> UpdateProject(Project proj) async{
     return true;
   }
   Future<bool> DeleteTask(Project proj, Task t)async{
-    CollectionReference ref = Firestore.instance.collection('Projects/' + proj.id +'/tasks'); 
-    await ref.document(t.id).delete();
+    print('Attempting to Delete Task');
+    await Firestore.instance.collection('Projects/' + proj.id +'/tasks').document(t.id).delete(); 
     return true;
   }
 class CRUD{

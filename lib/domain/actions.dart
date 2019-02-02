@@ -61,7 +61,7 @@ class DeleteTaskAction extends ProjectTaskCrud{
   @override
   List<Project> doAction(List<Project> state) {
     List<Project> value = []..addAll(state);
-    value.remove(super.task);
+    value.firstWhere((test) => test.id == super.proj.id).tasks.remove(super.task);
     return value;
   }
 }

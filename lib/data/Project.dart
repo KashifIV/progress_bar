@@ -13,7 +13,7 @@ class Project{
   PageType state = PageType.UND;
   Project(this.name, this.description,this.color, this.projType, {this.id, this.tasks, this.index}){
     if (this.tasks == null) 
-      tasks = [new Task()]; 
+      tasks = []; 
     
   }
 

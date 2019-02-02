@@ -56,7 +56,6 @@ TaskViewType taskViewReducer(TaskViewType state, action){
 }
 List<Project> projectsReducer(List<Project> state, action){
   if (action is ProjectsCrud){
-    print('REACHED PROJECTSCRUD');
     return action.doAction(state);
   }
   if (action is LoadedProjectsAction){

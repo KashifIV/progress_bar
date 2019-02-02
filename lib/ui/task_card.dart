@@ -6,14 +6,70 @@ import 'package:progress_bar/ui/task_page.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:progress_bar/data/Task.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter/animation.dart';
 class TaskCard extends StatefulWidget{
   final Task task;
   final int index;
   TaskCard(this.task,this.index);
-  _TaskCard createState() => _TaskCard();
+  _taskCard createState() => _taskCard();
 }
-
+class _taskCard extends State<TaskCard>{
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return StoreConnector<AppState, ViewModel>( 
+      converter:(Store<AppState> store) => ViewModel.create(store),
+      builder: (BuildContext context, ViewModel model) =>Slidable(
+      key: new Key(widget.task.id),
+      delegate: SlidableBehindDelegate(),
+      slideToDismissDelegate: SlideToDismissDrawerDelegate(
+        dismissThresholds: <SlideActionType, double>{SlideActionType.primary: 1.0},
+        onDismissed: (action){
+          if (action == SlideActionType.primary){
+            widget.task.complete = true;
+            model.onUpdateTask(model.projects[widget.index], widget.task);
+          }
+        }
+      ),
+      actionExtentRatio: 0.25,
+      child: new Container(
+        color: Colors.white,
+        child: ListTile(
+          title: Text(widget.task.name,
+            style: TextStyle(
+              fontSize: 20
+            ),
+          ),
+          subtitle: Text(widget.task.notes == null ? "" : widget.task.notes,
+            style: TextStyle(
+              fontSize: 15
+            ),
+          ),
+        )
+      ),     
+      actions: <Widget>[
+        new IconSlideAction(
+          caption: 'Done',
+          icon: Icons.check,
+          color: Colors.green,
+          onTap: (){
+            widget.task.complete = true;
+            model.onUpdateTask(model.projects[widget.index], widget.task);
+          },
+        )
+      ],
+      secondaryActions: <Widget>[
+        new IconSlideAction(
+          caption: 'Delete',
+          icon: Icons.delete,
+          color: Colors.red,
+          onTap: () => model.onDeleteTask(model.projects[widget.index],widget.task),
+        )
+      ],
+    ));
+  }
+}
 class _TaskCard extends State<TaskCard> with SingleTickerProviderStateMixin { 
   Animation<double> animation;
   AnimationController controller;

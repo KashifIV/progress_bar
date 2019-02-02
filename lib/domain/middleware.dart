@@ -27,4 +27,7 @@ void appStateMiddleware(Store<AppState> store, action, NextDispatcher next) asyn
   if (action is CreateTaskAction){
     await CreateTask(action.proj, action.task);
   }
+  if (action is DeleteTaskAction){
+    await DeleteTask(action.proj, action.task);
+  }
 }

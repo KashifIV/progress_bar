@@ -8,9 +8,13 @@ import 'package:progress_bar/data/Task.dart';
 import 'package:progress_bar/ui/task_list.dart';
 import 'package:progress_bar/ui/progress_bar.dart';
 
-class ProjectPage extends StatelessWidget{
-final int index;
-ProjectPage(this.index);
+class ProjectPage extends StatefulWidget{
+  final int index;
+  ProjectPage(this.index);
+  _ProjectPage createState() => _ProjectPage();
+}
+
+class _ProjectPage extends State<ProjectPage>{
 Widget checkSelect(ViewModel model, WhiteList value){
     if (model.whiteList == value) 
       return Icon(Icons.radio_button_checked);
@@ -62,7 +66,7 @@ void _whiteListControl(BuildContext context, ViewModel model){
               child: new Icon(Icons.note_add),
               backgroundColor: Colors.blue,
               onPressed: (){
-                model.projects[index].AddPhase(controller.text);
+                model.projects[widget.index].AddPhase(controller.text);
               },
             ),
             FloatingActionButton(
@@ -71,7 +75,7 @@ void _whiteListControl(BuildContext context, ViewModel model){
               mini: true,
               child: new Icon(Icons.add_to_queue),
               onPressed: (){
-                model.projects[index].AddStage(controller.text);
+                model.projects[widget.index].AddStage(controller.text);
               },
             ),
             FloatingActionButton(
@@ -80,10 +84,10 @@ void _whiteListControl(BuildContext context, ViewModel model){
               isExtended: true,
               mini: true,
               child: new Icon(Icons.add),
-              backgroundColor: model.projects[index].toColor(),
+              backgroundColor: model.projects[widget.index].toColor(),
               onPressed: () {
                 t.name = controller.text;
-                model.onAddTask(model.projects[index],t);
+                model.onAddTask(model.projects[widget.index],t);
                 },
               )
           ],
@@ -91,21 +95,21 @@ void _whiteListControl(BuildContext context, ViewModel model){
     });
   }
   Widget LoadPage(ViewModel model){
-    if (model.projects[index].tasks.isEmpty)
+    if (model.projects[widget.index].tasks.isEmpty)
     {
       return new SliverFillRemaining(child:Center(child: Text('Create a New Task!')));
     }
-    if (model.projects[index].tasks == null)
+    if (model.projects[widget.index].tasks == null)
     {
       return CircularProgressIndicator();
     }
-    else return TaskList(index);
+    else return TaskList(widget.index);
   }
   Widget _AppBar(ViewModel model){
     return new Container(
       child: Column(children: <Widget>[
         SizedBox(height: 100,),
-        Text(model.projects[index].name,
+        Text(model.projects[widget.index].name,
           style: TextStyle(
             fontSize: 40,
             color: Colors.white,
@@ -113,7 +117,7 @@ void _whiteListControl(BuildContext context, ViewModel model){
           ),
         ),
         SizedBox(height: 20,),
-        ProgressBar(index),
+        ProgressBar(widget.index),
       ],)
     );
   }
@@ -127,7 +131,7 @@ void _whiteListControl(BuildContext context, ViewModel model){
           slivers: <Widget>[
             SliverAppBar(
               expandedHeight: 200,
-              backgroundColor: model.projects[index].toColor(),
+              backgroundColor: model.projects[widget.index].toColor(),
               flexibleSpace: new FlexibleSpaceBar(
                 centerTitle: true,
                 //title: new Text(model.projects[index].name),
@@ -137,7 +141,6 @@ void _whiteListControl(BuildContext context, ViewModel model){
             ),
             LoadPage(model)
           ],
-        
         ),
          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           floatingActionButton: Builder(

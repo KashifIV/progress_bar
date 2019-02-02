@@ -133,6 +133,8 @@ class HomePage extends StatelessWidget{
           else{
             return Container(
               decoration: BoxDecoration(
+                color: Colors.white
+                /*
                 gradient: new LinearGradient(
                     colors: [Colors.white, Colors.white70],
                     begin: Alignment(0, -0.5),
@@ -140,6 +142,7 @@ class HomePage extends StatelessWidget{
                     stops: [0.0, 1.0],
                     tileMode: TileMode.clamp
                 ),
+                */
               ),
               child: Scaffold(    
                 backgroundColor: Colors.transparent,             

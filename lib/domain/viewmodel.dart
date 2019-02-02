@@ -56,7 +56,7 @@ class ViewModel {
       store.dispatch(UpdateTaskAction(task, proj));
     }
     _onDeleteTask(Project proj, Task task){
-      store.dispatch(DeleteTaskAction(task, proj,));
+      store.dispatch(DeleteTaskAction(task, proj));
     }
     _onGetProjectTask(Project proj){
       store.dispatch(GetTasksAction(proj));
