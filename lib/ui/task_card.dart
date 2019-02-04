@@ -12,9 +12,71 @@ class TaskCard extends StatefulWidget{
   final Task task;
   final int index;
   TaskCard(this.task,this.index);
-  _taskCard createState() => _taskCard();
+  _TaskCard createState() => _TaskCard();
 }
-class _taskCard extends State<TaskCard>{
+class _TaskCard extends State<TaskCard>{
+  Widget GetPrimarySlideAction(ViewModel model) {
+    if (widget.task.complete == false){
+      return new IconSlideAction(
+          caption: 'Done',
+          icon: Icons.check,
+          color: Colors.green,
+          onTap: (){
+            widget.task.complete = true;
+            model.onUpdateTask(model.projects[widget.index], widget.task);
+          },
+        );
+    }
+    else if (widget.task.complete == true){
+      return new IconSlideAction(
+        caption: 'Unfinished',
+        icon: Icons.undo,
+        color: Colors.blue,
+        onTap: (){
+          widget.task.complete = false;
+          model.onUpdateTask(model.projects[widget.index], widget.task);
+        },
+      );
+    }
+  }
+  SlideToDismissDelegate adjustDelegate(ViewModel model){
+    if (model.whiteList == WhiteList.all) return null;
+    return SlideToDismissDrawerDelegate(
+        dismissThresholds: <SlideActionType, double>{SlideActionType.secondary: 1.0},
+        onDismissed: (action){
+          if (action == SlideActionType.primary){
+            widget.task.complete = !widget.task.complete;
+            model.onUpdateTask(model.projects[widget.index], widget.task);
+          }
+        }
+      );
+  }
+  Widget dialog(ViewModel model, BuildContext context){
+    final controller = TextEditingController();
+    return ListView(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(15),
+          child: TextField(
+            controller: controller,
+          ),
+        ),
+        FloatingActionButton(
+          child: Icon(Icons.save),
+          onPressed: (){
+            widget.task.stage = controller.text;
+            if (model.projects[widget.index].stages == null || !model.projects[widget.index].stages.contains(widget.task.stage))
+            {
+              model.projects[widget.index].stages..add(widget.task.stage);
+            }
+            //model.onUpdateProject(model.projects[widget.index]);
+            model.onUpdateTask(model.projects[widget.index], widget.task);
+            Navigator.pop(context);
+          },
+        )
+      ],
+    );
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -22,18 +84,12 @@ class _taskCard extends State<TaskCard>{
       converter:(Store<AppState> store) => ViewModel.create(store),
       builder: (BuildContext context, ViewModel model) =>Slidable(
       key: new Key(widget.task.id),
-      delegate: SlidableBehindDelegate(),
-      slideToDismissDelegate: SlideToDismissDrawerDelegate(
-        dismissThresholds: <SlideActionType, double>{SlideActionType.primary: 1.0},
-        onDismissed: (action){
-          if (action == SlideActionType.primary){
-            widget.task.complete = true;
-            model.onUpdateTask(model.projects[widget.index], widget.task);
-          }
-        }
-      ),
+      delegate: SlidableBehindDelegate(),  
+      slideToDismissDelegate: adjustDelegate(model),
       actionExtentRatio: 0.25,
-      child: new Container(
+      child: GestureDetector(
+        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TaskPage(widget.index,model.projects[widget.index].tasks.indexOf(widget.task), task: widget.task,))),
+        child: new Container(
         color: Colors.white,
         child: ListTile(
           title: Text(widget.task.name,
@@ -47,17 +103,9 @@ class _taskCard extends State<TaskCard>{
             ),
           ),
         )
-      ),     
+      )),     
       actions: <Widget>[
-        new IconSlideAction(
-          caption: 'Done',
-          icon: Icons.check,
-          color: Colors.green,
-          onTap: (){
-            widget.task.complete = true;
-            model.onUpdateTask(model.projects[widget.index], widget.task);
-          },
-        )
+        GetPrimarySlideAction(model),
       ],
       secondaryActions: <Widget>[
         new IconSlideAction(
@@ -65,112 +113,16 @@ class _taskCard extends State<TaskCard>{
           icon: Icons.delete,
           color: Colors.red,
           onTap: () => model.onDeleteTask(model.projects[widget.index],widget.task),
-        )
+        ),
+        new IconSlideAction(
+          caption: 'Settings',
+          icon: Icons.settings,
+          color: Colors.grey,
+          onTap: (){
+            showDialog(context: context, builder: (context)=> Dialog(child: dialog(model, context),));
+          },
+        ),
       ],
     ));
   }
-}
-class _TaskCard extends State<TaskCard> with SingleTickerProviderStateMixin { 
-  Animation<double> animation;
-  AnimationController controller;
-  Transform pos;
-  initState() {
-    super.initState();
-    controller = AnimationController(
-        duration: const Duration(seconds: 1), vsync: this);
-    animation = Tween(begin: 0.0, end: 500.0).animate(controller) ..addListener(() {
-        setState(() {
-          // the state that has changed here is the animation object’s value
-        });
-      });
-  }
-  dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-  Widget CheckComplete(){
-    if (widget.task.complete){
-      return new Icon(Icons.check);
-    }
-    return new Icon(Icons.remove);
-  }
-  @override
-   Widget build(BuildContext context) {
-    return StoreConnector<AppState, ViewModel>( 
-      converter:(Store<AppState> store) => ViewModel.create(store),
-      builder: (BuildContext context, ViewModel model) =>
-      new GestureDetector( 
-            onHorizontalDragUpdate: (drag){
-              if (drag.delta.dx > 5){
-                //controller.forward();
-              }
-            },
-            onTap:(){
-              Navigator.push(context, MaterialPageRoute(builder: (context) =>TaskPage(widget.index,model.projects[widget.index].tasks.indexOf(widget.task), task:widget.task)));
-            },
-            onHorizontalDragEnd: (drag){
-              if (drag.velocity.pixelsPerSecond.dx > 100){
-                widget.task.complete = true;
-
-                model.onUpdateTask(model.projects[widget.index], widget.task);
-              }
-              else if (drag.velocity.pixelsPerSecond.dx < -100){
-                widget.task.complete = false;
-                model.onUpdateTask(model.projects[widget.index], widget.task);
-              }
-              else{
-                //controller.reverse();
-              }
-            },
-      child: Transform.translate(
-        offset: Offset(animation.value,0),
-        child: Container(
-          height: 75,
-          //width: MediaQuery.of(context).size.width*0.75,
-          margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 25.0),
-          padding: EdgeInsets.all(5.0),
-          decoration: new BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.rectangle,
-            border: Border.all(
-              color: Colors.grey,
-              width: 2.0,
-            ),
-            borderRadius: new BorderRadius.circular(12.0),
-              boxShadow: <BoxShadow>[
-                 new BoxShadow(
-                   color: Colors.black12,
-                   blurRadius: 2.0,
-                   offset: new Offset(0.0, 1.0),
-                 ),
-             ],
-          ),
-          child: CustomPaint(
-
-            child: new Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                new Expanded( child: Container(
-                  padding: EdgeInsets.all(10.0),
-                  child: new Text(
-                    widget.task.name,
-                    textAlign: TextAlign.start,
-                    textScaleFactor: 1.1,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey,
-                    ),
-                  )
-                )),
-                Expanded(
-                  flex: 0,
-                  child:CheckComplete()
-                  ),
-              ],           
-            ),
-        )))
-    ));
-   }
 }

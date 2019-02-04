@@ -12,11 +12,18 @@ class Project{
   List<String> phases;
   PageType state = PageType.UND;
   Project(this.name, this.description,this.color, this.projType, {this.id, this.tasks, this.index}){
-    if (this.tasks == null) 
-      tasks = []; 
-    
+    if (this.tasks == null){
+      tasks = [];
+      stages = [];
+    }else if (stages == null || stages.length <= 0){
+      stages = [];
+      tasks.forEach((task){
+        if (task.stage != "none" && !stages.contains(task.stage)){
+          stages.add(task.stage);
+        }
+      });
+    }
   }
-
   Map<String, dynamic> mapTo(String id){
     var dataMap = new Map<String, dynamic>();
     dataMap['name'] =  this.name;

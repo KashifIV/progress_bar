@@ -121,27 +121,35 @@ void _whiteListControl(BuildContext context, ViewModel model){
       ],)
     );
   }
+  Future<bool> _onRefresh(ViewModel model) async{
+    await model.onGetProjectTask(model.projects[widget.index]);
+    if (model.projects[widget.index].state == PageType.VAL)
+    {
+      return true;
+    }
+  }
   @override
     Widget build(BuildContext context) {
       return StoreConnector<AppState, ViewModel>(
         converter: (Store<AppState> store) => ViewModel.create(store),
         rebuildOnChange: true,
         builder: (BuildContext context, ViewModel model) => Scaffold(
-        body: new CustomScrollView(
+        body: RefreshIndicator(
+          onRefresh: () => _onRefresh(model),
+          child: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
               expandedHeight: 200,
               backgroundColor: model.projects[widget.index].toColor(),
               flexibleSpace: new FlexibleSpaceBar(
                 centerTitle: true,
-                //title: new Text(model.projects[index].name),
                 background: _AppBar(model),
               ),
 
             ),
             LoadPage(model)
           ],
-        ),
+        )),
          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           floatingActionButton: Builder(
               builder: (context) => new FloatingActionButton(

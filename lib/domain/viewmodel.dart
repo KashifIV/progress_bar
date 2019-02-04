@@ -65,7 +65,6 @@ class ViewModel {
     _onUpdateWhiteList(WhiteList whiteList){
       store.dispatch(UpdateWhiteList(whiteList));
     }
-    print(store.state.projects);
     return ViewModel(
       projects: store.state.projects,
       pageType: store.state.page,
