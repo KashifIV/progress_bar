@@ -55,7 +55,11 @@ Future<void> UpdateProject(Project proj) async{
     List<Task> t = []; 
     s.documents.forEach((task){
       if (task['name'] != null){
-          t.add(new Task(id: task.documentID, name: task['name'], complete: task['complete'], phase: task['phase'],stage: task['stage'], notes:task['notes'], order: task['order'], urls: task['urls']));
+        DateTime created; 
+        if (task.data.containsKey('dateCreated')) created = task['dateCreated']; 
+        else created = DateTime.now(); 
+          t.add(new Task(id: task.documentID, name: task['name'], complete: task['complete'], tags: (task.data.containsKey('tags')) ? task['tags']:null, notes:task['notes'], 
+          order: task['order'], urls: task['urls'], dateCreated: created));
       }
     }); 
     return t; 
@@ -73,6 +77,7 @@ Future<void> UpdateProject(Project proj) async{
           a.add(proj);
       });
     });
+    a.forEach((proj) async => proj.tasks = await getProjectTasks(proj.id)); 
     return a;
   }
   Future<bool> DeleteProject(Project proj) async{

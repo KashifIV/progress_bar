@@ -8,18 +8,18 @@ class Project{
   String color, projType;
   int index;
   List<Task> tasks = [];
-  List<String> stages;
-  List<String> phases;
+  List<String> tags; 
   PageType state = PageType.UND;
   Project(this.name, this.description,this.color, this.projType, {this.id, this.tasks, this.index}){
     if (this.tasks == null){
-      tasks = [];
-      stages = [];
-    }else if (stages == null || stages.length <= 0){
-      stages = [];
+      tasks =[]; 
+      tags = ["Important"]; 
+    }else if (tags == null || tags.length <= 0){
       tasks.forEach((task){
-        if (task.stage != "none" && !stages.contains(task.stage)){
-          stages.add(task.stage);
+        if (task.tags != null){
+          task.tags.forEach((tag){
+            if (!tags.contains(tag)) tags.add(tag); 
+          }); 
         }
       });
     }
@@ -30,8 +30,6 @@ class Project{
     dataMap['description'] = this.description;
     dataMap['color'] = this.color;
     dataMap['user'] = id;
-    dataMap['stages'] = stages;
-    dataMap['phases'] = phases;
     return dataMap;
   }
   Map<String, dynamic> mapWithoutID(){
@@ -39,8 +37,6 @@ class Project{
     dataMap['name'] =  this.name;
     dataMap['description'] = this.description;
     dataMap['color'] = this.color;
-    dataMap['stages'] = stages;
-    dataMap['phases'] = phases;
     return dataMap;
   }
   Project.fromMap(Map<String, dynamic> map){
@@ -48,8 +44,6 @@ class Project{
     this.name = map['name'];
     this.description = map['description'];
     this.color = map['color'];
-    this.stages = map['stages'];
-    this.phases = map['phases'];
   }
   double getPercentComplete(){
     if (tasks == null || tasks.isEmpty){
@@ -76,20 +70,6 @@ class Project{
   bool AddTask(Task t){
     if (t.order == null) t.order = tasks.length;
     tasks.add(t); 
-  }
-  bool AddStage(String s){
-    if (!stages.contains(s)){
-      stages.add(s);
-      return true;
-    }
-    return false;
-  }
-  bool AddPhase(String s){
-    if (!phases.contains(s)){
-      phases.add(s);
-      return true;
-    }
-    return false;
   }
   void Update(Project proj){
     tasks = proj.tasks;

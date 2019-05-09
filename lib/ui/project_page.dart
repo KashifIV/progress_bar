@@ -43,7 +43,8 @@ void _whiteListControl(BuildContext context, ViewModel model){
       );});
   }
  void _createNewTask(BuildContext context, ViewModel model){
-    Task t = new Task(name: 'Untitled', complete: false, stage: 'none', phase: 'none'); 
+    Task t = new Task(name: 'Untitled', complete: false, 
+    dateCreated: DateTime.now()); 
     final controller = TextEditingController();
     showModalBottomSheet<void>(context: context, builder: (BuildContext context){
       return ListView(
@@ -66,7 +67,7 @@ void _whiteListControl(BuildContext context, ViewModel model){
               child: new Icon(Icons.note_add),
               backgroundColor: Colors.blue,
               onPressed: (){
-                model.projects[widget.index].AddPhase(controller.text);
+
               },
             ),
             FloatingActionButton(
@@ -75,7 +76,7 @@ void _whiteListControl(BuildContext context, ViewModel model){
               mini: true,
               child: new Icon(Icons.add_to_queue),
               onPressed: (){
-                model.projects[widget.index].AddStage(controller.text);
+;
               },
             ),
             FloatingActionButton(

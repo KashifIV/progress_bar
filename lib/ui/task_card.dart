@@ -64,11 +64,6 @@ class _TaskCard extends State<TaskCard>{
         FloatingActionButton(
           child: Icon(Icons.save),
           onPressed: (){
-            widget.task.stage = controller.text;
-            if (model.projects[widget.index].stages == null || !model.projects[widget.index].stages.contains(widget.task.stage))
-            {
-              model.projects[widget.index].stages..add(widget.task.stage);
-            }
             //model.onUpdateProject(model.projects[widget.index]);
             model.onUpdateTask(model.projects[widget.index], widget.task);
             Navigator.pop(context);

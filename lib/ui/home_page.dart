@@ -4,7 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
 import 'package:progress_bar/domain/redux.dart';
-import 'package:progress_bar/domain/actions.dart';
+import 'package:progress_bar/ui/calendar_page.dart';
 import 'package:progress_bar/ui/account_page.dart';
 import 'package:progress_bar/ui/project_card.dart';
 import 'package:progress_bar/ui/create_project.dart';
@@ -51,7 +51,7 @@ class HomePage extends StatelessWidget{
               //shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
               backgroundColor: Colors.green,
               heroTag: 'Callendar',
-              onPressed:() => null,
+              onPressed:() => Navigator.push(context, MaterialPageRoute(builder:  (context) => CalendarPage())),
               elevation: 2.0,
             ),
           ],
@@ -128,24 +128,11 @@ class HomePage extends StatelessWidget{
         converter: (Store<AppState> store) => ViewModel.create(store),
         builder: (BuildContext context, ViewModel model){
           if (model.pageType != PageType.VAL){
-            return new Scaffold(body: PageHandler(model), floatingActionButton: _FloatingActionButtonTemplate(context, model),);
+            return new Scaffold(body: SafeArea(child:PageHandler(model)), floatingActionButton: _FloatingActionButtonTemplate(context, model),);
           }
           else{
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.white
-                /*
-                gradient: new LinearGradient(
-                    colors: [Colors.white, Colors.white70],
-                    begin: Alignment(0, -0.5),
-                    end: Alignment(-0, 1),
-                    stops: [0.0, 1.0],
-                    tileMode: TileMode.clamp
-                ),
-                */
-              ),
+            return SafeArea(            
               child: Scaffold(    
-                backgroundColor: Colors.transparent,             
                 body: RefreshIndicator(
 
                   onRefresh: () => _onRefresh(model),

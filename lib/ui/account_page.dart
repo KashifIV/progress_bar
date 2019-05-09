@@ -7,7 +7,8 @@ class AccountPage extends StatelessWidget{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      body: Column(
+      body: SafeArea(
+        child: Column(
         children: <Widget>[
           RaisedButton(
             padding: EdgeInsets.all(10),
@@ -15,7 +16,7 @@ class AccountPage extends StatelessWidget{
             onPressed: onSignedOut,
           )
         ],
-      )
+      ))
     );
   }
 }

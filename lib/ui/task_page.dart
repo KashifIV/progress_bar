@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:progress_bar/domain/redux.dart';
+import 'package:progress_bar/ui/task_tags.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
 import 'package:progress_bar/data/Task.dart';
 class TaskPage extends StatefulWidget{
@@ -93,6 +94,18 @@ class _TaskPage extends State<TaskPage>{
       ),
     );
   }
+  Widget _title(String title){
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: Text(
+          title,
+          softWrap: true,
+          style: TextStyle(
+            fontSize: 40
+          ),
+        ),
+    );
+  }
   @override
     Widget build(BuildContext context) {
       return StoreConnector<AppState, ViewModel>(
@@ -101,29 +114,20 @@ class _TaskPage extends State<TaskPage>{
         builder: (BuildContext context, ViewModel model) => WillPopScope(
         onWillPop: () => onPop(model),
         child: Scaffold(
-          body: CustomScrollView(
+          body: SafeArea(
+            child: CustomScrollView(
             slivers: <Widget>[
-              SliverAppBar(
-                expandedHeight: 100,
-                backgroundColor: Colors.white,
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Text(model.projects[widget.projIndex].tasks[widget.taskIndex].name,            
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 30,
-                  ),
-                  ),
-                  centerTitle: true,
-                ),
-              ),
               SliverList(
                 delegate: SliverChildListDelegate(
-                  <Widget>[]..add(Notes(model, context))
+                  <Widget>[]
+                  ..add(_title(model.projects[widget.projIndex].tasks[widget.taskIndex].name))
+                  ..add(TaskTags(widget.projIndex, widget.taskIndex))
+                  ..add(Notes(model, context))
                 ),
               )
             ],
           )
         )
-      ));
+      )));
     }
 }
