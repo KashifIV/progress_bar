@@ -45,7 +45,6 @@ Future<void> UpdateProject(Project proj) async{
   }
   Future<void> UpdateTask(Project proj, Task task) async{
     if (task.name != null){
-    print(task.id);
     await Firestore.instance.document('Projects/' + proj.id +'/tasks/'+ task.id).updateData(task.mapTo()).catchError((e) => print('Error Updating Task'));
     }
   }
@@ -58,7 +57,8 @@ Future<void> UpdateProject(Project proj) async{
         DateTime created; 
         if (task.data.containsKey('dateCreated')) created = task['dateCreated']; 
         else created = DateTime.now(); 
-          t.add(new Task(id: task.documentID, name: task['name'], complete: task['complete'], tags: (task.data.containsKey('tags')) ? task['tags']:null, notes:task['notes'], 
+          t.add(new Task(id: task.documentID, name: task['name'], complete: task['complete'], 
+            tags: (task.data.containsKey('tags') && task.data['tags'] != null) ? new List<String>.from(task.data['tags']):null, notes:task['notes'], 
           order: task['order'], urls: task['urls'], dateCreated: created));
       }
     }); 
@@ -71,17 +71,16 @@ Future<void> UpdateProject(Project proj) async{
           .where('user', isEqualTo: userid)
           .getDocuments();
       int count = 0;
-      snapshot.documents.forEach((document)  {
+      snapshot.documents.forEach((document) {
           Project proj = new Project(document['name'], document['description'], document['color'], 'Project', id: document.documentID, index: count);  
           count++;   
           a.add(proj);
       });
     });
-    a.forEach((proj) async => proj.tasks = await getProjectTasks(proj.id)); 
+    a.forEach((proj) async => proj.setTasks(await getProjectTasks(proj.id))); 
     return a;
   }
   Future<bool> DeleteProject(Project proj) async{
-    print(proj.id);
     await Firestore.instance.collection('Projects').document(proj.id).delete();
     return true;
   }

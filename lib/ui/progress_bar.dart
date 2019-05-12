@@ -3,14 +3,29 @@ import 'package:progress_bar/domain/viewmodel.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:progress_bar/domain/redux.dart';
-class ProgressBar extends StatelessWidget{
-  final int index;
-  ProgressBar(this.index);
+import 'package:animator/animator.dart';
+class ProgressBar extends StatefulWidget{
+  final int index; 
+  ProgressBar(this.index); 
+  _ProgressBar createState() => _ProgressBar();
 
+}
+class _ProgressBar extends State<ProgressBar>{
+  double originalPosition = 0;
+  double currentPercent = 0; 
+  double _getBarWidth(BuildContext context, ViewModel model, Animation<dynamic> anim){
+    currentPercent = model.projects[widget.index].getPercentComplete();
+    return MediaQuery.of(context).size.width*0.8*(1- anim.value);
+  }
   @override
     Widget build(BuildContext context) {
       return StoreConnector<AppState, ViewModel>(
         converter:(Store<AppState> store) => ViewModel.create(store),
+        onWillChange: (ViewModel model) {
+          setState(() {
+           originalPosition = currentPercent;  
+          });
+        },
         builder: (BuildContext context, ViewModel model) =>
         Container(
           height: 20,
@@ -19,15 +34,16 @@ class ProgressBar extends StatelessWidget{
             borderRadius: BorderRadius.circular(8),
             color: Colors.blue
           ),
-          child: new Container(
-            //height: 18,
-            //width: MediaQuery.of(context).size.width*0.8*model.projects[index].getPercentComplete(),
-            margin: EdgeInsets.fromLTRB(2, 2, MediaQuery.of(context).size.width*0.8 - MediaQuery.of(context).size.width*0.8*(model.projects[index].getPercentComplete()), 2),
+          child: Animator( 
+            tween: Tween<double>(begin: originalPosition, end: model.projects[widget.index].getPercentComplete(),),
+            builder:(anim) => Container(
+            margin: EdgeInsets.fromLTRB(2, 2, _getBarWidth(context,model, anim) , 2),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               color: Colors.yellow,              
             ),
           ),
+          )
         )
       );
     }

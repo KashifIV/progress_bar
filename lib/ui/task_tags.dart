@@ -5,9 +5,13 @@ import 'package:progress_bar/domain/viewmodel.dart';
 import 'package:progress_bar/data/Task.dart';
 import 'package:progress_bar/domain/redux.dart';
 
-class TaskTags extends StatelessWidget{
+class TaskTags extends StatefulWidget{
   final int projIndex, taskIndex; 
   TaskTags(this.projIndex, this.taskIndex); 
+  _TaskTags createState() => _TaskTags(); 
+}
+class _TaskTags extends State<TaskTags>{
+  bool isExpanded = false; 
   Widget _createChip(String tag, ViewModel model){
     return ActionChip(
       label: Text(
@@ -17,7 +21,7 @@ class TaskTags extends StatelessWidget{
           ),
         ),
         onPressed: (){
-          Task task = model.projects[projIndex].tasks[taskIndex]; 
+          Task task = model.projects[widget.projIndex].tasks[widget.taskIndex]; 
           if (task.tags == null){
             task.tags = [tag]; 
           }
@@ -27,7 +31,7 @@ class TaskTags extends StatelessWidget{
           else {
             task.tags.add(tag); 
           }
-          model.onUpdateTask(model.projects[projIndex], task); 
+          model.onUpdateTask(model.projects[widget.projIndex], task); 
         },
         backgroundColor: Colors.yellow,      
     );
@@ -47,13 +51,32 @@ class TaskTags extends StatelessWidget{
     List<String> options = (used != null) ? tags.where((tag) => !used.contains(tag)).toList(): tags;
     List<Widget> tagChips = []; 
     options.forEach((tag) => tagChips.add(_createChip(tag, model))); 
-    return Container(
-      color: Colors.grey,
-      child: Wrap(
-        children: tagChips,
-        spacing: 20.0,
-      )
-    ); 
+    return ExpansionPanelList(
+      expansionCallback: (int index, bool expanded){
+        setState(() {
+         isExpanded = !isExpanded;  
+        });
+      },
+      children: [
+        ExpansionPanel(
+          canTapOnHeader: true,
+          headerBuilder: (BuildContext context, bool isExpanded) =>
+            Container(
+              padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+              child: Row(
+                children: <Widget>[Text('Tags'),
+                ]
+              ),
+            ),
+            isExpanded: isExpanded,
+          body: Container(
+            width: MediaQuery.of(context).size.width,
+          color: Colors.grey[300],
+          child: Wrap(
+            children: tagChips,
+            spacing: 20.0,
+          )
+    ))]); 
   }
   @override
   Widget build(BuildContext context) {
@@ -62,10 +85,10 @@ class TaskTags extends StatelessWidget{
       builder: (BuildContext context, ViewModel model)=> Container(
         child: Column(
           children: <Widget>[
-            _taskTags(model.projects[projIndex].tasks[taskIndex].tags, model),
+            _taskTags(model.projects[widget.projIndex].tasks[widget.taskIndex].tags, model),
             SizedBox(height: 30,),
-            _projectTags(model.projects[projIndex].tags, 
-            model.projects[projIndex].tasks[taskIndex].tags,
+            _projectTags(model.projects[widget.projIndex].tags, 
+            model.projects[widget.projIndex].tasks[widget.taskIndex].tags,
             model)
           ],
         )

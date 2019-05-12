@@ -1,3 +1,4 @@
+
 import 'Task.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_bar/domain/redux.dart';
@@ -15,6 +16,7 @@ class Project{
       tasks =[]; 
       tags = ["Important"]; 
     }else if (tags == null || tags.length <= 0){
+      tags = []; 
       tasks.forEach((task){
         if (task.tags != null){
           task.tags.forEach((tag){
@@ -23,6 +25,17 @@ class Project{
         }
       });
     }
+  }
+  void setTasks(List<Task> tasks){
+    this.tasks = tasks; 
+    if (tags == null) tags = []; 
+    tasks.forEach((task){
+      if (task.tags != null){
+        task.tags.forEach((tag){
+          if (!tags.contains(tag)) tags.add(tag); 
+        });
+      }
+    });
   }
   Map<String, dynamic> mapTo(String id){
     var dataMap = new Map<String, dynamic>();
