@@ -72,7 +72,11 @@ Future<void> UpdateProject(Project proj) async{
           .getDocuments();
       int count = 0;
       snapshot.documents.forEach((document) {
-          Project proj = new Project(document['name'], document['description'], document['color'], 'Project', id: document.documentID, index: count);  
+          List<String> tags = []; 
+          if (document.data.containsKey('tags') && document.data['tags'] != null){
+            List<String> tags = new List<String>.from(document.data['tags']); 
+          }
+          Project proj = new Project(document['name'], document['description'], document['color'], 'Project', tags: tags, id: document.documentID, index: count);  
           count++;   
           a.add(proj);
       });

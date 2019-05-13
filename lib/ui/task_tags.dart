@@ -36,10 +36,40 @@ class _TaskTags extends State<TaskTags>{
         backgroundColor: Colors.yellow,      
     );
   }
+  Widget _createNewTag(ViewModel model){
+    final newTagController = TextEditingController(); 
+    return Container(
+      width: 120,
+      padding: EdgeInsets.only(left: 4, right: 4,),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20), 
+        color: Colors.white,
+        border: Border.all(
+          color: Colors.grey,
+          width: 2,
+        )
+      ),
+      child: Center(child: TextField(
+        onSubmitted: (value) {
+          model.projects[widget.projIndex].tasks[widget.taskIndex].tags.add(value); 
+          model.projects[widget.projIndex].tags.add(value);
+          model.onUpdateTask(model.projects[widget.projIndex], model.projects[widget.projIndex].tasks[widget.taskIndex]);
+          model.onUpdateProject(model.projects[widget.projIndex]);
+        },
+        controller: newTagController,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(vertical: 6),
+          hintText: 'Add a Tag +',
+          border: InputBorder.none
+        ),
+      ),
+    ));
+  }
   Widget _taskTags(List<String> tags, ViewModel model){
-    if  (tags == null)return SizedBox(height: 20,);
+    if  (tags == null)tags = [];
     List<Widget> tagChips = []; 
     tags.forEach((tag)=> tagChips.add(_createChip(tag, model)));
+    tagChips.add(_createNewTag(model)); 
     return Container(
       child: Wrap(
         children: tagChips,
@@ -64,7 +94,12 @@ class _TaskTags extends State<TaskTags>{
             Container(
               padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
               child: Row(
-                children: <Widget>[Text('Tags'),
+                children: <Widget>[
+                  Text('Tags',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
                 ]
               ),
             ),

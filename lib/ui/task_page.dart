@@ -27,54 +27,22 @@ class _TaskPage extends State<TaskPage>{
     return Future.value(true);
   }
   Widget Notes(ViewModel model, BuildContext context){
-    return new Container(
-      padding: EdgeInsets.all(15),
-      width: MediaQuery.of(context).size.width*0.9,
-      decoration: BoxDecoration(
-        color: model.projects[widget.projIndex].toColor(),
-        borderRadius: BorderRadius.circular(12),
-        boxShadow:  <BoxShadow>[
-          BoxShadow(
-            offset: Offset(1.0, 1.0),
-            blurRadius: 3.0,
-            color: Color.fromARGB(255, 0, 0, 0),
+    return new Column (
+      children : <Widget>[
+        Container(
+          padding: EdgeInsets.all(10),
+          child: Text(
+            'Notes',
+            style: TextStyle(
+              fontSize: 18,
+            ),
+            textAlign: TextAlign.left,
           ),
-          BoxShadow(
-            offset: Offset(2.0, 2.0),
-            blurRadius: 8.0,
-            color: Color.fromARGB(125, 0, 0, 255),
-          ),
-        ]
-      ),
-      child: new Column(
-        children: <Widget>[
-          Center(
-            child: Text(
-              'Notes',
-              style: TextStyle(
-                color: Colors.white, 
-                fontSize: 24,
-              ),
-            )
-          ),
-          SizedBox(height: 20,),
-          Container(
+        ),
+        Container(
             padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow:  <BoxShadow>[
-                BoxShadow(
-                  offset: Offset(1.0, 1.0),
-                  blurRadius: 3.0,
-                  color: Color.fromARGB(255, 0, 0, 0),
-                ),
-                BoxShadow(
-                  offset: Offset(2.0, 2.0),
-                  blurRadius: 8.0,
-                  color: Color.fromARGB(125, 0, 0, 255),
-                ),
-              ]
+              color: Colors.white
             ),
             child: TextField(
               autocorrect: true,
@@ -89,10 +57,7 @@ class _TaskPage extends State<TaskPage>{
                 model.onUpdateTask(model.projects[widget.projIndex], widget.task);
               },
             ),
-          )
-        ],
-      ),
-    );
+    )]);
   }
   Widget _title(String title){
     return Container(
