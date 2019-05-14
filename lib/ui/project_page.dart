@@ -144,7 +144,7 @@ class _ProjectPage extends State<ProjectPage> {
         SizedBox(
           height: 20,
         ),
-        ProgressBar(widget.index),
+        ProgressBar(widget.index, color: model.projects[widget.index].toColor(),),
       ],
     ));
   }

@@ -78,8 +78,13 @@ class Project {
       return count.toDouble() / tasks.length.toDouble();
     }
     else {
-      List<Task> tasksWithTag = tasks.where((task) => task.tags.contains(tag)); 
-      return tasksWithTag.fold(0, (value, task)=> value+ ((task.complete)? 1: 0))/tasksWithTag.length;
+      List<Task> tasksWithTag = tasks.where((task) => task.tags != null && task.tags.contains(tag)).toList(); 
+      if (tasks.length== 0 )
+        return 0; 
+      double count = tasksWithTag.fold(0, (value, task)=> value+ ((task.complete)? 1: 0))/tasksWithTag.length;
+      if (count == null)
+        return 0; 
+      return count;
     }
   }
 

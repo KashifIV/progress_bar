@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:progress_bar/data/auth.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
-import 'package:progress_bar/domain/viewmodel.dart';
-import 'package:progress_bar/domain/redux.dart';
-import 'package:progress_bar/ui/calendar_page.dart';
-import 'package:progress_bar/ui/account_page.dart';
 import 'package:progress_bar/ui/project_card.dart';
-import 'package:progress_bar/ui/create_project.dart';
-
-class HomePage extends StatelessWidget{
-  HomePage({Key key, this.auth, this.onSignedOut}) : super(key: key);
-  final Auth auth;
-  final VoidCallback onSignedOut;
-   Widget _logo(ViewModel model, BuildContext context){
+import 'package:progress_bar/ui/task_list.dart';
+import 'package:redux/redux.dart';
+import 'package:progress_bar/domain/redux.dart';
+import 'package:progress_bar/domain/viewmodel.dart';
+import 'package:progress_bar/ui/account_page.dart';
+import 'package:progress_bar/ui/calendar_page.dart';
+class HomePage extends StatefulWidget{
+  HomePage({Key key, this.auth, this.onSignedOut}): super(key:key); 
+  final Auth auth; 
+  final VoidCallback onSignedOut; 
+  _HomePage createState() => _HomePage();
+}
+class _HomePage extends State<HomePage>{
+  int projIndex = 0; 
+     Widget _logo(ViewModel model, BuildContext context){
     return Column (
       children: <Widget>[
         SizedBox(height: 50,),
@@ -43,7 +47,7 @@ class HomePage extends StatelessWidget{
               //shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
               backgroundColor: Colors.blue,
               heroTag: 'Account',
-              onPressed:() => Navigator.push(context, MaterialPageRoute(builder: (context) => AccountPage(onSignedOut: onSignedOut,)),),
+              onPressed:() => Navigator.push(context, MaterialPageRoute(builder: (context) => AccountPage(onSignedOut: widget.onSignedOut,)),),
               elevation: 2.0,
             ),
             FloatingActionButton(
@@ -59,24 +63,14 @@ class HomePage extends StatelessWidget{
       ]
     );
   }
-  Widget PageHandler(ViewModel model){
-    switch(model.pageType){
-      case PageType.VAL:
-        return null;
-      case PageType.UND:
-        return UndUser(model);
-      case PageType.NEW:
-        return NewUser(model);
-    }
-  }
-  Widget UndUser(ViewModel model){
-    model.onGetProject(auth);
+  Widget _undUser(ViewModel model){
+    model.onGetProject(widget.auth);
     return Container(
       alignment: Alignment.center,
       child: CircularProgressIndicator(),
     );
   }
-  Widget NewUser(ViewModel model){
+  Widget _newUser(ViewModel model){
     return new Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -91,71 +85,76 @@ class HomePage extends StatelessWidget{
         new Center(child: Text(
           'Tap the "+" icon to get started!',
         )),
-        new IconButton(icon: Icon(Icons.refresh), onPressed: () => model.onGetProject(auth)),
+        new IconButton(icon: Icon(Icons.refresh), onPressed: () => model.onGetProject(widget.auth)),
       ],
     );
   }
-  Widget _FloatingActionButtonTemplate(BuildContext context, ViewModel model){
-    return new FloatingActionButton(
-        onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => CreateProject(auth)))
-              .then((val)=> model.onGetProject(auth));
-        },
-        heroTag: 'Add',
-        tooltip: 'Add a New Project',
-        child: new Icon(Icons.add),
+  Widget _pageHandler(BuildContext context, ViewModel model){
+    switch(model.pageType){
+      case PageType.VAL:
+        return _mainPage(context, model);
+      case PageType.UND:
+        return _undUser(model);
+      case PageType.NEW:
+        return _newUser(model);
+    }
+  }
+  Widget _mainPage(BuildContext context, ViewModel model){
+    final controller = PageController(viewportFraction: 1.2); 
+    return Column(
+      children: <Widget>[
+        SizedBox(
+          height: 400,
+          width: 400,
+          child: CustomScrollView(
+            slivers: <Widget>[
+              TaskList(projIndex)
+            ],
+          )
+        ),
+        Center(
+          child: _buildCarousel(context, model, controller),
+        )
+      ],
     );
   }
-  List<Widget> _getProjectCards(BuildContext context, ViewModel model){
-    List<Widget> a = [];
-    for (int i = 0; i < model.projects.length; i++){
-      if (model.projects[i].name != null){
-        a.add(ProjectCard(i));
-      }
-    }
-    return a;
+  void onPageChanged(int value){
+    setState(() {
+      projIndex = value; 
+    });
   }
-  Future<bool> _onRefresh(ViewModel model) async {
-    await model.onGetProject(auth);
-    if (model.pageType == PageType.VAL)
-    {
-      return true;
-    }
+  Widget _buildCarousel(BuildContext context, ViewModel model, PageController controller){
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        SizedBox(
+          height: 110,
+          child: PageView.builder(
+            itemCount: model.projects.length,
+            controller: controller,
+            onPageChanged: onPageChanged,
+            itemBuilder: (BuildContext context, int index){
+              return ProjectCard(index);
+            },
+          ),
+        )
+      ],
+    );
   }
   @override
-    Widget build(BuildContext context) {
-      return StoreConnector<AppState, ViewModel>(
-        converter: (Store<AppState> store) => ViewModel.create(store),
-        builder: (BuildContext context, ViewModel model){
-          if (model.pageType != PageType.VAL){
-            return new Scaffold(body: SafeArea(child:PageHandler(model)), floatingActionButton: _FloatingActionButtonTemplate(context, model),);
-          }
-          else{
-            return SafeArea(            
-              child: Scaffold(    
-                body: RefreshIndicator(
-
-                  onRefresh: () => _onRefresh(model),
-                  child: CustomScrollView(
-                  slivers: <Widget>[
-                    SliverAppBar(
-                      expandedHeight: 250,
-                      backgroundColor: Colors.white12,
-                      flexibleSpace: new FlexibleSpaceBar(
-                        background: _logo(model, context),
-                      ),
-                    ),
-                    new SliverList(
-                      delegate: SliverChildListDelegate(                      
-                        _getProjectCards(context, model)
-                      ),
-                    )
-                  ],
-                )),
-                floatingActionButton: _FloatingActionButtonTemplate(context, model),
-            ));
-          }
-        },
-      );
-    }
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, ViewModel>(
+      converter: (Store<AppState> store) => ViewModel.create(store),
+      builder: (BuildContext context, ViewModel model)=> Scaffold(
+        body: SafeArea(
+          child: Column(
+            children: <Widget>[
+              _logo(model, context),
+              _pageHandler(context, model)
+            ],
+          ),
+        ),
+      )
+    );
+  }
 }

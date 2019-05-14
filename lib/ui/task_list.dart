@@ -5,6 +5,7 @@ import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:progress_bar/ui/task_card.dart';
 import 'package:progress_bar/data/Task.dart';
+import 'package:progress_bar/ui/project_tags.dart';
 class TaskList extends StatelessWidget{
   final int index; 
   TaskList(this.index);

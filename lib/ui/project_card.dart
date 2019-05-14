@@ -37,10 +37,6 @@ class ProjectCard extends StatelessWidget{
                 ),
                 color: model.projects[index].toColor(),
                 shape: BoxShape.rectangle,
-                border: Border.all(
-                  color: Colors.grey,
-                  width: 2.0,
-                ),
                 borderRadius: new BorderRadius.circular(8.0),
                   boxShadow: <BoxShadow>[
                     new BoxShadow(

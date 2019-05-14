@@ -8,19 +8,19 @@ class ProgressBar extends StatefulWidget{
   final int index; 
   final double width; 
   final String tag; 
-  ProgressBar(this.index, {this.width, this.tag}); 
+  final Color color; 
+  ProgressBar(this.index, {this.width, this.tag, this.color}); 
   _ProgressBar createState() => _ProgressBar();
 
 }
 class _ProgressBar extends State<ProgressBar>{
   double originalPosition = 0;
   double currentPercent = 0; 
-  double screenWidth; 
-  @override
-  void initState(){
-    screenWidth = (widget.width == null) ? MediaQuery.of(context).size.width*0.8 : widget.width;
-  }
+  double screenWidth;
   double _getBarWidth(BuildContext context, ViewModel model, Animation<dynamic> anim){
+    if (screenWidth == null){
+      screenWidth = (widget.width == null) ? MediaQuery.of(context).size.width*0.8 : widget.width;
+    }
     currentPercent = model.projects[widget.index].getPercentComplete(widget.tag); 
     return screenWidth*(1- anim.value);
   }
@@ -39,7 +39,7 @@ class _ProgressBar extends State<ProgressBar>{
           width: MediaQuery.of(context).size.width*0.8,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            color: Colors.blue
+            color: Colors.blue  
           ),
           child: Animator( 
             tween: Tween<double>(begin: originalPosition, end: model.projects[widget.index].getPercentComplete(widget.tag),),
