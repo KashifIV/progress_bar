@@ -10,18 +10,41 @@ import 'package:progress_bar/ui/progress_bar.dart';
 
 class ProjectPage extends StatefulWidget {
   final int index;
-  ProjectPage(this.index);
+  final String tag; 
+  ProjectPage(this.index, {this.tag});
   _ProjectPage createState() => _ProjectPage();
 }
 
 class _ProjectPage extends State<ProjectPage> {
-  Widget checkSelect(ViewModel model, WhiteList value) {
-    if (model.whiteList == value) return Icon(Icons.radio_button_checked);
+  String whiteListTag; 
+  void initState(){
+    if (widget.tag != null) whiteListTag = widget.tag; 
+  }
+  Widget checkSelect(ViewModel model, WhiteList value, {String tag}) {
+    if (model.whiteList == value) {
+      if (value == WhiteList.tag && whiteListTag == tag){
+       return Icon(Icons.radio_button_checked);
+      }
+      else if (value != WhiteList.tag)
+        return Icon(Icons.radio_button_checked); 
+    }
     return Icon(Icons.radio_button_unchecked);
   }
 
   final controller = TextEditingController();
   void _whiteListControl(BuildContext context, ViewModel model) {
+    List<Widget> tags = []; 
+    model.projects[widget.index].tags.forEach((tag){
+      tags.add(ListTile(
+        leading: checkSelect(model, WhiteList.tag, tag: tag),
+        title: Text(tag),
+        onTap: (){
+          model.onUpdateWhiteList(WhiteList.tag); 
+          whiteListTag = tag; 
+          Navigator.pop(context); 
+        },
+      ));
+    });
     showModalBottomSheet<void>(
         context: context,
         builder: (BuildContext context) {
@@ -32,7 +55,8 @@ class _ProjectPage extends State<ProjectPage> {
                 title: Text('Incomplete'),
                 onTap: () {
                   model.onUpdateWhiteList(WhiteList.incomplete);
-                  Navigator.pop(context);
+                  whiteListTag = null; 
+                  Navigator.pop(context);                 
                 },
               ),
               ListTile(
@@ -40,6 +64,7 @@ class _ProjectPage extends State<ProjectPage> {
                 title: Text('Complete'),
                 onTap: () {
                   model.onUpdateWhiteList(WhiteList.complete);
+                  whiteListTag = null; 
                   Navigator.pop(context);
                 },
               ),
@@ -48,10 +73,11 @@ class _ProjectPage extends State<ProjectPage> {
                 title: Text('All'),
                 onTap: () {
                   model.onUpdateWhiteList(WhiteList.all);
+                  whiteListTag = null; 
                   Navigator.pop(context);
                 },
-              )
-            ],
+              ), 
+            ]..addAll(tags),
           );
         });
   }
@@ -60,7 +86,7 @@ class _ProjectPage extends State<ProjectPage> {
     Task t = new Task(
         name: controller.text, complete: false, dateCreated: DateTime.now());
     model.onAddTask(model.projects[widget.index], t);
-    controller.text = ""; 
+    controller.text = "";
   }
 
   void _createNewTask(BuildContext context, ViewModel model) {
@@ -117,6 +143,9 @@ class _ProjectPage extends State<ProjectPage> {
   }
 
   Widget LoadPage(ViewModel model) {
+    if (whiteListTag != null){
+      model.onUpdateWhiteList(WhiteList.tag); 
+    }
     if (model.projects[widget.index].tasks.isEmpty) {
       return new SliverFillRemaining(
           child: Center(child: Text('Create a New Task!')));
@@ -124,29 +153,57 @@ class _ProjectPage extends State<ProjectPage> {
     if (model.projects[widget.index].tasks == null) {
       return CircularProgressIndicator();
     } else
-      return TaskList(widget.index);
+      return TaskList(widget.index, tag: whiteListTag,);
   }
 
   Widget _AppBar(ViewModel model) {
-    return new Container(
-        child: Column(
-      children: <Widget>[
-        SizedBox(
-          height: 100,
-        ),
-        Text(
-          model.projects[widget.index].name,
-          style: TextStyle(
-            fontSize: 40,
-            color: Colors.white,
-          ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        ProgressBar(widget.index, color: model.projects[widget.index].toColor(),),
-      ],
-    ));
+    return new Hero(
+        tag: 'Name',
+        child: Container(
+            decoration: new BoxDecoration(
+              gradient: new LinearGradient(
+                  colors: [
+                    model.projects[widget.index].toColor(),
+                    Colors.teal[400]
+                  ],
+                  begin: const FractionalOffset(0.0, 0.0),
+                  end: const FractionalOffset(0.9, 0.3),
+                  stops: [0.0, 1.0],
+                  tileMode: TileMode.clamp),
+              color: model.projects[widget.index].toColor(),
+              shape: BoxShape.rectangle,
+              borderRadius: new BorderRadius.circular(8.0),
+              boxShadow: <BoxShadow>[
+                new BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 10.0,
+                  offset: new Offset(0.0, 10.0),
+                ),
+              ],
+            ),
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 100,
+                ),
+                Material(
+                  color: Colors.transparent,
+                  child:Text(
+                  model.projects[widget.index].name,
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.white,
+                  ),
+                ), 
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                ProgressBar(
+                  widget.index,
+                ),
+              ],
+            )));
   }
 
   Future<bool> _onRefresh(ViewModel model) async {
@@ -186,13 +243,12 @@ class _ProjectPage extends State<ProjectPage> {
                         child: Container(
                           padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                           decoration: BoxDecoration(
-                            borderRadius: new BorderRadius.circular(20.0),
-                            color: Colors.white,
-                            border: Border.all(
-                              color: model.projects[widget.index].toColor(), 
-                              width: 2.6,
-                            )
-                          ),
+                              borderRadius: new BorderRadius.circular(20.0),
+                              color: Colors.white,
+                              border: Border.all(
+                                color: model.projects[widget.index].toColor(),
+                                width: 2.6,
+                              )),
                           child: TextField(
                             onSubmitted: (value) => _createNewTaskNew(model),
                             controller: controller,

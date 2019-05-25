@@ -3,15 +3,23 @@ import 'package:progress_bar/data/auth.dart';
 import 'package:progress_bar/data/Task.dart';
 import 'package:progress_bar/domain/actions.dart';
 import 'package:progress_bar/domain/redux.dart';
+import 'package:progress_bar/data/Account.dart';
 
 AppState appStateReducer(AppState state, action){
   return AppState(
+    accountReducer(state.account, action),
     projectsReducer(state.projects, action),
     taskViewReducer(state.taskView, action),
     authReducer(state.auth, action),
     pageReducer(state.page, action),
     whiteListReduer(state.whiteList, action)
   );
+}
+Account accountReducer(Account state, action){
+  if (action is OnUpdatedAccount){
+    return action.account; 
+  }
+  return state; 
 }
 WhiteList whiteListReduer(WhiteList state, action){
   if (action is UpdateWhiteList){

@@ -12,15 +12,21 @@ abstract class AuthImpl {
 class Auth implements AuthImpl {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   String uid = '----';
+  String email; 
   String getUID(){
     return uid;
   }
+  String getEmail(){
+    return email; 
+  }
   Future<String> signIn(String email, String password) async {
+    this.email = email; 
     FirebaseUser user = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
     return user.uid;
   }
 
   Future<String> signUp(String email, String password) async {
+    this.email = email; 
     FirebaseUser user = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
     return user.uid;
   }

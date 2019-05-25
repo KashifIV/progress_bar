@@ -51,6 +51,8 @@ class _TaskTags extends State<TaskTags>{
       ),
       child: Center(child: TextField(
         onSubmitted: (value) {
+          if (model.projects[widget.projIndex].tasks[widget.taskIndex].tags == null)
+            model.projects[widget.projIndex].tasks[widget.taskIndex].tags = []; 
           model.projects[widget.projIndex].tasks[widget.taskIndex].tags.add(value); 
           model.projects[widget.projIndex].tags.add(value);
           model.onUpdateTask(model.projects[widget.projIndex], model.projects[widget.projIndex].tasks[widget.taskIndex]);

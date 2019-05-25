@@ -1,3 +1,4 @@
+import 'package:progress_bar/data/Account.dart';
 import 'package:progress_bar/domain/actions.dart';
 import 'package:redux/redux.dart';
 import 'package:progress_bar/domain/redux.dart';
@@ -5,6 +6,7 @@ import 'package:progress_bar/data/auth.dart';
 import 'package:progress_bar/data/Project.dart';
 import 'package:progress_bar/data/Task.dart';
 class ViewModel {
+  final Account account; 
   final List<Project> projects;
   final PageType pageType;
   final TaskViewType taskView;
@@ -20,7 +22,12 @@ class ViewModel {
   final Function(Project) onGetProjectTask;
 
   final Function(WhiteList) onUpdateWhiteList;
+
+  final Function(Auth,Account) onCreateAccount; 
+  final Function(Auth, Account) onUpdateAccount; 
+  final Function(Auth) onFetchAccount; 
   ViewModel({
+    this.account, 
     this.projects,
     this.pageType,
     this.taskView,
@@ -33,7 +40,10 @@ class ViewModel {
     this.onUpdateTask,
     this.onDeleteTask,
     this.onGetProjectTask,
-    this.onUpdateWhiteList
+    this.onUpdateWhiteList,
+    this.onCreateAccount, 
+    this.onUpdateAccount,
+    this.onFetchAccount 
   });
   factory ViewModel.create(Store<AppState> store){
     _onCreateProject(Project proj, Auth auth){
@@ -47,8 +57,7 @@ class ViewModel {
     }
     _onUpdateProject(Project proj){
       store.dispatch(UpdateProjectAction(proj));
-    }
-
+    }   
     _onAddTask(Project proj, Task task){
       store.dispatch(CreateTaskAction(task, proj));
     }
@@ -61,11 +70,20 @@ class ViewModel {
     _onGetProjectTask(Project proj){
       store.dispatch(GetTasksAction(proj));
     }
-
     _onUpdateWhiteList(WhiteList whiteList){
       store.dispatch(UpdateWhiteList(whiteList));
     }
+    _onCreateAccount(Auth auth, Account account){
+      store.dispatch(CreateAccountAction(auth, account)); 
+    }
+    _onUpdateAccount(Auth auth, Account account){
+      store.dispatch(UpdateAccountAction(auth, account)); 
+    }
+    _onFetchAccount(Auth auth){
+      store.dispatch(FetchAccountAction(auth)); 
+    }
     return ViewModel(
+      account: store.state.account,
       projects: store.state.projects,
       pageType: store.state.page,
       taskView: store.state.taskView,
@@ -79,6 +97,9 @@ class ViewModel {
       onDeleteTask: _onDeleteTask,
       onGetProjectTask: _onGetProjectTask,
       onUpdateWhiteList: _onUpdateWhiteList,
+      onCreateAccount: _onCreateAccount, 
+      onUpdateAccount: _onUpdateAccount,
+      onFetchAccount: _onFetchAccount,
     );
   }
 }

@@ -11,7 +11,8 @@ import 'package:flutter/animation.dart';
 class TaskCard extends StatefulWidget{
   final Task task;
   final int index;
-  TaskCard(this.task,this.index);
+  final Color color; 
+  TaskCard(this.task,this.index, {this.color});
   _TaskCard createState() => _TaskCard();
 }
 class _TaskCard extends State<TaskCard>{
@@ -89,15 +90,20 @@ class _TaskCard extends State<TaskCard>{
         child: ListTile(
           title: Text(widget.task.name,
             style: TextStyle(
-              fontSize: 20
+              fontSize: 20,
+              color: (widget.color != null) ?widget.color: Colors.black,
             ),
+          ),
+          trailing: Text(
+            (widget.color == null)? "": 'Deadline: ' + (widget.task.deadline.day - DateTime.now().day).toString() + ' Days',
+            style: TextStyle(color: widget.color),
           ),
           subtitle: Text(widget.task.notes == null ? "" : widget.task.notes,
             style: TextStyle(
               fontSize: 15
             ),
           ),
-        )
+        ), 
       )),     
       actions: <Widget>[
         GetPrimarySlideAction(model),

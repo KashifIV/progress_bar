@@ -1,3 +1,4 @@
+import 'package:progress_bar/data/Account.dart';
 import 'package:progress_bar/data/Project.dart';
 import 'package:progress_bar/data/Task.dart';
 import 'package:progress_bar/data/auth.dart';
@@ -127,5 +128,29 @@ class LoadedCurrentTask{
 
 class UpdateWhiteList{
   final WhiteList val;
-  UpdateWhiteList(this.val);
+UpdateWhiteList(this.val);
+}
+//-----------------------------------------------------------
+class CreateAccountAction{
+  final Account account; 
+  final Auth auth; 
+  CreateAccountAction(this.auth, this.account); 
+}
+class UpdateAccountAction{
+  final Account account;
+  final Auth auth;  
+  UpdateAccountAction(this.auth,this.account); 
+}
+class DeleteAccountAction{
+  final Account account; 
+  final Auth auth; 
+  DeleteAccountAction(this.auth, this.account); 
+}
+class FetchAccountAction{
+  final Auth auth; 
+  FetchAccountAction(this.auth); 
+}
+class OnUpdatedAccount{
+  final Account account; 
+  OnUpdatedAccount(this.account); 
 }

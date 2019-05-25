@@ -1,10 +1,40 @@
 import 'dart:async';
 import 'dart:io' show Platform;
+import 'package:progress_bar/data/Account.dart';
+
 import 'auth.dart';
 import 'Project.dart';
 import 'Task.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+Future<Account> UpdateUser(Auth auth, Account account) async{
+  
+  DocumentReference ref = Firestore.instance.collection('Accounts').document(auth.getUID()); 
+  ref.get().then((snapshot){
+    if (snapshot.exists){
+      ref.updateData(account.mapTo()); 
+    }
+    else{
+      CreateUser(auth, account); 
+    }
+  }); 
+  return account; 
+}
+
+Future<Account> CreateUser(Auth auth, Account account)async{
+  await Firestore.instance.runTransaction((transaction) async{
+    CollectionReference a = Firestore.instance.collection('Accounts'); 
+    DocumentReference ref = a.document(auth.getUID()); 
+    await transaction.set(ref, account.mapTo()); 
+  });
+  return account; 
+}
+Future<Account> FetchAccount(Auth auth) async{
+  DocumentReference ref = Firestore.instance.collection('Accounts').document(auth.getUID()); 
+  DocumentSnapshot snapshot = await ref.get(); 
+  if (!snapshot.exists) return null; 
+  else return  Account.fromMap(auth.getUID(), snapshot.data); 
+}
 Future<void> CreateProject(Project proj, Auth auth) async{
     DocumentReference ref; 
      auth.getCurrentUser().then((userid){
@@ -59,7 +89,7 @@ Future<void> UpdateProject(Project proj) async{
         else created = DateTime.now(); 
           t.add(new Task(id: task.documentID, name: task['name'], complete: task['complete'], 
             tags: (task.data.containsKey('tags') && task.data['tags'] != null) ? new List<String>.from(task.data['tags']):null, notes:task['notes'], 
-          order: task['order'], urls: task['urls'], dateCreated: created));
+          order: task['order'], deadline: (task.data.containsKey('deadline')? task['deadline']:null), urls: task['urls'], dateCreated: created));
       }
     }); 
     return t; 

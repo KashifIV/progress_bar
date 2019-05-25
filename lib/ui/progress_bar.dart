@@ -9,7 +9,8 @@ class ProgressBar extends StatefulWidget{
   final double width; 
   final String tag; 
   final Color color; 
-  ProgressBar(this.index, {this.width, this.tag, this.color}); 
+  final bool withPercent; 
+  ProgressBar(this.index, {this.width, this.tag, this.color, this.withPercent = false}); 
   _ProgressBar createState() => _ProgressBar();
 
 }
@@ -36,10 +37,11 @@ class _ProgressBar extends State<ProgressBar>{
         builder: (BuildContext context, ViewModel model) =>
         Container(
           height: 20,
+          margin: EdgeInsets.fromLTRB(2, 2, 2 , 2),
           width: MediaQuery.of(context).size.width*0.8,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            color: Colors.blue  
+            color: Colors.black.withAlpha(20) 
           ),
           child: Animator( 
             tween: Tween<double>(begin: originalPosition, end: model.projects[widget.index].getPercentComplete(widget.tag),),
@@ -47,7 +49,16 @@ class _ProgressBar extends State<ProgressBar>{
             margin: EdgeInsets.fromLTRB(2, 2, _getBarWidth(context,model, anim) , 2),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: Colors.yellow,              
+              color: Colors.yellow,
+              gradient: LinearGradient(
+                colors: [
+                  model.projects[widget.index].toColor(),
+                  Colors.teal[200]
+                ],
+                begin: Alignment.centerLeft,
+                end: Alignment(anim.value, 0),
+                tileMode: TileMode.clamp
+              )              
             ),
           ),
           )
