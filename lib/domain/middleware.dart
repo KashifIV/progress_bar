@@ -1,5 +1,6 @@
 import 'package:progress_bar/data/Account.dart';
 import 'package:progress_bar/data/CRUD.dart';
+import 'package:progress_bar/data/Project.dart';
 import 'package:progress_bar/domain/actions.dart';
 import 'package:redux/redux.dart';
 import 'package:progress_bar/domain/redux.dart';
@@ -8,9 +9,10 @@ void appStateMiddleware(Store<AppState> store, action, NextDispatcher next) asyn
   next(action);
   if (action is GetProjectsAction){
     store.dispatch(UpdatePageAction(PageType.UND));
-    await getProjects(action.auth).then((state) => store.dispatch(LoadedProjectsAction(state)));
+    List<Project> state = await getProjects(action.auth);
+    store.dispatch(LoadedProjectsAction(state));
+    store.dispatch(UpdateTaskViewAction(TaskViewType.list));
     store.dispatch(UpdatePageAction(PageType.VAL));
-
   }
   if (action is GetTasksAction){
     await getProjectTasks(action.proj.id).then((state) => store.dispatch(LoadedTasksAction(action.proj, state)));
@@ -42,15 +44,16 @@ void appStateMiddleware(Store<AppState> store, action, NextDispatcher next) asyn
     await UpdateUser(action.auth, action.account).then((state) => store.dispatch(OnUpdatedAccount(action.account))); 
   }
   if (action is FetchAccountAction){
-    print('Fetching');
-    Account account = await FetchAccount(action.auth); 
+    Account account = await FetchAccount(action.id); 
     if (account == null){
-      print('Creating New Account');
-      store.dispatch(CreateAccountAction(action.auth, Account(id: action.auth.getUID(), email: action.auth.getEmail()))); 
+      
     }
     else {
-      print(account.email); 
       store.dispatch(OnUpdatedAccount(account)); 
     }
+  }
+  
+  if (action is CreateLogAction){
+    await createLog(action.project, action.task, action.log); 
   }
 }

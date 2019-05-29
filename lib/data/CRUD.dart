@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io' show Platform;
 import 'package:progress_bar/data/Account.dart';
+import 'package:progress_bar/data/Log.dart';
 
 import 'auth.dart';
 import 'Project.dart';
@@ -29,11 +30,11 @@ Future<Account> CreateUser(Auth auth, Account account)async{
   });
   return account; 
 }
-Future<Account> FetchAccount(Auth auth) async{
-  DocumentReference ref = Firestore.instance.collection('Accounts').document(auth.getUID()); 
+Future<Account> FetchAccount(String id) async{
+  DocumentReference ref = Firestore.instance.collection('Accounts').document(id); 
   DocumentSnapshot snapshot = await ref.get(); 
   if (!snapshot.exists) return null; 
-  else return  Account.fromMap(auth.getUID(), snapshot.data); 
+  else return  Account.fromMap(id, snapshot.data); 
 }
 Future<void> CreateProject(Project proj, Auth auth) async{
     DocumentReference ref; 
@@ -54,6 +55,15 @@ Future<void> CreateTask(Project proj, Task t) async{
       await transaction.set(ref, t.mapTo()); 
     }
   );
+}
+Future<void> createLog(Project proj, Task task, Log log) async{
+  await Firestore.instance.runTransaction((transaction) async{
+    CollectionReference a = Firestore.instance.collection('Projects/' + proj.id + '/tasks/' + task.id + '/Logs');
+    DocumentReference ref = a.document(); 
+    log.id = ref.documentID; 
+    await transaction.set(ref, log.mapTo()); 
+
+  });
 }
 Future<void> UpdateProject(Project proj) async{
     await UpdateTasks(proj);
@@ -92,7 +102,18 @@ Future<void> UpdateProject(Project proj) async{
           order: task['order'], deadline: (task.data.containsKey('deadline')? task['deadline']:null), urls: task['urls'], dateCreated: created));
       }
     }); 
+    t.forEach((task) async => task.setLogs(await getTaskLogs(id, task.id))); 
     return t; 
+  }
+  Future<List<Log>>getTaskLogs(String projectID, String taskID)async {
+    CollectionReference ref = Firestore.instance.collection('Projects/' + projectID + '/tasks/' + taskID + '/Logs'); 
+    QuerySnapshot s = await ref.getDocuments(); 
+    List<Log> logs = []; 
+    s.documents.forEach((log)async {
+      Account account = await FetchAccount(log['accountID']); 
+      logs.add(Log.fromMap(log.documentID, log.data, account)); 
+    });
+    return logs; 
   }
   Future<List<Project>> getProjects(Auth auth) async {
     List<Project> a = [];
@@ -111,7 +132,10 @@ Future<void> UpdateProject(Project proj) async{
           a.add(proj);
       });
     });
-    a.forEach((proj) async => proj.setTasks(await getProjectTasks(proj.id))); 
+    for (int i = 0; i < a.length; i++){
+      await a[i].setTasks(await getProjectTasks(a[i].id));
+    }
+    //a.forEach((proj) async => proj.setTasks(await getProjectTasks(proj.id))); 
     return a;
   }
   Future<bool> DeleteProject(Project proj) async{

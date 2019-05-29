@@ -158,7 +158,7 @@ class _ProjectPage extends State<ProjectPage> {
 
   Widget _AppBar(ViewModel model) {
     return new Hero(
-        tag: 'Name',
+        tag: model.projects[widget.index].name,
         child: Container(
             decoration: new BoxDecoration(
               gradient: new LinearGradient(

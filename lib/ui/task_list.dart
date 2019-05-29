@@ -13,6 +13,7 @@ class TaskList extends StatelessWidget{
   TaskList(this.index, {this.tag, this.emergency = false});
   List<Widget> _getTaskCards(ViewModel model, Function whiteList){
     List<Widget> a = [];
+    print(index); 
     if (model.projects[index].tasks != null){
     for (int i = 0; i < model.projects[index].tasks.length; i++){
       if (model.projects[index].tasks[i].name != null && whiteList(model.projects[index].tasks[i])){
@@ -66,6 +67,7 @@ class TaskList extends StatelessWidget{
     Widget build(BuildContext context) {
       return StoreConnector<AppState, ViewModel>(
         converter: (Store<AppState> store) => ViewModel.create(store),
+        rebuildOnChange: true,
         builder: (BuildContext context, ViewModel model){
           return new SliverList(
             delegate: SliverChildListDelegate(

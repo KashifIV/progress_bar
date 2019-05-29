@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:progress_bar/data/Log.dart';
 import 'package:redux/redux.dart'; 
 import 'package:progress_bar/domain/viewmodel.dart';
 import 'package:progress_bar/data/Task.dart';
@@ -12,6 +13,49 @@ class TaskTags extends StatefulWidget{
 }
 class _TaskTags extends State<TaskTags>{
   bool isExpanded = false; 
+
+  Widget _createGraidentChip(String tag, ViewModel model){
+    return Hero(child: GestureDetector(
+      onTap: (){
+        Task task = model.projects[widget.projIndex].tasks[widget.taskIndex]; 
+          if (task.tags == null){
+            task.tags = [tag]; 
+          }
+          else if (task.tags.contains(tag)){
+            task.tags.remove(tag);
+          }
+          else {
+            task.tags.add(tag); 
+          }
+          if (task.logs == null ) task.logs = []; 
+          model.onUpdateTask(model.projects[widget.projIndex], task); 
+      },
+      child: Container(
+        
+        child: Text(
+          tag,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+          ),
+        ),
+        padding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20), 
+         gradient: new LinearGradient(
+                          colors: [
+                            Colors.purple,
+                            Colors.blue[700]
+                          ],
+                          begin: const FractionalOffset(0.0, 0.0),
+                          end: const FractionalOffset(0.9, 0.3),
+                          stops: [0.0, 1.0],
+                          tileMode: TileMode.mirror),
+
+        )
+      ),
+    ), tag: tag,);
+  }
   Widget _createChip(String tag, ViewModel model){
     return ActionChip(
       label: Text(
@@ -60,7 +104,7 @@ class _TaskTags extends State<TaskTags>{
         },
         controller: newTagController,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(vertical: 6),
+          contentPadding: EdgeInsets.all(6),
           hintText: 'Add a Tag +',
           border: InputBorder.none
         ),
@@ -70,7 +114,7 @@ class _TaskTags extends State<TaskTags>{
   Widget _taskTags(List<String> tags, ViewModel model){
     if  (tags == null)tags = [];
     List<Widget> tagChips = []; 
-    tags.forEach((tag)=> tagChips.add(_createChip(tag, model)));
+    tags.forEach((tag)=> tagChips.add(_createGraidentChip(tag, model)));
     tagChips.add(_createNewTag(model)); 
     return Container(
       child: Wrap(
@@ -82,7 +126,7 @@ class _TaskTags extends State<TaskTags>{
   Widget _projectTags(List<String> tags, List<String> used, ViewModel model){
     List<String> options = (used != null) ? tags.where((tag) => !used.contains(tag)).toList(): tags;
     List<Widget> tagChips = []; 
-    options.forEach((tag) => tagChips.add(_createChip(tag, model))); 
+    options.forEach((tag) => tagChips.add(_createGraidentChip(tag, model))); 
     return ExpansionPanelList(
       expansionCallback: (int index, bool expanded){
         setState(() {
@@ -108,7 +152,8 @@ class _TaskTags extends State<TaskTags>{
             isExpanded: isExpanded,
           body: Container(
             width: MediaQuery.of(context).size.width,
-          color: Colors.grey[300],
+          color:Colors.white,
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Wrap(
             children: tagChips,
             spacing: 20.0,

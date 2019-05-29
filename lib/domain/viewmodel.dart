@@ -1,4 +1,5 @@
 import 'package:progress_bar/data/Account.dart';
+import 'package:progress_bar/data/Log.dart';
 import 'package:progress_bar/domain/actions.dart';
 import 'package:redux/redux.dart';
 import 'package:progress_bar/domain/redux.dart';
@@ -25,7 +26,9 @@ class ViewModel {
 
   final Function(Auth,Account) onCreateAccount; 
   final Function(Auth, Account) onUpdateAccount; 
-  final Function(Auth) onFetchAccount; 
+  final Function(String) onFetchAccount; 
+
+  final Function(Project, Task, Log) onCreateLog; 
   ViewModel({
     this.account, 
     this.projects,
@@ -43,7 +46,8 @@ class ViewModel {
     this.onUpdateWhiteList,
     this.onCreateAccount, 
     this.onUpdateAccount,
-    this.onFetchAccount 
+    this.onFetchAccount, 
+    this.onCreateLog
   });
   factory ViewModel.create(Store<AppState> store){
     _onCreateProject(Project proj, Auth auth){
@@ -79,8 +83,11 @@ class ViewModel {
     _onUpdateAccount(Auth auth, Account account){
       store.dispatch(UpdateAccountAction(auth, account)); 
     }
-    _onFetchAccount(Auth auth){
-      store.dispatch(FetchAccountAction(auth)); 
+    _onFetchAccount(String id){
+      store.dispatch(FetchAccountAction(id)); 
+    }
+    _onCreateLog(Project project, Task task, Log log){
+      store.dispatch(CreateLogAction(project, task, log)); 
     }
     return ViewModel(
       account: store.state.account,
@@ -95,11 +102,12 @@ class ViewModel {
       onAddTask: _onAddTask,
       onUpdateTask: _onUpdateTask,
       onDeleteTask: _onDeleteTask,
-      onGetProjectTask: _onGetProjectTask,
+      //onGetProjectTask: _onGetProjectTask,
       onUpdateWhiteList: _onUpdateWhiteList,
       onCreateAccount: _onCreateAccount, 
       onUpdateAccount: _onUpdateAccount,
       onFetchAccount: _onFetchAccount,
+      onCreateLog: _onCreateLog,
     );
   }
 }

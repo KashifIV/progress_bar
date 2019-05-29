@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:progress_bar/ui/task_log.dart';
 import 'package:redux/redux.dart';
 import 'package:progress_bar/domain/redux.dart';
 import 'package:progress_bar/ui/task_tags.dart';
@@ -75,15 +76,19 @@ class _TaskPage extends State<TaskPage> {
 
   Widget _datePicker(BuildContext context, ViewModel model) {
     String ans = (model.projects[widget.projIndex].tasks[widget.taskIndex].deadline == null)? 
-      'Add a Deadline.': model
-        .projects[widget.projIndex].tasks[widget.taskIndex].deadline.toString().substring(0,10);
+      'Add a Deadline.': model.projects[widget.projIndex].tasks[widget.taskIndex].deadline.difference(DateTime.now()).inDays.toString() + ' Day(s) Remaining \n'+
+        model.projects[widget.projIndex].tasks[widget.taskIndex].deadline.toString().substring(0,10);
       return Container(
+        padding: EdgeInsets.symmetric(vertical: 10),
         child: Center(
           child: FlatButton(
             child: Text(
               ans,
+              textAlign: TextAlign.center,
               style: TextStyle(
-                color: model.projects[widget.projIndex].toColor()
+                color: model.projects[widget.projIndex].toColor(),
+              
+                fontSize: 23, 
               ),
               ),
             onPressed: () => showDatePicker(
@@ -124,6 +129,7 @@ class _TaskPage extends State<TaskPage> {
                         .tasks[widget.taskIndex].name))
                     ..add(TaskTags(widget.projIndex, widget.taskIndex))
                     ..add(_datePicker(context, model))
+                    ..add(TaskLog(widget.projIndex, widget.taskIndex))
                     ..add(Notes(model, context))),
                 )
               ],

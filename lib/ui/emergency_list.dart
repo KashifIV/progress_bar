@@ -26,7 +26,7 @@ class EmergencyList extends StatelessWidget{
     if (!a.isEmpty){
       a..add(SizedBox(height: 10,))..add(CalendarCarousel(
         weekFormat: true,
-        weekDayFormat: WeekdayFormat.standaloneShort,
+        weekDayFormat: WeekdayFormat.standaloneShort,    
         weekdayTextStyle: TextStyle(color: Colors.grey),
         showHeader: false,
         headerMargin: EdgeInsets.all(4),
@@ -42,6 +42,7 @@ class EmergencyList extends StatelessWidget{
     Widget build(BuildContext context) {
       return StoreConnector<AppState, ViewModel>(
         converter: (Store<AppState> store) => ViewModel.create(store),
+        rebuildOnChange: true,
         builder: (BuildContext context, ViewModel model){
           return new SliverList(
             delegate: SliverChildListDelegate(

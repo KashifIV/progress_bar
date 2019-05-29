@@ -21,6 +21,7 @@ class ProjectTags extends StatelessWidget{
           project.tasks.forEach((task){
             if (task.tags != null && task.tags.contains(tag)){
               task.tags.remove(tag); 
+              model.onUpdateTask(project, task); 
             }
           });
           model.onUpdateProject(project); 

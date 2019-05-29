@@ -1,4 +1,5 @@
 import 'package:progress_bar/data/Account.dart';
+import 'package:progress_bar/data/Log.dart';
 import 'package:progress_bar/data/Project.dart';
 import 'package:progress_bar/data/Task.dart';
 import 'package:progress_bar/data/auth.dart';
@@ -147,10 +148,19 @@ class DeleteAccountAction{
   DeleteAccountAction(this.auth, this.account); 
 }
 class FetchAccountAction{
-  final Auth auth; 
-  FetchAccountAction(this.auth); 
+  final String id; 
+  FetchAccountAction(this.id); 
 }
 class OnUpdatedAccount{
   final Account account; 
   OnUpdatedAccount(this.account); 
+}
+
+//--------------------------------------------------------
+
+class CreateLogAction{
+  final Project project; 
+  final Task task; 
+  final Log log; 
+  CreateLogAction(this.project, this.task, this.log); 
 }

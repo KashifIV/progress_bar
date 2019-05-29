@@ -12,7 +12,6 @@ class ProjectCard extends StatelessWidget {
   final int index;
   ProjectCard(this.index);
   void _openProject(BuildContext context, ViewModel model) {
-    model.onGetProjectTask(model.projects[index]);
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => ProjectPage(index)));
   }
@@ -23,19 +22,16 @@ class ProjectCard extends StatelessWidget {
         converter: (Store<AppState> store) => ViewModel.create(store),
         builder: (BuildContext context, ViewModel model) => Hero(
           transitionOnUserGestures: true,
-          tag:'Name',
+          tag:model.projects[index].name,
           child: Container(
             child: GestureDetector(
                 onLongPress: () => model.onRemoveProject(model.projects[index]),
                 onTap: () => _openProject(context, model),
                 child: new Container(
-                    height: 150,
-                    width: MediaQuery.of(context).size.width * 0.80,
-                    margin:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+                    height: 125,
                     padding: EdgeInsets.all(10.0),
                     decoration: new BoxDecoration(
-                      gradient: new LinearGradient(
+                    gradient: new LinearGradient(
                           colors: [
                             model.projects[index].toColor(),
                             Colors.teal[400]

@@ -22,11 +22,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
-  int projIndex = 0;
+  int projIndex = 0; 
   Widget _logo(ViewModel model, BuildContext context) {
     return Column(children: <Widget>[
       SizedBox(
-        height: 50,
+        height: 20,
       ),
       Container(
           width: 400,
@@ -39,10 +39,10 @@ class _HomePage extends State<HomePage> {
           
     ]);
   }
-
   Widget _undUser(ViewModel model) {
-    model.onFetchAccount(widget.auth); 
-    model.onGetProject(widget.auth);
+    model.onFetchAccount(widget.auth.getUID()); 
+    model.onGetProject(widget.auth); 
+    if(model.projects != null  && model.projects.length>0)model.onGetProjectTask(model.projects[0]); 
     return Container(
       alignment: Alignment.center,
       child: CircularProgressIndicator(),
@@ -82,17 +82,16 @@ class _HomePage extends State<HomePage> {
   }
 
   Widget _mainPage(BuildContext context, ViewModel model) {
-    final controller = PageController(viewportFraction: 1.1);
+    final controller = PageController(viewportFraction: 0.95);
     return
     RefreshIndicator(
-      onRefresh: () {
-        model.onFetchAccount(widget.auth); 
-        model.onGetProject(widget.auth); 
+      onRefresh: (){
+
       },
       child: Column(
       children: <Widget>[
         SizedBox(
-            height: 480,
+            height: MediaQuery.of(context).size.height - 280,
             width: 400,
             child:(projIndex != model.projects.length) ? CustomScrollView(
               slivers: <Widget>[EmergencyList(projIndex),TagList(projIndex),TaskList(projIndex, emergency: true,)],
@@ -152,7 +151,10 @@ class _HomePage extends State<HomePage> {
                   ),
                 ));
               }
-              return ProjectCard(index);
+              return Container(
+                margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+                child:ProjectCard(index)
+                );
             },
           ),
         )
@@ -164,8 +166,9 @@ class _HomePage extends State<HomePage> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
         converter: (Store<AppState> store) => ViewModel.create(store),
+        rebuildOnChange: true,
         builder: (BuildContext context, ViewModel model) => Scaffold(
-          drawer: MainDrawer('Steve', auth: widget.auth, onSignedOut: widget.onSignedOut,),
+          drawer: MainDrawer(model.account.name, auth: widget.auth, onSignedOut: widget.onSignedOut,),
               body: SafeArea(
                 child: Column(
                   children: <Widget>[
