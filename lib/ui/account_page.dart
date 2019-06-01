@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:progress_bar/data/LinkBuilder.dart';
 import 'package:progress_bar/data/Project.dart';
 import 'package:progress_bar/data/auth.dart';
 import 'package:progress_bar/ui/project_card.dart';
@@ -39,12 +41,21 @@ class _AccountPage extends State<AccountPage> {
     List<Widget> a = [];
     model.projects.forEach((project) {
       a.add(Container(
-          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          margin: EdgeInsets.symmetric(horizontal: 10),
           child: Slidable(
             key: new Key(project.id),
             child: ProjectCard(project.index),
             delegate: SlidableBehindDelegate(),
             actionExtentRatio: 0.25,
+            actions: <Widget>[
+              IconSlideAction(
+                icon: Icons.share,
+                color: Colors.blue,
+                onTap: (){
+                  Clipboard.setData(new ClipboardData(text: CloneProjectLink(project).toString()));
+                },
+              )
+            ],
             secondaryActions: <Widget>[
               IconSlideAction(
                 caption: 'Delete Project',
