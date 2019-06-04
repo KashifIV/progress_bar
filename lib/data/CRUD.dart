@@ -115,6 +115,18 @@ Future<void> UpdateProject(Project proj) async{
     });
     return logs; 
   }
+  Future<Project> getProject(String id)async{
+    Project project; 
+    DocumentReference ref = Firestore.instance.document('Projects/' + id); 
+    DocumentSnapshot snapshot = await ref.get(); 
+    List<String> tags = []; 
+    if (snapshot.data.containsKey('tags') && snapshot.data['tags'] != null){
+            List<String> tags = new List<String>.from(snapshot.data['tags']); 
+          }
+    project = new Project(snapshot.data['name'], snapshot['description'], snapshot['color'], 'Project', tags: tags,id: snapshot.documentID); 
+    project.setTasks(await getProjectTasks(project.id)); 
+    return project; 
+  }
   Future<List<Project>> getProjects(Auth auth) async {
     List<Project> a = [];
     await auth.getCurrentUser().then((userid) async {

@@ -2,6 +2,7 @@ import 'package:progress_bar/data/Log.dart';
 
 class Task{
   String id;
+  int parentIndex; 
   String name = 'Untitled'; 
   List<String> tags; 
   String notes;

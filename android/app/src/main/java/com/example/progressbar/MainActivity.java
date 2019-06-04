@@ -1,4 +1,4 @@
-package com.example.progressbar;
+package com.kashif.progressbar;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

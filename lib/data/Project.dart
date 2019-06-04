@@ -5,6 +5,7 @@ import 'package:progress_bar/domain/redux.dart';
 class Project {
   String name;
   String id;
+  List<String> users = []; 
   String description;
   String color, projType;
   int index;
@@ -12,7 +13,7 @@ class Project {
   List<String> tags;
   PageType state = PageType.UND;
   Project(this.name, this.description, this.color, this.projType,
-      {this.tags, this.id, this.tasks, this.index}) {
+      {this.tags, this.id, this.tasks, this.index, this.users}) {
     if (this.tasks == null) {
       tasks = [];
       tags = ["Important"];
@@ -29,6 +30,7 @@ class Project {
   }
   void setTasks(List<Task> tasks) {
     this.tasks = tasks;
+    this.tasks.forEach((task) => task.parentIndex = index);
     if (tags == null) tags = [];
     tasks.forEach((task) {
       if (task.tags != null) {

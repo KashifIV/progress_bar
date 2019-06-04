@@ -25,7 +25,6 @@ class ProjectCard extends StatelessWidget {
           tag:model.projects[index].name,
           child: Container(
             child: GestureDetector(
-                onLongPress: () => model.onRemoveProject(model.projects[index]),
                 onTap: () => _openProject(context, model),
                 child: new Container(
                     height: 125,

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:progress_bar/data/create_link.dart';
 import 'package:progress_bar/data/Project.dart';
 import 'package:progress_bar/data/auth.dart';
 import 'package:progress_bar/ui/project_card.dart';
 import 'package:redux/redux.dart';
 import 'package:progress_bar/domain/redux.dart';
+import 'package:share/share.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
 
 class AccountPage extends StatefulWidget {
@@ -39,12 +42,22 @@ class _AccountPage extends State<AccountPage> {
     List<Widget> a = [];
     model.projects.forEach((project) {
       a.add(Container(
-          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          margin: EdgeInsets.symmetric(horizontal: 10),
           child: Slidable(
             key: new Key(project.id),
             child: ProjectCard(project.index),
             delegate: SlidableBehindDelegate(),
             actionExtentRatio: 0.25,
+            actions: <Widget>[
+              IconSlideAction(
+                icon: Icons.share,
+                color: Colors.blue,
+                onTap: (){
+                  CloneProjectLink(project).then((value) =>
+                    Share.share(value.toString())); 
+                },
+              )
+            ],
             secondaryActions: <Widget>[
               IconSlideAction(
                 caption: 'Delete Project',

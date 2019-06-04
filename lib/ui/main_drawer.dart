@@ -23,23 +23,29 @@ class MainDrawer extends StatelessWidget{
                 
                 children: <Widget>[
                 Icon(Icons.account_circle) ,
-                Text(name),
+                name != null ? Text(name): Text(''),
               ],),
             )
           ), 
           ListTile(
             title: Text(titles[0]),
-            onTap: () => Navigator.push(
+            onTap: (){
+              Navigator.pop(context);
+              Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AccountPage(onSignedOut: onSignedOut,))),
+                              builder: (context) => AccountPage(onSignedOut: onSignedOut,))); 
+            }
           ), 
           ListTile(
             title: Text(titles[1]),
-            onTap: () => Navigator.push(
+            onTap: (){
+              Navigator.pop(context);
+              Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CalendarPage()))
+                              builder: (context) => CalendarPage()));
+            }
           ),
           ListTile(
             title: Text(titles[2]),

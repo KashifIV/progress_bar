@@ -15,7 +15,7 @@ class _CreateProject extends State<CreateProject>{
   @override
   void initState() {
     super.initState();
-    proj = new Project('Untitled', 'description', Colors.pink.toString(), 'Project');
+    proj = new Project('Untitled', 'description', Colors.pink.toString(), 'Project', users: [widget.auth.getUID()]);
   }
   void setName(String text){
     setState(() {
