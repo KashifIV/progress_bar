@@ -84,7 +84,7 @@ Container(
       ),
       child: Column(children: <Widget>[
         ListTile(
-          leading: CircleAvatar(child: Text((model.account.name[0])),),
+          leading: CircleAvatar(child: Text((model.account.name == null)? 'U':model.account.name[0]),),
           title: Text('Create a New Log:',
           style: TextStyle(
             fontSize: 20
@@ -112,6 +112,7 @@ Container(
   }
   List<Widget> _getLogs(Task task){
     List<Widget> logs = [];
+    if (task.logs == null) return [SizedBox(height: 5,)];
     logs.add(SizedBox(height: 10,)); 
     print(task.logs); 
     if (task.logs == null) return logs; 

@@ -23,7 +23,7 @@ class MainDrawer extends StatelessWidget{
                 
                 children: <Widget>[
                 Icon(Icons.account_circle) ,
-                Text(name),
+                name != null ? Text(name): Text(''),
               ],),
             )
           ), 

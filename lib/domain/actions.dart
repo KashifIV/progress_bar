@@ -165,6 +165,6 @@ class CreateLogAction{
   CreateLogAction(this.project, this.task, this.log); 
 }
 class CloneProjectAction{
-  final String projectID; 
-CloneProjectAction(this.projectID); 
+  final Project project; 
+  CloneProjectAction(this.project); 
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:progress_bar/data/Project.dart';
 import 'package:progress_bar/data/auth.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:progress_bar/ui/create_project.dart';
@@ -14,6 +15,7 @@ import 'package:redux/redux.dart';
 import 'package:progress_bar/domain/redux.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:progress_bar/data/server_functions.dart';
 import 'package:progress_bar/ui/account_page.dart';
 import 'package:progress_bar/ui/calendar_page.dart';
 
@@ -26,7 +28,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePage extends State<HomePage> with WidgetsBindingObserver{
   int projIndex = 0; 
-    Timer _timerLink;
+  Timer _timerLink;
+  Project clonedProject; 
   Widget _logo(ViewModel model, BuildContext context) {
     return Column(children: <Widget>[
       SizedBox(
@@ -57,10 +60,18 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
     }
   }
   Future<void> _retrieveDynamicLink() async{
+    
      final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance.retrieveDynamicLink(); 
      final Uri deepLink = data?.link;
-     print(deepLink.data.parameters.toString()); 
+     if (deepLink != null)
+      if (deepLink.pathSegments[0] == 'cloneProject'){
+        Project temp = await cloneProject(deepLink.toString(), widget.auth.getUID());
+        setState(() {
+          clonedProject = temp; 
+        });
+      } 
      return; 
+    
   }
   Widget _undUser(ViewModel model) {
     model.onFetchAccount(widget.auth.getUID()); 
@@ -94,6 +105,10 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
   }
 
   Widget _pageHandler(BuildContext context, ViewModel model) {
+    if(clonedProject != null){
+      model.onCloneProject(clonedProject); 
+      clonedProject = null; 
+    }
     switch (model.pageType) {
       case PageType.VAL:
         return _mainPage(context, model);

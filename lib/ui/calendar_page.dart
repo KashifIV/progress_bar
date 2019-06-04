@@ -4,6 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:progress_bar/domain/redux.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
+import 'package:progress_bar/ui/task_list.dart';
 import 'package:redux/redux.dart';
 
 class CalendarPage extends StatefulWidget{
@@ -26,12 +27,26 @@ class _CalendarPage extends State<CalendarPage>{
         converter: (Store<AppState> store) => ViewModel.create(store),
         builder: (BuildContext context, ViewModel model) => Scaffold(
       body: SafeArea(
-        child:Container(
+        child: Column(
+          children: <Widget>[
+        Container(
+          height: 450,
         margin: EdgeInsets.symmetric(horizontal: 16.0),
         child: CalendarCarousel(
           markedDatesMap: _getDates(model),
         )
-      )),
-    ));
-  }
+      ), 
+      SizedBox(
+        height: MediaQuery.of(context).size.height - 500,
+        width: MediaQuery.of(context).size.width,
+        child:CustomScrollView(
+          slivers: <Widget>[
+            TaskList(-1),
+          ],
+        )
+      )
+          ]
+      )
+    ))
+    );}
 }

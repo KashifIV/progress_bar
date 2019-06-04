@@ -69,6 +69,11 @@ List<Project> projectsReducer(List<Project> state, action){
   if (action is LoadedProjectsAction){
     return action.projects;
   }
+  if (action is CloneProjectAction){
+    Project project = action.project; 
+    project.index = state.length; 
+    return []..addAll(state)..add(project); 
+  }
   if (action is ProjectTaskCrud){
     return action.doAction(state);
   }

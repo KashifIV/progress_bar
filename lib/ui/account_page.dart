@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:progress_bar/data/LinkBuilder.dart';
+import 'package:progress_bar/data/create_link.dart';
 import 'package:progress_bar/data/Project.dart';
 import 'package:progress_bar/data/auth.dart';
 import 'package:progress_bar/ui/project_card.dart';
 import 'package:redux/redux.dart';
 import 'package:progress_bar/domain/redux.dart';
+import 'package:share/share.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
 
 class AccountPage extends StatefulWidget {
@@ -52,7 +53,8 @@ class _AccountPage extends State<AccountPage> {
                 icon: Icons.share,
                 color: Colors.blue,
                 onTap: (){
-                  Clipboard.setData(new ClipboardData(text: CloneProjectLink(project).toString()));
+                  CloneProjectLink(project).then((value) =>
+                    Share.share(value.toString())); 
                 },
               )
             ],

@@ -28,6 +28,8 @@ class ViewModel {
   final Function(Auth, Account) onUpdateAccount; 
   final Function(String) onFetchAccount; 
 
+  final Function(Project) onCloneProject; 
+
   final Function(Project, Task, Log) onCreateLog; 
   ViewModel({
     this.account, 
@@ -47,7 +49,8 @@ class ViewModel {
     this.onCreateAccount, 
     this.onUpdateAccount,
     this.onFetchAccount, 
-    this.onCreateLog
+    this.onCreateLog,
+    this.onCloneProject
   });
   factory ViewModel.create(Store<AppState> store){
     _onCreateProject(Project proj, Auth auth){
@@ -86,6 +89,9 @@ class ViewModel {
     _onFetchAccount(String id){
       store.dispatch(FetchAccountAction(id)); 
     }
+    _onCloneProject(Project project){
+      store.dispatch(CloneProjectAction(project)); 
+    }
     _onCreateLog(Project project, Task task, Log log){
       store.dispatch(CreateLogAction(project, task, log)); 
     }
@@ -107,6 +113,7 @@ class ViewModel {
       onCreateAccount: _onCreateAccount, 
       onUpdateAccount: _onUpdateAccount,
       onFetchAccount: _onFetchAccount,
+      onCloneProject: _onCloneProject,
       onCreateLog: _onCreateLog,
     );
   }

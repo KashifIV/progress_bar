@@ -95,7 +95,7 @@ class _TaskCard extends State<TaskCard>{
             ),
           ),
           trailing: Text(
-            (widget.color == null)? "": 'Deadline: ' + (widget.task.deadline.day - DateTime.now().day).toString() + ' Days',
+            (widget.color == Colors.red)? 'Deadline: ' + (widget.task.deadline.difference(DateTime.now()).inDays).toString() + ' Days':'',
             style: TextStyle(color: widget.color),
           ),
           subtitle: Text(widget.task.notes == null ? "" : widget.task.notes,

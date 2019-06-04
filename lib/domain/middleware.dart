@@ -3,6 +3,7 @@ import 'package:progress_bar/data/CRUD.dart';
 import 'package:progress_bar/data/Project.dart';
 import 'package:progress_bar/domain/actions.dart';
 import 'package:redux/redux.dart';
+import 'package:progress_bar/data/server_functions.dart';
 import 'package:progress_bar/domain/redux.dart';
 
 
@@ -58,8 +59,4 @@ void appStateMiddleware(Store<AppState> store, action, NextDispatcher next) asyn
     await createLog(action.project, action.task, action.log); 
   }
 
-  if (action is CloneProjectAction){
-    //bool ans = await CloneProject(action.projectID); 
-    //if (ans) store.dispatch(GetProjectsAction); 
-  }
 }

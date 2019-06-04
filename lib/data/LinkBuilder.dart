@@ -5,7 +5,7 @@ import 'package:progress_bar/data/Project.dart';
 Future<Uri> CloneProjectLink(Project project)async{
   final DynamicLinkParameters params = DynamicLinkParameters(
     link: Uri.parse("kashifhussa.in/cloneProject?projectID=" + project.id),
-    uriPrefix: 'https://progressbar.page.link',
+    domain: 'https://progressbar.page.link',
     socialMetaTagParameters:  SocialMetaTagParameters(
       title: 'Copy of ' + project.name,
       description: 'Click the Link to clone the project!',

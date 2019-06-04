@@ -12,12 +12,31 @@ class TaskList extends StatelessWidget{
   final bool emergency; 
   TaskList(this.index, {this.tag, this.emergency = false});
   List<Widget> _getTaskCards(ViewModel model, Function whiteList){
+    if (index == -1){
+      List<Task> tasks = []; 
+      model.projects.forEach((project){
+        tasks..addAll(project.tasks); 
+      });
+      tasks.removeWhere((task) => task.dateCreated == null); 
+      tasks.sort((a, b){
+        if (a.deadline == null || b.deadline == null) 
+          return a.dateCreated.compareTo(b.dateCreated); 
+        else
+          return a.deadline.compareTo(b.deadline);
+        }
+      ); 
+      List<Widget> cards = []; 
+
+      for (int i = 0; i < tasks.length; i++){
+        cards.add(TaskCard(tasks[i], tasks[i].parentIndex, color: model.projects[tasks[i].parentIndex].toColor(),)); 
+      }
+      return cards; 
+    }
     List<Widget> a = [];
-    print(index); 
     if (model.projects[index].tasks != null){
     for (int i = 0; i < model.projects[index].tasks.length; i++){
       if (model.projects[index].tasks[i].name != null && whiteList(model.projects[index].tasks[i])){
-        a.add(TaskCard(model.projects[index].tasks[i], index));
+        a.add(TaskCard(model.projects[index].tasks[i], index,));
       }
     }
     }
