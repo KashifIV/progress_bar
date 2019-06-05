@@ -124,7 +124,8 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
     return
     RefreshIndicator(
       onRefresh: (){
-
+        model.onFetchAccount(widget.auth.getUID()); 
+        model.onGetProject(widget.auth); 
       },
       child: Column(
       children: <Widget>[

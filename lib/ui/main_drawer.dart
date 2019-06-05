@@ -34,7 +34,7 @@ class MainDrawer extends StatelessWidget{
               Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AccountPage(onSignedOut: onSignedOut,))); 
+                              builder: (context) => AccountPage(auth: auth, onSignedOut: onSignedOut,))); 
             }
           ), 
           ListTile(

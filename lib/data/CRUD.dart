@@ -10,7 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 Future<Account> UpdateUser(Auth auth, Account account) async{
   
-  DocumentReference ref = Firestore.instance.collection('Accounts').document(auth.getUID()); 
+  DocumentReference ref = Firestore.instance.document('Accounts/' +auth.getUID()); 
   ref.get().then((snapshot){
     if (snapshot.exists){
       ref.updateData(account.mapTo()); 

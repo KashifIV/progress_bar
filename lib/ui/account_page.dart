@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:progress_bar/data/Account.dart';
 import 'package:progress_bar/data/create_link.dart';
 import 'package:progress_bar/data/Project.dart';
 import 'package:progress_bar/data/auth.dart';
@@ -19,7 +20,11 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPage extends State<AccountPage> {
-  bool isEditing = false;
+  bool isEditing ; 
+  final userControl = TextEditingController();
+  void initState(){
+    isEditing = false; 
+  }
   Widget _dialog(ViewModel model, BuildContext context, Project project) {
     return AlertDialog(
       title: Text('Delete ' + project.name + '?'),
@@ -52,9 +57,9 @@ class _AccountPage extends State<AccountPage> {
               IconSlideAction(
                 icon: Icons.share,
                 color: Colors.blue,
-                onTap: (){
-                  CloneProjectLink(project).then((value) =>
-                    Share.share(value.toString())); 
+                onTap: () {
+                  CloneProjectLink(project)
+                      .then((value) => Share.share(value.toString()));
                 },
               )
             ],
@@ -80,17 +85,24 @@ class _AccountPage extends State<AccountPage> {
   }
 
   Widget _userNameEdit(ViewModel model) {
-    if (!isEditing){
-    return Text(
-      (model.account.name == null) ? 'Username' : model.account.name,
-      style: TextStyle(
-        color: Colors.black,
-        fontSize: 32,
-      ),
-    );
+    if (!isEditing) {
+      return Text(
+        (model.account.name == null) ? 'Username' : model.account.name,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 32,
+        ),
+      );
     }
-    return TextField(
-      
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 30),
+      child: TextField(
+        controller: userControl,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 20
+        ),
+      ),
     );
   }
 
@@ -98,6 +110,7 @@ class _AccountPage extends State<AccountPage> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
         converter: (Store<AppState> store) => ViewModel.create(store),
+        rebuildOnChange: true,
         builder: (BuildContext context, ViewModel model) => Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.transparent,
@@ -107,8 +120,19 @@ class _AccountPage extends State<AccountPage> {
                 FloatingActionButton(
                   backgroundColor: Colors.transparent,
                   elevation: 0,
+                  onPressed: (){
+                    if (isEditing){
+                      Account account = model.account; 
+                      account.name = (userControl.text.isNotEmpty)? userControl.text : 'Username';
+                      model.onUpdateAccount(widget.auth, account);
+                    }
+                    setState(() {
+                     isEditing = !isEditing;  
+                    });
+                    
+                  },
                   child: Icon(
-                    Icons.edit,
+                    (isEditing) ?Icons.save:Icons.edit,
                     color: Colors.black,
                   ),
                 )
@@ -128,7 +152,7 @@ class _AccountPage extends State<AccountPage> {
                 color: Colors.blue,
               ),
               Center(
-                child: Text(
+                child: (isEditing)? _userNameEdit(model): Text(
                   (model.account.name == null)
                       ? 'Username'
                       : model.account.name,
