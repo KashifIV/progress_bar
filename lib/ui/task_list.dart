@@ -10,14 +10,18 @@ class TaskList extends StatelessWidget{
   final int index; 
   final String tag; 
   final bool emergency; 
-  TaskList(this.index, {this.tag, this.emergency = false});
+  final DateTime dayOf; 
+  TaskList(this.index, {this.tag, this.emergency = false, this.dayOf});
   List<Widget> _getTaskCards(ViewModel model, Function whiteList){
     if (index == -1){
       List<Task> tasks = []; 
       model.projects.forEach((project){
         tasks..addAll(project.tasks); 
       });
-      tasks.removeWhere((task) => task.dateCreated == null); 
+      tasks.removeWhere((task) => task.deadline == null); 
+      if (dayOf != null){
+        tasks.removeWhere((task)  => !(task.deadline.year == dayOf.year && task.deadline.month == dayOf.month && task.deadline.day == dayOf.day)); 
+      }
       tasks.sort((a, b){
         if (a.deadline == null || b.deadline == null) 
           return a.dateCreated.compareTo(b.dateCreated); 

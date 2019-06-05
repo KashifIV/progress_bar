@@ -21,6 +21,10 @@ EventList<String> _getDates(ViewModel model){
 
 }
 class _CalendarPage extends State<CalendarPage>{
+  DateTime selectedDay; 
+  void initState(){
+    selectedDay = DateTime.now(); 
+  }
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
@@ -33,7 +37,13 @@ class _CalendarPage extends State<CalendarPage>{
           height: 450,
         margin: EdgeInsets.symmetric(horizontal: 16.0),
         child: CalendarCarousel(
+          selectedDateTime: selectedDay,
           markedDatesMap: _getDates(model),
+          onDayPressed: (date, values){
+            setState(() {
+              selectedDay = date;  
+            });
+          },
         )
       ), 
       SizedBox(
@@ -41,7 +51,7 @@ class _CalendarPage extends State<CalendarPage>{
         width: MediaQuery.of(context).size.width,
         child:CustomScrollView(
           slivers: <Widget>[
-            TaskList(-1),
+            TaskList(-1, dayOf: selectedDay,),
           ],
         )
       )
