@@ -42,7 +42,16 @@ class _AccountPage extends State<AccountPage> {
       ],
     );
   }
-
+  Widget _shareProjectDialog(BuildContext context, ViewModel model, Project project){
+    return AlertDialog(
+      title: Text('How would you like to Share your Project?'),
+      content: Text('Clone: Give them a Copy. \nCollaborate: Work Together.'),
+      actions: <Widget>[
+        FlatButton(child: Text('Clone'), onPressed: () => CloneProjectLink(project).then((value) => Share.share(value.toString())),), 
+        FlatButton(child: Text('Collab'), onPressed: () => CollabProjectLink(project).then((value) => Share.share(value.toString()))),
+      ],
+    );
+  }
   List<Widget> _getProjects(ViewModel model, BuildContext context) {
     List<Widget> a = [];
     model.projects.forEach((project) {
@@ -57,10 +66,10 @@ class _AccountPage extends State<AccountPage> {
               IconSlideAction(
                 icon: Icons.share,
                 color: Colors.blue,
-                onTap: () {
-                  CloneProjectLink(project)
-                      .then((value) => Share.share(value.toString()));
-                },
+                onTap: () => showDialog(
+                  context: context, 
+                  builder: (context) => _shareProjectDialog(context, model, project)
+                )
               )
             ],
             secondaryActions: <Widget>[
@@ -80,6 +89,7 @@ class _AccountPage extends State<AccountPage> {
               )
             ],
           )));
+      a.add(SizedBox(height: 10,));
     });
     return a;
   }

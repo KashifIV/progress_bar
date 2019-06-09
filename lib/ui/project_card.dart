@@ -26,8 +26,9 @@ class ProjectCard extends StatelessWidget {
           child: Container(
             child: GestureDetector(
                 onTap: () => _openProject(context, model),
-                child: new Container(
-                    height: 125,
+                child: new SingleChildScrollView(
+                  child: Container(
+                    height: 89,
                     padding: EdgeInsets.all(10.0),
                     decoration: new BoxDecoration(
                     gradient: new LinearGradient(
@@ -68,6 +69,6 @@ class ProjectCard extends StatelessWidget {
                           ProgressBar(index)
                         ],
                       ),
-                    )))));
+                    ))))));
   }
 }

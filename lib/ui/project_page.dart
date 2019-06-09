@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:progress_bar/domain/redux.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
+import 'package:progress_bar/ui/create_task.dart';
 import 'package:redux/redux.dart';
 import 'package:progress_bar/domain/actions.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -17,8 +18,11 @@ class ProjectPage extends StatefulWidget {
 
 class _ProjectPage extends State<ProjectPage> {
   String whiteListTag; 
+  bool isSearching; 
   void initState(){
+    isSearching = false; 
     if (widget.tag != null) whiteListTag = widget.tag; 
+    super.initState(); 
   }
   Widget checkSelect(ViewModel model, WhiteList value, {String tag}) {
     if (model.whiteList == value) {
@@ -82,65 +86,7 @@ class _ProjectPage extends State<ProjectPage> {
         });
   }
 
-  void _createNewTaskNew(ViewModel model) {
-    Task t = new Task(
-        name: controller.text, complete: false, dateCreated: DateTime.now());
-    model.onAddTask(model.projects[widget.index], t);
-    controller.text = "";
-  }
 
-  void _createNewTask(BuildContext context, ViewModel model) {
-    Task t = new Task(
-        name: 'Untitled', complete: false, dateCreated: DateTime.now());
-    final controller = TextEditingController();
-    showModalBottomSheet<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return ListView(children: <Widget>[
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    padding: EdgeInsets.all(20.0),
-                    child: TextField(
-                      autofocus: true,
-                      controller: controller,
-                      autocorrect: true,
-                      decoration: InputDecoration(hintText: 'Name: '),
-                    )),
-                FloatingActionButton(
-                  heroTag: 'stage',
-                  elevation: 3.0,
-                  mini: true,
-                  child: new Icon(Icons.note_add),
-                  backgroundColor: Colors.blue,
-                  onPressed: () {},
-                ),
-                FloatingActionButton(
-                  heroTag: 'phase',
-                  elevation: 3.0,
-                  mini: true,
-                  child: new Icon(Icons.add_to_queue),
-                  onPressed: () {},
-                ),
-                FloatingActionButton(
-                  heroTag: 'Add',
-                  elevation: 3.0,
-                  isExtended: true,
-                  mini: true,
-                  child: new Icon(Icons.add),
-                  backgroundColor: model.projects[widget.index].toColor(),
-                  onPressed: () {
-                    t.name = controller.text;
-                    model.onAddTask(model.projects[widget.index], t);
-                  },
-                )
-              ],
-            )
-          ]);
-        });
-  }
 
   Widget LoadPage(ViewModel model) {
     if (whiteListTag != null){
@@ -158,8 +104,9 @@ class _ProjectPage extends State<ProjectPage> {
 
   Widget _AppBar(ViewModel model) {
     return new Hero(
-        tag: model.projects[widget.index].name,
-        child: Container(
+      tag: model.projects[widget.index].name,
+        child: SingleChildScrollView(
+          child: Container(
             decoration: new BoxDecoration(
               gradient: new LinearGradient(
                   colors: [
@@ -202,8 +149,17 @@ class _ProjectPage extends State<ProjectPage> {
                 ProgressBar(
                   widget.index,
                 ),
+                SizedBox(height: 30),
+                Row(
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.menu, color: Colors.white,),
+                      onPressed: () => _whiteListControl(context, model),
+                    ),
+                  ],
+                )
               ],
-            )));
+            ))));
   }
 
   Future<bool> _onRefresh(ViewModel model) async {
@@ -233,50 +189,11 @@ class _ProjectPage extends State<ProjectPage> {
                             background: _AppBar(model),
                           ),
                         ),
-                        LoadPage(model)
+                        LoadPage(model), 
                       ],
                     ),
-                    Positioned(
-                        bottom: 0,
-                        left: 7,
-                        right: 7,
-                        child: Container(
-                          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                          decoration: BoxDecoration(
-                              borderRadius: new BorderRadius.circular(20.0),
-                              color: Colors.white,
-                              border: Border.all(
-                                color: model.projects[widget.index].toColor(),
-                                width: 2.6,
-                              )),
-                          child: TextField(
-                            onSubmitted: (value) => _createNewTaskNew(model),
-                            controller: controller,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'Task Name',
-                            ),
-                          ),
-                        ))
-                  ])),
-              bottomNavigationBar: new BottomAppBar(
-                shape: CircularNotchedRectangle(),
-                notchMargin: 4.0,
-                child: new Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.menu),
-                      onPressed: () => _whiteListControl(context, model),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-              ),
+                    CreateTask(widget.index)])),
+                  
             ));
   }
 }

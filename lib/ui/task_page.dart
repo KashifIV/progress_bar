@@ -7,6 +7,8 @@ import 'package:progress_bar/ui/task_tags.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
 import 'package:progress_bar/data/Task.dart';
 
+import 'date_options.dart';
+
 class TaskPage extends StatefulWidget {
   final int projIndex;
   final int taskIndex;
@@ -75,41 +77,61 @@ class _TaskPage extends State<TaskPage> {
   }
 
   Widget _datePicker(BuildContext context, ViewModel model) {
-    String ans = (model.projects[widget.projIndex].tasks[widget.taskIndex].deadline == null)? 
-      'Add a Deadline.': model.projects[widget.projIndex].tasks[widget.taskIndex].deadline.difference(DateTime.now()).inDays.toString() + ' Day(s) Remaining \n'+
-        model.projects[widget.projIndex].tasks[widget.taskIndex].deadline.toString().substring(0,10);
-      return Container(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        child: Center(
-          child: FlatButton(
-            child: Text(
-              ans,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: model.projects[widget.projIndex].toColor(),
-              
-                fontSize: 23, 
-              ),
-              ),
-            onPressed: () => showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2019),
-                    lastDate: DateTime(2030),
-                    builder: (BuildContext context, Widget child) {
-                      return Theme(
-                        data: ThemeData.light(),
-                        child: child,
-                      );
-                    }).then((onValue) {
-                  model.projects[widget.projIndex].tasks[widget.taskIndex]
-                      .deadline = onValue;
-                  model.onUpdateTask(model.projects[widget.projIndex],
-                      model.projects[widget.projIndex].tasks[widget.taskIndex]);
-                }),
-          ),
-        ),
-      );
+    String ans = (model
+                .projects[widget.projIndex].tasks[widget.taskIndex].deadline ==
+            null)
+        ? 'Add a Deadline.'
+        : model.projects[widget.projIndex].tasks[widget.taskIndex].deadline
+                .difference(DateTime.now())
+                .inDays
+                .toString() +
+            ' Day(s) Remaining \n' +
+            model.projects[widget.projIndex].tasks[widget.taskIndex].deadline
+                .toString()
+                .substring(0, 10);
+    return DateOptions(
+      deadline:
+          model.projects[widget.projIndex].tasks[widget.taskIndex].deadline,
+      onDeadlineChange: (value) {
+        if (model.projects[widget.projIndex].tasks[widget.taskIndex].routine <
+            1) {
+          model.projects[widget.projIndex].tasks[widget.taskIndex].deadline =
+              value;
+        } else {
+          Task t = model.projects[widget.projIndex].tasks[widget.taskIndex];
+          t.deadline = value; 
+          if (t.routine == 1 && t.deadline.difference(DateTime.now()).inDays > 7) {
+            t.deadline = DateTime.now().add(Duration(days: 7));
+          } else if (t.routine== 2 &&
+              t.deadline
+                      .difference(DateTime.now().add(Duration(days: 31)))
+                      .inDays <
+                  31) {
+            t.deadline = DateTime(DateTime.now().year,
+                (DateTime.now().month + 1) % 12, DateTime.now().day);
+          }
+          model.projects[widget.projIndex].tasks[widget.taskIndex].deadline = t.deadline; 
+        }
+        model.onUpdateTask(model.projects[widget.projIndex],
+            model.projects[widget.projIndex].tasks[widget.taskIndex]);
+      },
+      routine: model.projects[widget.projIndex].tasks[widget.taskIndex].routine,
+      onRoutineChange: (value) {
+        Task t = model.projects[widget.projIndex].tasks[widget.taskIndex];
+        t.routine = value;
+        if (value == 1 && t.deadline.difference(DateTime.now()).inDays > 7) {
+          t.deadline = DateTime.now().add(Duration(days: 7));
+        } else if (value == 2 &&
+            t.deadline
+                    .difference(DateTime.now())
+                    .inDays >
+                31) {
+          t.deadline = DateTime(DateTime.now().year,
+              (DateTime.now().month + 1) % 12, DateTime.now().day);
+        }
+        model.onUpdateTask(model.projects[widget.projIndex], t);
+      },
+    );
   }
 
   @override

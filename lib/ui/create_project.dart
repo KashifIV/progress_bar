@@ -94,6 +94,7 @@ class _CreateProject extends State<CreateProject>{
                           decoration: InputDecoration(hintText: 'Description'),
                         )
                     ),
+                    /*
                     new Container(
                       alignment: Alignment.centerLeft,
                       child: DropdownButton(
@@ -108,12 +109,13 @@ class _CreateProject extends State<CreateProject>{
                         //hint: new Text(getItemText()),
                       ),
                     )
+                    */
                   ]
                 )
               ),
               new Center(
                 child: new Container(
-                  padding: new EdgeInsets.fromLTRB(0.0, 50.0, 0.0, 0.0),
+                  padding: new EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
                   child: ColourOptions(
                     colourValues: [Colors.red, Colors.pink, Colors.purple, Colors.blue, Colors.green, Colors.orange],
                     onOptionSelect: (Color color){
@@ -123,6 +125,7 @@ class _CreateProject extends State<CreateProject>{
                 ),
               ),
               new Container(
+                padding: EdgeInsets.only(top: 20),
                 child: new FloatingActionButton(
                   child: new Icon(Icons.keyboard_arrow_right),
                   onPressed: (){

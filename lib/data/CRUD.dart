@@ -94,12 +94,7 @@ Future<void> UpdateProject(Project proj) async{
     List<Task> t = []; 
     s.documents.forEach((task){
       if (task['name'] != null){
-        DateTime created; 
-        if (task.data.containsKey('dateCreated')) created = task['dateCreated']; 
-        else created = DateTime.now(); 
-          t.add(new Task(id: task.documentID, name: task['name'], complete: task['complete'], 
-            tags: (task.data.containsKey('tags') && task.data['tags'] != null) ? new List<String>.from(task.data['tags']):null, notes:task['notes'], 
-          order: task['order'], deadline: (task.data.containsKey('deadline')? task['deadline']:null), urls: task['urls'], dateCreated: created));
+        t.add(Task.fromMap(task.documentID, task.data)); 
       }
     }); 
     t.forEach((task) async => task.setLogs(await getTaskLogs(id, task.id))); 

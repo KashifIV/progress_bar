@@ -9,6 +9,7 @@ import 'package:progress_bar/ui/create_project.dart';
 import 'package:progress_bar/ui/emergency_list.dart';
 import 'package:progress_bar/ui/main_drawer.dart';
 import 'package:progress_bar/ui/project_card.dart';
+import 'package:progress_bar/ui/project_page.dart';
 import 'package:progress_bar/ui/taglist.dart';
 import 'package:progress_bar/ui/task_list.dart';
 import 'package:redux/redux.dart';
@@ -29,7 +30,7 @@ class HomePage extends StatefulWidget {
 class _HomePage extends State<HomePage> with WidgetsBindingObserver{
   int projIndex = 0; 
   Timer _timerLink;
-  Project clonedProject; 
+  Project clonedProject, collabedProject; 
   Widget _logo(ViewModel model, BuildContext context) {
     return Column(children: <Widget>[
       SizedBox(
@@ -68,6 +69,12 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
         Project temp = await cloneProject(deepLink.toString(), widget.auth.getUID());
         setState(() {
           clonedProject = temp; 
+        });
+      }
+      else if (deepLink.pathSegments[0] == 'collab'){
+        Project temp = await collabProject(deepLink.toString(), widget.auth.getUID()); 
+        setState(() {
+          collabedProject = temp;  
         });
       } 
      return; 
@@ -108,6 +115,11 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
     if(clonedProject != null){
       model.onCloneProject(clonedProject); 
       clonedProject = null; 
+    }
+    if (collabedProject != null){
+      model.account.joinedProjects.add(collabedProject.id); 
+      model.onCloneProject(collabedProject); 
+      collabedProject = null; 
     }
     switch (model.pageType) {
       case PageType.VAL:
@@ -166,7 +178,9 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
                           context,
                           MaterialPageRoute(
                               builder: (context) => CreateProject(widget.auth)))
-                      .then((val) => model.onGetProject(widget.auth)),
+                              .then((context) => Navigator.push(context, 
+                              MaterialPageRoute(builder: (context) => ProjectPage(model.projects.last.index))
+                              )),
                   child: Container(
                     height: 150,
                     width: MediaQuery.of(context).size.width * 0.80,
