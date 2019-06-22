@@ -59,6 +59,7 @@ class DateOptions extends StatelessWidget {
                 hint: Text('Add a \nRoutine'),
                 onChanged: (value) => onRoutineChange(value),
                 items: <DropdownMenuItem>[
+                  DropdownMenuItem(child: Text('None'), value: null), 
                   DropdownMenuItem(child: Text('Daily'),value: 0,), 
                   DropdownMenuItem(child: Text('Weekly'),value: 1,),
                   DropdownMenuItem(child: Text('Monthly'), value: 2)

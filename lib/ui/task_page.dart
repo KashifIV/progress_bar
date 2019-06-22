@@ -93,8 +93,8 @@ class _TaskPage extends State<TaskPage> {
       deadline:
           model.projects[widget.projIndex].tasks[widget.taskIndex].deadline,
       onDeadlineChange: (value) {
-        if (model.projects[widget.projIndex].tasks[widget.taskIndex].routine <
-            1) {
+        if (model.projects[widget.projIndex].tasks[widget.taskIndex].routine == null || model.projects[widget.projIndex].tasks[widget.taskIndex].routine <
+            1 ) {
           model.projects[widget.projIndex].tasks[widget.taskIndex].deadline =
               value;
         } else {

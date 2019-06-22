@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:progress_bar/data/Log.dart';
+import 'package:progress_bar/data/app_color.dart' as appcolor; 
 import 'package:redux/redux.dart'; 
 import 'package:progress_bar/domain/viewmodel.dart';
 import 'package:progress_bar/data/Task.dart';
@@ -42,15 +43,7 @@ class _TaskTags extends State<TaskTags>{
         padding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20), 
-         gradient: new LinearGradient(
-                          colors: [
-                            Colors.purple,
-                            Colors.blue[700]
-                          ],
-                          begin: const FractionalOffset(0.0, 0.0),
-                          end: const FractionalOffset(0.9, 0.3),
-                          stops: [0.0, 1.0],
-                          tileMode: TileMode.mirror),
+         color: appcolor.tagColors[model.projects[widget.projIndex].tags.indexOf(tag)],
 
         )
       ),

@@ -1,5 +1,7 @@
 
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:progress_bar/data/Account.dart';
+import 'package:progress_bar/data/CRUD.dart';
 import 'package:progress_bar/data/Project.dart';
 
 Future<Uri> CloneProjectLink(Project project)async{
@@ -21,13 +23,14 @@ Future<Uri> CloneProjectLink(Project project)async{
   return url.shortUrl; 
   
 }
-Future<Uri> CollabProjectLink(Project project) async {
+Future<Uri> CollabProjectLink(Account account,Project project, List<String> authenticatedUsers) async {
+  await createAuthenticationDoc(account, project, authenticatedUsers); 
   final DynamicLinkParameters params = DynamicLinkParameters(
     link: Uri.parse("https://kashifhussa.in/collab?projectID=" + project.id), 
     domain: 'progressbar.page.link',
     socialMetaTagParameters:  SocialMetaTagParameters(
       title: 'Copy of ' + project.name,
-      description: 'Click the Link to clone the project!',
+      description: 'Click the Link to Join the Project!',
     ),
     androidParameters: AndroidParameters(
       packageName: 'com.kashif.progressbar'

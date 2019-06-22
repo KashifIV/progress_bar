@@ -7,6 +7,7 @@ import 'package:progress_bar/data/create_link.dart';
 import 'package:progress_bar/data/Project.dart';
 import 'package:progress_bar/data/auth.dart';
 import 'package:progress_bar/ui/project_card.dart';
+import 'package:progress_bar/ui/share_project.dart';
 import 'package:redux/redux.dart';
 import 'package:progress_bar/domain/redux.dart';
 import 'package:share/share.dart';
@@ -48,7 +49,7 @@ class _AccountPage extends State<AccountPage> {
       content: Text('Clone: Give them a Copy. \nCollaborate: Work Together.'),
       actions: <Widget>[
         FlatButton(child: Text('Clone'), onPressed: () => CloneProjectLink(project).then((value) => Share.share(value.toString())),), 
-        FlatButton(child: Text('Collab'), onPressed: () => CollabProjectLink(project).then((value) => Share.share(value.toString()))),
+        FlatButton(child: Text('Collab'), onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ShareProject(project)))),
       ],
     );
   }

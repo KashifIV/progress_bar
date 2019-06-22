@@ -21,7 +21,18 @@ Future<Account> UpdateUser(Auth auth, Account account) async{
   }); 
   return account; 
 }
+Future<void> createAuthenticationDoc(Account account, Project project, List<String> users)async {
+  Map<String, dynamic> dataMap = new Map<String, dynamic>(); 
+  dataMap = {
+    'Owner' : account.id, 
+    'users' : users, 
 
+  }; 
+  await Firestore.instance.runTransaction((transaction) async{
+    DocumentReference ref = Firestore.instance.document('Projects/' + project.id + '/Authentication/permissions');
+     await transaction.set(ref, dataMap); 
+  });
+}
 Future<Account> CreateUser(Auth auth, Account account)async{
   await Firestore.instance.runTransaction((transaction) async{
     CollectionReference a = Firestore.instance.collection('Accounts'); 

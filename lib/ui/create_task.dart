@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:progress_bar/data/Task.dart';
+import 'package:progress_bar/ui/date_options.dart';
 import 'package:progress_bar/ui/task_tags.dart';
 import 'package:redux/redux.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
@@ -36,6 +37,12 @@ class _CreateTask extends State<CreateTask> with TickerProviderStateMixin {
     rotationController.dispose();
     super.dispose();
   }
+  Widget _expandedOptions(ViewModel model){
+    if (isExpanded){
+      return DateOptions(); 
+    }
+    return SizedBox(); 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +62,10 @@ class _CreateTask extends State<CreateTask> with TickerProviderStateMixin {
                       color: model.projects[widget.index].toColor(),
                       width: 2.6,
                     )),
-                child: Row(children: <Widget>[
+                child:Column(
+                  children: <Widget>
+                  [ 
+                    Row(children: <Widget>[
                   Container(
                     width: MediaQuery.of(context).size.width - 110,
                     child: TextField(
@@ -84,11 +94,12 @@ class _CreateTask extends State<CreateTask> with TickerProviderStateMixin {
                           } else {
                             rotationController.reverse();
                           }
-                          if (_focus.hasFocus) {
-                            _focus.unfocus();
-                          }
                         });
-                      })
-                ]))));
+                      }), 
+                  
+                ]),
+                _expandedOptions(model)
+              ])
+            )));
   }
 }

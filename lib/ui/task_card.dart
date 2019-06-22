@@ -8,6 +8,7 @@ import 'package:progress_bar/data/Task.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter/animation.dart';
+import 'package:progress_bar/data/app_color.dart' as appcolor;
 class TaskCard extends StatefulWidget{
   final Task task;
   final int index;
@@ -73,6 +74,28 @@ class _TaskCard extends State<TaskCard>{
       ],
     );
   }
+  Widget _buildTagPill(ViewModel model , String tag){
+    return Container(
+      height: 10,
+      width: 20,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20), 
+        color: appcolor.tagColors[model.projects[widget.index].tags.indexOf(tag)%appcolor.tagColors.length],
+      ),
+    );
+  }
+  List<Widget> _buildPillList(ViewModel model){
+    List<Widget> a = []; 
+    if (widget.task.tags != null){
+      widget.task.tags.forEach((tag){
+        a.add(_buildTagPill(model, tag)); 
+        a.add(SizedBox(width: 10,)); 
+      });
+      return a; 
+    }
+    else return [SizedBox(width: 10,)]; 
+
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -94,10 +117,19 @@ class _TaskCard extends State<TaskCard>{
               color: (widget.color != null) ?widget.color: Colors.black,
             ),
           ),
-          trailing: Text(
+          trailing: Column(
+            children: <Widget> [
+              Text(
             (widget.color == Colors.red)? 'Deadline: ' + (widget.task.deadline.difference(DateTime.now()).inDays).toString() + ' Days':'',
             style: TextStyle(color: widget.color),
+              ), 
+              SizedBox(height: 10,),
+              Wrap(
+                children: _buildPillList(model),
+              )
+            ]
           ),
+          
           subtitle: Text(widget.task.notes == null ? "" : widget.task.notes,
             style: TextStyle(
               fontSize: 15
