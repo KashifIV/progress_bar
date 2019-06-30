@@ -7,13 +7,14 @@ class Project {
   String id;
   List<String> users = []; 
   String description;
+  DateTime deadline; 
   String color, projType;
   int index;
   List<Task> tasks = [];
   List<String> tags;
   PageType state = PageType.UND;
   Project(this.name, this.description, this.color, this.projType,
-      {this.tags, this.id, this.tasks, this.index, this.users}) {
+      {this.tags, this.id, this.tasks, this.index, this.users, this.deadline}) {
     if (this.tasks == null) {
       tasks = [];
       tags = ["Important"];
@@ -48,6 +49,7 @@ class Project {
     dataMap['color'] = this.color;
     dataMap['user'] = id;
     dataMap['tags'] = tags;
+    dataMap['deadline'] = deadline; 
     return dataMap;
   }
 
@@ -57,6 +59,7 @@ class Project {
     dataMap['description'] = this.description;
     dataMap['color'] = this.color;
     dataMap['tags'] = tags;
+    dataMap['deadline'] = deadline; 
     return dataMap;
   }
 
@@ -65,6 +68,7 @@ class Project {
     this.name = map['name'];
     this.description = map['description'];
     this.color = map['color'];
+    if (map.containsKey('deadline')) deadline = map['deadline']; 
   }
   double getPercentComplete(String tag) {
     if (tag == null) {
@@ -120,5 +124,12 @@ class Project {
     projType = proj.projType;
     color = proj.color;
     name = proj.name;
+  }
+  void updateSettings(Project proj){
+    description = proj.description; 
+    projType = proj.projType; 
+    deadline = proj.deadline; 
+    color = proj.color; 
+    name = proj.name; 
   }
 }

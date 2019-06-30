@@ -78,9 +78,8 @@ Future<void> createLog(Project proj, Task task, Log log) async{
 }
 Future<void> UpdateProject(Project proj) async{
     await UpdateTasks(proj);
-    Firestore.instance.runTransaction((transaction)async{
-      await transaction.update(Firestore.instance.collection('Projects').document(), proj.mapWithoutID());
-    });
+    await Firestore.instance.document('Projects/' + proj.id).updateData(proj.mapWithoutID()); 
+    print('Updated Project'); 
   }
   Future<void> UpdateTasks(Project proj)async{
     CollectionReference ref = Firestore.instance.collection('Projects/' + proj.id +'/tasks'); 
@@ -88,7 +87,7 @@ Future<void> UpdateProject(Project proj) async{
       values.documents.forEach((doc){
         if (doc.exists){
           Task t = proj.tasks.firstWhere((test) => test.id == doc.documentID);
-          Firestore.instance.document('Projects/' + proj.id +'/tasks' + doc.documentID)
+          Firestore.instance.document('Projects/' + proj.id +'/tasks/' + doc.documentID)
             .updateData(t.mapTo()).catchError((e) => print('UPDATE FAILED'));
         }
       });
@@ -129,7 +128,9 @@ Future<void> UpdateProject(Project proj) async{
     if (snapshot.data.containsKey('tags') && snapshot.data['tags'] != null){
             List<String> tags = new List<String>.from(snapshot.data['tags']); 
           }
-    project = new Project(snapshot.data['name'], snapshot['description'], snapshot['color'], 'Project', tags: tags,id: snapshot.documentID); 
+    DateTime deadline = null; 
+    if (snapshot.data.containsKey('deadline')) deadline = snapshot['deadline']; 
+    project = new Project(snapshot.data['name'], snapshot['description'], snapshot['color'], 'Project', tags: tags,id: snapshot.documentID, deadline: deadline); 
     project.setTasks(await getProjectTasks(project.id)); 
     return project; 
   }

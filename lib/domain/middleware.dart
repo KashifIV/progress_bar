@@ -35,6 +35,11 @@ void appStateMiddleware(Store<AppState> store, action, NextDispatcher next) asyn
   if (action is DeleteTaskAction){
     await DeleteTask(action.proj, action.task);
   }
+  if (action is UpdateProjectSettingsAction){
+    String id = action.proj.id; 
+    action.doAction(store.state.projects); 
+    await (UpdateProject(store.state.projects.firstWhere((test) => test.id == id))); 
+  }
 
   //-----------------------------------------------
 

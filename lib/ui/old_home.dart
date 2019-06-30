@@ -98,7 +98,7 @@ class HomePage extends StatelessWidget{
   Widget _FloatingActionButtonTemplate(BuildContext context, ViewModel model){
     return new FloatingActionButton(
         onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => CreateProject(auth)))
+          Navigator.push(context, MaterialPageRoute(builder: (context) => CreateProject(auth: auth)))
               .then((val)=> model.onGetProject(auth));
         },
         heroTag: 'Add',

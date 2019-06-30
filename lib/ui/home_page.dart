@@ -177,7 +177,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
                   onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CreateProject(widget.auth)))
+                              builder: (context) => CreateProject(auth:widget.auth)))
                               .then((context) => Navigator.push(context, 
                               MaterialPageRoute(builder: (context) => ProjectPage(model.projects.last.index))
                               )),

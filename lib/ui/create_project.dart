@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:progress_bar/data/Project.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
+import 'package:progress_bar/ui/date_options.dart';
 import 'package:redux/redux.dart';
 import 'package:progress_bar/domain/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:progress_bar/data/auth.dart';
 class CreateProject extends StatefulWidget{
   final Auth auth;
-  CreateProject(this.auth);
+  final Project project; 
+  CreateProject({this.auth, this.project});
   _CreateProject createState() => new _CreateProject();
 }
 class _CreateProject extends State<CreateProject>{
@@ -15,7 +17,9 @@ class _CreateProject extends State<CreateProject>{
   @override
   void initState() {
     super.initState();
-    proj = new Project('Untitled', 'description', Colors.pink.toString(), 'Project', users: [widget.auth.getUID()]);
+    if (widget.project == null)
+      proj = new Project('Untitled', 'description', Colors.pink.toString(), 'Project', users: [widget.auth.getUID()]);
+    else proj = new Project(widget.project.name, widget.project.description, widget.project.color, widget.project.projType, id: widget.project.id, deadline: widget.project.deadline); 
   }
   void setName(String text){
     setState(() {
@@ -41,8 +45,13 @@ class _CreateProject extends State<CreateProject>{
     Widget build(BuildContext context) {
       return StoreConnector<AppState, ViewModel>( 
       converter:(Store<AppState> store) => ViewModel.create(store),
-      builder: (BuildContext context, ViewModel model) =>
-      Scaffold(
+      builder: (BuildContext context, ViewModel model) => WillPopScope(
+        onWillPop: () async{
+          if (widget.project != null)
+            model.onUpdateProjectSettings(model.projects[widget.project.index]); 
+          return true; 
+        },
+      child: Scaffold(
       backgroundColor: Colors.white,
       body: new ListView(
           //mainAxisAlignment: MainAxisAlignment.start,
@@ -63,7 +72,7 @@ class _CreateProject extends State<CreateProject>{
                 color: proj.toColor(),
                 alignment: AlignmentDirectional(-1.0, -1.0),
                 constraints: BoxConstraints(
-                maxHeight: 200.0,
+                maxHeight: 120.0,
                 maxWidth: double.infinity
                 ),
               child: Center(child: Text(proj.name,
@@ -91,25 +100,36 @@ class _CreateProject extends State<CreateProject>{
                         padding: EdgeInsets.only(top: 20.0),
                         child: new TextField(
                           onChanged:(text) {setProjectDesc(text);},
-                          decoration: InputDecoration(hintText: 'Description'),
+                          decoration: InputDecoration(hintText: (proj.description == null) ? 'Description': proj.description),
                         )
                     ),
-                    /*
-                    new Container(
-                      alignment: Alignment.centerLeft,
-                      child: DropdownButton(
-                        items: [
-                          DropdownMenuItem(child: new Text('Project'), value: 'Project',),
-                          DropdownMenuItem(child: new Text('Continuous'), value: 'Continuous'),
-                          DropdownMenuItem(child: new Text('Date'), value: 'Date')
-                        ],
-                        onChanged: (text) {
-                          setProjectType(text);
-                        },
-                        //hint: new Text(getItemText()),
-                      ),
+                    SizedBox(height: 10,),
+                    
+                    new FlatButton(
+                      child: Row(children: <Widget>[
+                        Icon(Icons.calendar_today), 
+                        Text(
+                          (proj.deadline == null) ? 'Add a deadline' : proj.deadline.toString().split(' ')[0]
+                        )
+                      ],),
+                      onPressed: () => showDatePicker(
+                        context: context, 
+                        initialDate: DateTime.now(), 
+                        firstDate: DateTime(2019), 
+                        lastDate: DateTime(2030), 
+                        builder: (BuildContext context, Widget child){
+                          return Theme(
+                            data: ThemeData.light(),
+                            child: child,
+                          );
+                        }
+                      ).then((onValue){
+                        setState(() {
+                          proj.deadline = onValue; 
+                        });
+                      }),
                     )
-                    */
+                    
                   ]
                 )
               ),
@@ -129,14 +149,16 @@ class _CreateProject extends State<CreateProject>{
                 child: new FloatingActionButton(
                   child: new Icon(Icons.keyboard_arrow_right),
                   onPressed: (){
-                    model.onCreateProject(proj,widget.auth);
+                    if (widget.project == null)
+                      model.onCreateProject(proj,widget.auth);
+                    else model.onUpdateProjectSettings(proj); 
                     Navigator.pop(context, true);
                   },
                 ),
               ),
         ]
       ),
-    ));
+    )));
     }
 }
 typedef ColourOptionCallback = void Function(Color color);

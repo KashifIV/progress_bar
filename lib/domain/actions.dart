@@ -34,6 +34,14 @@ class UpdateProjectAction extends ProjectsCrud{
       return value;
     }
 }
+class UpdateProjectSettingsAction extends ProjectsCrud{
+  UpdateProjectSettingsAction(Project proj): super(proj); 
+  List<Project> doAction(List<Project> state){
+    List<Project> value = []..addAll(state); 
+    value.firstWhere((test) => test.id == super.proj.id).updateSettings(super.proj); 
+    return value; 
+  }
+}
 class LoadedProjectsAction{
   List<Project> projects;
   LoadedProjectsAction(this.projects);

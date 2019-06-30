@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_bar/data/auth.dart';
 import 'package:progress_bar/domain/redux.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
+import 'package:progress_bar/ui/create_project.dart';
 import 'package:progress_bar/ui/create_task.dart';
 import 'package:redux/redux.dart';
 import 'package:progress_bar/domain/actions.dart';
@@ -143,19 +146,27 @@ class _ProjectPage extends State<ProjectPage> {
                   ),
                 ), 
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: 10,),
                 ProgressBar(
                   widget.index,
                 ),
-                SizedBox(height: 30),
+                Center(
+                  child: (model.projects[widget.index].deadline != null)? 
+                    Text(model.projects[widget.index].deadline.toString().split(' ')[0], style: TextStyle(fontSize: 20, color: Colors.white),):
+                    SizedBox(height: 30,),
+                ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     IconButton(
                       icon: Icon(Icons.menu, color: Colors.white,),
                       onPressed: () => _whiteListControl(context, model),
                     ),
+                    IconButton(
+                      icon: Icon(Icons.settings, color: Colors.white), 
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CreateProject(project: model.projects[widget.index],)))
+                      .then((onValue) => model.onUpdateProject(model.projects[widget.index])),
+                    )
                   ],
                 )
               ],
@@ -181,7 +192,7 @@ class _ProjectPage extends State<ProjectPage> {
                     CustomScrollView(
                       slivers: <Widget>[
                         SliverAppBar(
-                          expandedHeight: 200,
+                          expandedHeight: 190,
                           backgroundColor:
                               model.projects[widget.index].toColor(),
                           flexibleSpace: new FlexibleSpaceBar(

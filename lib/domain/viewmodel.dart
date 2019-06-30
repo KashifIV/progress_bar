@@ -16,6 +16,7 @@ class ViewModel {
   final Function(Auth) onGetProject;
   final Function(Project) onRemoveProject;
   final Function(Project) onUpdateProject;
+  final Function(Project) onUpdateProjectSettings; 
 
   final Function(Project, Task) onAddTask;
   final Function(Project, Task) onUpdateTask;
@@ -50,7 +51,8 @@ class ViewModel {
     this.onUpdateAccount,
     this.onFetchAccount, 
     this.onCreateLog,
-    this.onCloneProject
+    this.onCloneProject, 
+    this.onUpdateProjectSettings, 
   });
   factory ViewModel.create(Store<AppState> store){
     _onCreateProject(Project proj, Auth auth){
@@ -65,6 +67,9 @@ class ViewModel {
     _onUpdateProject(Project proj){
       store.dispatch(UpdateProjectAction(proj));
     }   
+    _onUpdateProjectSettings(Project proj){
+      store.dispatch(UpdateProjectSettingsAction(proj)); 
+    }
     _onAddTask(Project proj, Task task){
       store.dispatch(CreateTaskAction(task, proj));
     }
@@ -104,6 +109,7 @@ class ViewModel {
       onCreateProject: _onCreateProject,
       onGetProject: _onGetProject,
       onRemoveProject: _onRemoveProject,
+      onUpdateProjectSettings: _onUpdateProjectSettings,
       onUpdateProject: _onUpdateProject,
       onAddTask: _onAddTask,
       onUpdateTask: _onUpdateTask,
