@@ -22,8 +22,25 @@ class _ProgressBar extends State<ProgressBar>{
     if (screenWidth == null){
       screenWidth = (widget.width == null) ? MediaQuery.of(context).size.width*0.8 : widget.width;
     }
-    currentPercent = model.projects[widget.index].getPercentComplete(widget.tag); 
+    if (model.account.progressType == "Task")
+      currentPercent = model.projects[widget.index].getPercentComplete(widget.tag); 
+    else if (model.account.progressType == "Deadline" && model.projects[widget.index].deadline != null){
+      currentPercent = DateTime.now().difference(model.projects[widget.index].dateCreated).inHours /model.projects[widget.index].deadline.difference(model.projects[widget.index].dateCreated).inHours;
+    } else currentPercent = model.projects[widget.index].getPercentComplete(widget.tag); 
+
+    currentPercent = currentPercent.abs(); 
+    print(currentPercent); 
     return screenWidth*(1- anim.value);
+  }
+  double _getPercent(ViewModel model){
+    double value; 
+    if (model.account.progressType == "Task")
+      value = model.projects[widget.index].getPercentComplete(widget.tag); 
+    else if (model.account.progressType == "Deadline" && model.projects[widget.index].deadline != null){
+      value = DateTime.now().difference(model.projects[widget.index].dateCreated).inHours /model.projects[widget.index].deadline.difference(model.projects[widget.index].dateCreated).inHours;
+    } else value = model.projects[widget.index].getPercentComplete(widget.tag); 
+    return value.abs(); 
+
   }
   @override
     Widget build(BuildContext context) {
@@ -44,7 +61,7 @@ class _ProgressBar extends State<ProgressBar>{
             color: Colors.black.withAlpha(20) 
           ),
           child: Animator( 
-            tween: Tween<double>(begin: originalPosition, end: model.projects[widget.index].getPercentComplete(widget.tag),),
+            tween: Tween<double>(begin: originalPosition, end: _getPercent(model),),
             builder:(anim) => Container(
             margin: EdgeInsets.fromLTRB(2, 2, _getBarWidth(context,model, anim) , 2),
             decoration: BoxDecoration(

@@ -114,7 +114,7 @@ class ViewModel {
       onAddTask: _onAddTask,
       onUpdateTask: _onUpdateTask,
       onDeleteTask: _onDeleteTask,
-      //onGetProjectTask: _onGetProjectTask,
+      onGetProjectTask: _onGetProjectTask,
       onUpdateWhiteList: _onUpdateWhiteList,
       onCreateAccount: _onCreateAccount, 
       onUpdateAccount: _onUpdateAccount,

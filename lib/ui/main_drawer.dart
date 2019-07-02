@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:progress_bar/data/auth.dart';
 import 'package:progress_bar/ui/account_page.dart';
 import 'package:progress_bar/ui/calendar_page.dart';
+import 'package:progress_bar/ui/settings_page.dart';
 
 class MainDrawer extends StatelessWidget{
   final String name;
@@ -49,6 +50,13 @@ class MainDrawer extends StatelessWidget{
           ),
           ListTile(
             title: Text(titles[2]),
+            onTap: (){
+              //Navigator.pop(context); 
+              Navigator.push(
+                context, 
+                MaterialPageRoute(builder: (context) => SettingsPage(auth: auth,))
+              );
+            },
           )
         ],
       ),

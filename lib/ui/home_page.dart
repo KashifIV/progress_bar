@@ -83,7 +83,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
   Widget _undUser(ViewModel model) {
     model.onFetchAccount(widget.auth.getUID()); 
     model.onGetProject(widget.auth); 
-    if(model.projects != null  && model.projects.length>0)model.onGetProjectTask(model.projects[0]); 
+    if(model.projects != null  && model.projects.length>0)model.onGetProjectTask(model.projects[projIndex]); 
     return Container(
       alignment: Alignment.center,
       child: CircularProgressIndicator(),
@@ -135,9 +135,10 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
     final controller = PageController(viewportFraction: 0.95);
     return
     RefreshIndicator(
-      onRefresh: (){
+      onRefresh: () async{
         model.onFetchAccount(widget.auth.getUID()); 
         model.onGetProject(widget.auth); 
+        return true; 
       },
       child: Column(
       children: <Widget>[

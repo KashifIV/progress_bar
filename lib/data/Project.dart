@@ -7,14 +7,14 @@ class Project {
   String id;
   List<String> users = []; 
   String description;
-  DateTime deadline; 
+  DateTime deadline, dateCreated; 
   String color, projType;
   int index;
   List<Task> tasks = [];
   List<String> tags;
   PageType state = PageType.UND;
   Project(this.name, this.description, this.color, this.projType,
-      {this.tags, this.id, this.tasks, this.index, this.users, this.deadline}) {
+      {this.tags, this.id, this.tasks, this.index, this.users, this.deadline, this.dateCreated}) {
     if (this.tasks == null) {
       tasks = [];
       tags = ["Important"];
@@ -50,6 +50,7 @@ class Project {
     dataMap['user'] = id;
     dataMap['tags'] = tags;
     dataMap['deadline'] = deadline; 
+    dataMap['dateCreated'] = dateCreated; 
     return dataMap;
   }
 
@@ -60,15 +61,22 @@ class Project {
     dataMap['color'] = this.color;
     dataMap['tags'] = tags;
     dataMap['deadline'] = deadline; 
+    dataMap['dateCreated'] = dateCreated; 
     return dataMap;
   }
 
-  Project.fromMap(Map<String, dynamic> map) {
-    this.id = map['id'];
-    this.name = map['name'];
-    this.description = map['description'];
-    this.color = map['color'];
-    if (map.containsKey('deadline')) deadline = map['deadline']; 
+  factory Project.fromMap(Map<String, dynamic> map, List<String> tags, String documentID, {int count}) {
+    return Project(
+      map['name'],
+      map['description'], 
+      map['color'], 
+      'Project', 
+      tags: tags,
+      id: documentID, 
+      deadline: (map.containsKey('deadline')) ? map['deadline'] : null,
+      dateCreated: (map.containsKey('dateCreated')) ? map['dateCreated']: DateTime.now(), 
+      index: count
+    );
   }
   double getPercentComplete(String tag) {
     if (tag == null) {
@@ -117,7 +125,17 @@ class Project {
     if (t.order == null) t.order = tasks.length;
     tasks.add(t);
   }
-
+  List<double> totalvsFinishedTime(){
+    double complete = 0; 
+    double total = 0; 
+    tasks.forEach((task){
+      if (task.duration != null){
+        total += task.duration.inMinutes; 
+        if (task.complete) complete += task.duration.inMinutes; 
+      }
+    });
+    return [complete, total]; 
+  }
   void Update(Project proj) {
     tasks = proj.tasks;
     description = proj.description;

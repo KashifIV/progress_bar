@@ -131,6 +131,12 @@ class _TaskPage extends State<TaskPage> {
         }
         model.onUpdateTask(model.projects[widget.projIndex], t);
       },
+      duration: model.projects[widget.projIndex].tasks[widget.taskIndex].duration,
+      onDurationChange: (value){
+        Task t= model.projects[widget.projIndex].tasks[widget.taskIndex]; 
+        t.duration = value; 
+        model.onUpdateTask(model.projects[widget.projIndex], t); 
+      },
     );
   }
 

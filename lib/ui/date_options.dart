@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_duration_picker/flutter_duration_picker.dart';
 class DateOptions extends StatelessWidget {
   final DateTime deadline;
   int routine; 
+  final Duration duration; 
   final Function(DateTime value) onDeadlineChange;
   final Function(int value) onRoutineChange;
+  final Function (Duration time) onDurationChange; 
 
   void initState(){
   }
   DateOptions(
       {this.deadline,
       this.routine,
+      this.duration,
       this.onDeadlineChange,
+      this.onDurationChange,
       this.onRoutineChange});
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 10),
       child:Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -35,7 +39,7 @@ class DateOptions extends StatelessWidget {
           child: Row(
             children: <Widget>[
               Icon(Icons.calendar_today),
-              SizedBox(width: 10,),
+              SizedBox(width: 8,),
               Text(
                 (deadline != null)
                     ? deadline.difference(DateTime.now()).inDays.toString() + 
@@ -48,7 +52,29 @@ class DateOptions extends StatelessWidget {
               )
             ],
           ),
-        ), 
+        ),
+        FlatButton(
+          onPressed: () => showDurationPicker(
+            context: context, 
+            initialTime: Duration(minutes: 1),
+          ).then((onValue) => onDurationChange(onValue)),
+          child: Row(
+            children: <Widget>[
+              Icon(Icons.timer),
+              SizedBox(width: 8,),
+              Text(
+                (duration != null)
+                    ? duration.inMinutes.toString() 
+                    +' mins to \nComplete'
+                    : 'Add a \nDuration.',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+              )
+            ],
+          ),
+        ),  
         Container(
           child: Row(
             children: <Widget>[

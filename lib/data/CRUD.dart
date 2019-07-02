@@ -95,7 +95,7 @@ Future<void> UpdateProject(Project proj) async{
   }
   Future<void> UpdateTask(Project proj, Task task) async{
     if (task.name != null){
-    await Firestore.instance.document('Projects/' + proj.id +'/tasks/'+ task.id).updateData(task.mapTo()).catchError((e) => print('Error Updating Task'));
+      await Firestore.instance.document('Projects/' + proj.id +'/tasks/'+ task.id).updateData(task.mapTo()).catchError((e) => print('Error Updating Task'));
     }
   }
   Future<List<Task>>getProjectTasks(String id) async {
@@ -127,10 +127,8 @@ Future<void> UpdateProject(Project proj) async{
     List<String> tags = []; 
     if (snapshot.data.containsKey('tags') && snapshot.data['tags'] != null){
             List<String> tags = new List<String>.from(snapshot.data['tags']); 
-          }
-    DateTime deadline = null; 
-    if (snapshot.data.containsKey('deadline')) deadline = snapshot['deadline']; 
-    project = new Project(snapshot.data['name'], snapshot['description'], snapshot['color'], 'Project', tags: tags,id: snapshot.documentID, deadline: deadline); 
+          } 
+    project = Project.fromMap(snapshot.data, tags, snapshot.documentID); 
     project.setTasks(await getProjectTasks(project.id)); 
     return project; 
   }
@@ -146,7 +144,7 @@ Future<void> UpdateProject(Project proj) async{
           if (document.data.containsKey('tags') && document.data['tags'] != null){
             List<String> tags = new List<String>.from(document.data['tags']); 
           }
-          Project proj = new Project(document['name'], document['description'], document['color'], 'Project', tags: tags, id: document.documentID, index: count);  
+          Project proj = Project.fromMap(document.data, tags, document.documentID, count: count);  
           count++;   
           a.add(proj);
       });

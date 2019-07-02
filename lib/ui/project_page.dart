@@ -104,7 +104,14 @@ class _ProjectPage extends State<ProjectPage> {
     } else
       return TaskList(widget.index, tag: whiteListTag,);
   }
-
+  String _convertToReadableTime(DateTime time){
+    List<String> months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    String suffix = 'th'; 
+    if (time.day == 1  || time.day == 21 || time.day == 31)suffix = 'st'; 
+    else if (time.day == 2 || time.day == 22) suffix = 'nd';
+    else if (time.day == 3 || time.day == 23) suffix = 'rd';
+    return months[time.month] + ' ' + time.day.toString() + suffix + ' ' + time.year.toString(); 
+  }
   Widget _AppBar(ViewModel model) {
     return new Hero(
       tag: model.projects[widget.index].name,
@@ -134,7 +141,7 @@ class _ProjectPage extends State<ProjectPage> {
             child: Column(
               children: <Widget>[
                 SizedBox(
-                  height: 100,
+                  height: 90,
                 ),
                 Material(
                   color: Colors.transparent,
@@ -152,23 +159,23 @@ class _ProjectPage extends State<ProjectPage> {
                 ),
                 Center(
                   child: (model.projects[widget.index].deadline != null)? 
-                    Text(model.projects[widget.index].deadline.toString().split(' ')[0], style: TextStyle(fontSize: 20, color: Colors.white),):
-                    SizedBox(height: 30,),
+                    Text(_convertToReadableTime(model.projects[widget.index].deadline), style: TextStyle(fontSize: 20, color: Colors.white),):
+                    SizedBox(height: 23,),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.menu, color: Colors.white,),
+                    FlatButton(
+                      child: Icon(Icons.menu, color: Colors.white,),
                       onPressed: () => _whiteListControl(context, model),
                     ),
-                    IconButton(
-                      icon: Icon(Icons.settings, color: Colors.white), 
+                    FlatButton(
+                      child: Icon(Icons.settings, color: Colors.white), 
                       onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CreateProject(project: model.projects[widget.index],)))
                       .then((onValue) => model.onUpdateProject(model.projects[widget.index])),
                     )
                   ],
-                )
+                ), 
               ],
             ))));
   }
@@ -192,7 +199,7 @@ class _ProjectPage extends State<ProjectPage> {
                     CustomScrollView(
                       slivers: <Widget>[
                         SliverAppBar(
-                          expandedHeight: 190,
+                          expandedHeight: 180,
                           backgroundColor:
                               model.projects[widget.index].toColor(),
                           flexibleSpace: new FlexibleSpaceBar(

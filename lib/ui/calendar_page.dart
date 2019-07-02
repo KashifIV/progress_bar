@@ -25,6 +25,17 @@ class _CalendarPage extends State<CalendarPage>{
   void initState(){
     selectedDay = DateTime.now(); 
   }
+  Widget _title(String title) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: Text(
+        title,
+        softWrap: true,
+        style: TextStyle(fontSize: 60),
+        textAlign: TextAlign.left,
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
@@ -33,6 +44,7 @@ class _CalendarPage extends State<CalendarPage>{
       body: SafeArea(
         child: Column(
           children: <Widget>[
+            _title('Callendar'),
         Container(
           height: 450,
         margin: EdgeInsets.symmetric(horizontal: 16.0),
@@ -47,7 +59,7 @@ class _CalendarPage extends State<CalendarPage>{
         )
       ), 
       SizedBox(
-        height: MediaQuery.of(context).size.height - 500,
+        height: MediaQuery.of(context).size.height - 610,
         width: MediaQuery.of(context).size.width,
         child:CustomScrollView(
           slivers: <Widget>[

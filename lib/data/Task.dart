@@ -9,11 +9,12 @@ class Task{
   List<String> urls;
   List<Log> logs; 
   DateTime dateCreated, deadline, dateCompleted; 
+  Duration duration; 
   int routine;  
   int order; 
   bool complete = false;
   Task({this.id, this.name, this.complete,this.order, this.notes, this.urls,
-        this.dateCreated, this.deadline, this.tags, this.logs, this.routine, this.dateCompleted});
+        this.dateCreated, this.deadline, this.tags, this.logs, this.routine, this.dateCompleted, this.duration});
   Map<String, dynamic> mapTo(){
      var dataMap = new Map<String, dynamic>();
      if (order != null) {
@@ -32,6 +33,7 @@ class Task{
      dataMap['dateCreated'] = dateCreated; 
      dataMap['notes'] = notes;
      dataMap['urls'] = urls;
+     dataMap['duration'] = duration; 
      dataMap['name'] = name; 
      dataMap['complete'] = complete; 
      return dataMap; 
@@ -72,6 +74,7 @@ class Task{
       order: map['order'], 
       deadline: dead, 
       urls: map['urls'], 
+      duration: (map.containsKey('duration')) ? map['duration'] : null,
       routine: (map.containsKey('routine')? map['routine']: null),
       dateCreated: created
     );

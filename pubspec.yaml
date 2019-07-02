@@ -25,6 +25,7 @@ dependencies:
   flutter_redux: ^0.5.3
   share: ^0.6.1+1
   flutter_chips_input: ^1.2.0
+  flutter_duration_picker: ^1.0.4
   firebase_core: ^0.2.5+1
   flutter_slidable: ^0.4.9
   flutter_calendar_carousel: ^1.3.16
