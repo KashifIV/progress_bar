@@ -44,7 +44,7 @@ class DateOptions extends StatelessWidget {
                 (deadline != null)
                     ? deadline.difference(DateTime.now()).inDays.toString() + 
                     ' Days \nremaning'
-                    : 'Add a \nDeadline.',
+                    : 'Add a \nDate.',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 14,

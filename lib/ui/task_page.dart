@@ -6,6 +6,7 @@ import 'package:progress_bar/domain/redux.dart';
 import 'package:progress_bar/ui/task_tags.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
 import 'package:progress_bar/data/Task.dart';
+import 'package:add_2_calendar/add_2_calendar.dart';
 
 import 'date_options.dart';
 
@@ -139,7 +140,25 @@ class _TaskPage extends State<TaskPage> {
       },
     );
   }
-
+  Widget _addToCalendar(ViewModel model){
+    return Container(height: 100,
+    child: FlatButton(
+      child: Text('Add to Google Calendar'),
+      color: Colors.blue,
+      onPressed: (){
+        final Event event = Event(
+          endDate: widget.task.deadline, 
+          startDate: widget.task.deadline,
+          location: 'nowhere',
+          title: widget.task.name, 
+          allDay: true,
+          description: model.projects[widget.task.parentIndex].name,
+        ); 
+        Add2Calendar.addEvent2Cal(event); 
+      },
+    ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
@@ -158,6 +177,7 @@ class _TaskPage extends State<TaskPage> {
                     ..add(TaskTags(widget.projIndex, widget.taskIndex))
                     ..add(_datePicker(context, model))
                     ..add(TaskLog(widget.projIndex, widget.taskIndex))
+                    //..add(_addToCalendar(model))
                     ..add(Notes(model, context))),
                 )
               ],

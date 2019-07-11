@@ -14,11 +14,20 @@ EventList<String> _getDates(ViewModel model){
   EventList<String> times = new EventList<String>(); 
   model.projects.forEach((project) {
       project.tasks.forEach((task){
-        if (task.deadline != null) times.add(task.deadline, task.name);
+        if (task.deadline != null){
+          if (task.routine ==0){           
+            int counter = 0; 
+            while(task.deadline.difference(task.dateCreated.add(Duration(days: counter))).isNegative)
+            {
+              times.add(task.dateCreated.add(Duration(days: counter)), task.name + counter.toString());
+            } 
+            times.add(task.deadline, task.name);         
+          }
+          else times.add(task.deadline, task.name);
+        }
       });
-  });
+  }); 
   return times;
-
 }
 class _CalendarPage extends State<CalendarPage>{
   DateTime selectedDay; 

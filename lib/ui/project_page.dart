@@ -159,7 +159,9 @@ class _ProjectPage extends State<ProjectPage> {
                 ),
                 Center(
                   child: (model.projects[widget.index].deadline != null)? 
-                    Text(_convertToReadableTime(model.projects[widget.index].deadline), style: TextStyle(fontSize: 20, color: Colors.white),):
+                    Material(
+                      color: Colors.transparent,
+                    child: Text(_convertToReadableTime(model.projects[widget.index].deadline), style: TextStyle(fontSize: 20, color: Colors.white),)):
                     SizedBox(height: 23,),
                 ),
                 Row(
