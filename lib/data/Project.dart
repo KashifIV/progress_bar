@@ -12,6 +12,7 @@ class Project {
   int index;
   List<Task> tasks = [];
   List<String> tags;
+  int tasksComplete, tasksToDo; 
   PageType state = PageType.UND;
   Project(this.name, this.description, this.color, this.projType,
       {this.tags, this.id, this.tasks, this.index, this.users, this.deadline, this.dateCreated}) {
@@ -30,6 +31,8 @@ class Project {
     }
   }
   void setTasks(List<Task> tasks) {
+    tasksComplete = 0; 
+    tasksToDo = 0; 
     this.tasks = tasks;
     this.tasks.forEach((task) => task.parentIndex = index);
     if (tags == null) tags = [];
@@ -39,6 +42,8 @@ class Project {
           if (!tags.contains(tag)) tags.add(tag);
         });
       }
+      if (task.complete) tasksComplete++; 
+      else tasksToDo++;
     });
   }
 
@@ -123,18 +128,25 @@ class Project {
 
   bool AddTask(Task t) {
     if (t.order == null) t.order = tasks.length;
+    if (t.complete) tasksComplete++; 
+    else tasksToDo++; 
     tasks.add(t);
   }
   List<double> totalvsFinishedTime(){
     double complete = 0; 
     double total = 0; 
+    int defaultValue = 30; 
     tasks.forEach((task){
       if (task.duration != null){
         total += task.duration.inMinutes; 
         if (task.complete) complete += task.duration.inMinutes; 
       }
+      else {
+        total+=defaultValue; 
+        if (task.complete) complete+= defaultValue;
+      }
     });
-    return [complete, total]; 
+    return [total, complete]; 
   }
   void Update(Project proj) {
     tasks = proj.tasks;

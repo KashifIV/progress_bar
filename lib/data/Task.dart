@@ -33,7 +33,7 @@ class Task{
      dataMap['dateCreated'] = dateCreated; 
      dataMap['notes'] = notes;
      dataMap['urls'] = urls;
-     dataMap['duration'] = duration; 
+     dataMap['duration'] = duration.toString(); 
      dataMap['name'] = name; 
      dataMap['complete'] = complete; 
      return dataMap; 
@@ -65,6 +65,12 @@ class Task{
        }
      }
     }
+
+    Duration duration; 
+    String value; 
+    if (map.containsKey('duration') && (map['duration'] = value) != null){
+      duration = Duration(hours: int.parse(value.split(':')[0]), minutes: int.parse(value.split(':')[1])); 
+    }
     return new Task(
       id: documentID,
       name: map['name'], 
@@ -74,7 +80,7 @@ class Task{
       order: map['order'], 
       deadline: dead, 
       urls: map['urls'], 
-      duration: (map.containsKey('duration')) ? map['duration'] : null,
+      duration: duration,
       routine: (map.containsKey('routine')? map['routine']: null),
       dateCreated: created
     );

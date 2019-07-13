@@ -110,10 +110,11 @@ class _TaskCard extends State<TaskCard>{
         onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TaskPage(widget.index,model.projects[widget.index].tasks.indexOf(widget.task), task: widget.task,))),
         child: new Container(
         color: Colors.white,
-        child: ListTile(
+        child:Column(children: <Widget>[ ListTile(
+          dense: true,
           title: Text(widget.task.name,
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 18,
               color: (widget.color != null) ?widget.color: Colors.black,
             ),
           ),
@@ -135,7 +136,19 @@ class _TaskCard extends State<TaskCard>{
               fontSize: 15
             ),
           ),
-        ), 
+        ),
+        /*
+         Container(
+              height: 5,
+              width: double.infinity,
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: (widget.task.complete) ? Colors.green.withOpacity(0.4) : (widget.task.deadline == null) ? Colors.grey.withOpacity(0.4) : Colors.orange.withOpacity(0.4),
+              )
+            ),
+            */
+        ])
       )),     
       actions: <Widget>[
         GetPrimarySlideAction(model),

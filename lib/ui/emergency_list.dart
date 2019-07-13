@@ -24,7 +24,7 @@ class EmergencyList extends StatelessWidget{
     }
     }
     if (!a.isEmpty){
-      a..add(SizedBox(height: 10,))..add(CalendarCarousel(
+      a..add(SizedBox(height: 10,))..add(Card( elevation: 3, child: CalendarCarousel(
         weekFormat: true,
         weekDayFormat: WeekdayFormat.standaloneShort,    
         weekdayTextStyle: TextStyle(color: Colors.grey),
@@ -32,9 +32,14 @@ class EmergencyList extends StatelessWidget{
         headerMargin: EdgeInsets.all(4),
         markedDatesMap: times,
         height: 80,
-        selectedDayButtonColor: model.projects[index].toColor(),
-        selectedDateTime: DateTime.now(),
-      ));
+        todayBorderColor: model.projects[index].toColor(),
+        daysHaveCircularBorder: true,
+        todayTextStyle: TextStyle(color: Colors.black),
+        todayButtonColor: Colors.white,
+        selectedDayButtonColor: Colors.transparent,
+        selectedDayBorderColor: Colors.teal[200],
+        selectedDayTextStyle: TextStyle(color: Colors.black),
+      )));
     }
     return a;
   }

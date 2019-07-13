@@ -17,6 +17,7 @@ import 'package:progress_bar/domain/redux.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:progress_bar/data/server_functions.dart';
+import 'package:progress_bar/ui/progress_overview.dart';
 import 'package:progress_bar/ui/account_page.dart';
 import 'package:progress_bar/ui/calendar_page.dart';
 
@@ -32,20 +33,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
   Timer _timerLink;
   Project clonedProject, collabedProject; 
   Widget _logo(ViewModel model, BuildContext context) {
-    return Column(children: <Widget>[
-      SizedBox(
-        height: 20,
-      ),
-      Container(
-          width: 400,
-          height: 100,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-                image:
-                    DecorationImage(image: AssetImage('assets/logoLight.png'))),
-          )),
-          
-    ]);
+    return ProgressOverview(model.projects[projIndex]); 
   }
     @override
   void initState() {
@@ -142,6 +130,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
       },
       child: Column(
       children: <Widget>[
+         _logo(model, context),
         SizedBox(
             height: MediaQuery.of(context).size.height - 280,
             width: 400,
@@ -222,11 +211,11 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
         converter: (Store<AppState> store) => ViewModel.create(store),
         rebuildOnChange: true,
         builder: (BuildContext context, ViewModel model) => Scaffold(
+          backgroundColor: Colors.white,
           drawer: MainDrawer(model.account.name, auth: widget.auth, onSignedOut: widget.onSignedOut,),
               body: SafeArea(
                 child: Column(
                   children: <Widget>[
-                    _logo(model, context),
                     _pageHandler(context, model)
                   ],
                 ),

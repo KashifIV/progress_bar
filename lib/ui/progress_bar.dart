@@ -22,14 +22,7 @@ class _ProgressBar extends State<ProgressBar>{
     if (screenWidth == null){
       screenWidth = (widget.width == null) ? MediaQuery.of(context).size.width*0.8 : widget.width;
     }
-    if (model.account.progressType == "Task")
-      currentPercent = model.projects[widget.index].getPercentComplete(widget.tag); 
-    else if (model.account.progressType == "Deadline" && model.projects[widget.index].deadline != null){
-      currentPercent = DateTime.now().difference(model.projects[widget.index].dateCreated).inHours /model.projects[widget.index].deadline.difference(model.projects[widget.index].dateCreated).inHours;
-    } else currentPercent = model.projects[widget.index].getPercentComplete(widget.tag); 
-
-    currentPercent = currentPercent.abs(); 
-    print(currentPercent); 
+    currentPercent = _getPercent(model); 
     return screenWidth*(1- anim.value);
   }
   double _getPercent(ViewModel model){
@@ -38,7 +31,13 @@ class _ProgressBar extends State<ProgressBar>{
       value = model.projects[widget.index].getPercentComplete(widget.tag); 
     else if (model.account.progressType == "Deadline" && model.projects[widget.index].deadline != null){
       value = DateTime.now().difference(model.projects[widget.index].dateCreated).inHours /model.projects[widget.index].deadline.difference(model.projects[widget.index].dateCreated).inHours;
-    } else value = model.projects[widget.index].getPercentComplete(widget.tag); 
+    } else{
+       List<double> ans = model.projects[widget.index].totalvsFinishedTime(); 
+       if (ans[0] == 0)
+        value = 0; 
+      else 
+       value = ans[1]/ans[0]; 
+    } 
     return value.abs(); 
 
   }
@@ -70,7 +69,7 @@ class _ProgressBar extends State<ProgressBar>{
               gradient: LinearGradient(
                 colors: [
                   model.projects[widget.index].toColor(),
-                  Colors.teal[200]
+                  (widget.color == null ) ?Colors.teal[200] : widget.color, 
                 ],
                 begin: Alignment.centerLeft,
                 end: Alignment(anim.value, 0),

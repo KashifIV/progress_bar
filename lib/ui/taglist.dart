@@ -17,6 +17,7 @@ class TagList extends StatelessWidget{
           a.add(ProjectTags(tag, model.projects[index])); 
       });
     }
+    a.add(SizedBox(height: 20,));
     return a; 
   }
   @override
