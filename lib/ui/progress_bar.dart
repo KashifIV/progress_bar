@@ -45,6 +45,11 @@ class _ProgressBar extends State<ProgressBar>{
     Widget build(BuildContext context) {
       return StoreConnector<AppState, ViewModel>(
         converter:(Store<AppState> store) => ViewModel.create(store),
+        onInitialBuild: (ViewModel model){
+          setState(() {
+           originalPosition = _getPercent(model); 
+          });
+        },
         onWillChange: (ViewModel model) {
           setState(() {
            originalPosition = currentPercent;  

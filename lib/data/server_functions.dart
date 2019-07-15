@@ -23,7 +23,14 @@ Future<Project> cloneProject(String link, String id)async{
 }
 Future<Project> collabProject(String link, String id)async{
   String projectID = link.split('projectID=').last; 
-  return await getProject(projectID); 
+  Project proj;
+  try{ 
+    proj = await getProject(projectID); 
+  }catch(e){
+    return null;
+  }
+  if (!proj.users.contains(id)) return null; 
+  return proj; 
 }
 
 

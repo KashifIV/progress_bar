@@ -33,8 +33,9 @@ class ProjectCard extends StatelessWidget {
                     decoration: new BoxDecoration(
                     gradient: new LinearGradient(
                           colors: [
-                            model.projects[index].toColor(),
-                            Colors.teal[400]
+                            //model.projects[index].toColor(),
+                            Color.alphaBlend(model.projects[index].toColor().withAlpha(210), Colors.black), 
+                            Colors.teal[600]
                           ],
                           begin: const FractionalOffset(0.0, 0.0),
                           end: const FractionalOffset(0.9, 0.3),

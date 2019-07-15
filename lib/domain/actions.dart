@@ -19,11 +19,15 @@ class CreateProjectAction extends ProjectsCrud{
     }
 }
 class DeleteProjectAction extends ProjectsCrud{
-  DeleteProjectAction(Project proj): super(proj);
+  bool isJoined; 
+  DeleteProjectAction(Project proj, {isJoined = false}): super(proj);
   @override
     List<Project> doAction(List<Project> state) {
       return []..addAll(state)..remove(super.proj);
     }
+  bool IsJoined(){
+    return isJoined; 
+  }
 }
 class UpdateProjectAction extends ProjectsCrud{
   UpdateProjectAction(Project proj): super(proj);
@@ -175,4 +179,8 @@ class CreateLogAction{
 class CloneProjectAction{
   final Project project; 
   CloneProjectAction(this.project); 
+}
+class CollabProjectAction{
+  final Project project; 
+  CollabProjectAction(this.project); 
 }

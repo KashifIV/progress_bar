@@ -23,14 +23,22 @@ void appStateMiddleware(Store<AppState> store, action, NextDispatcher next) asyn
   if (action is CreateProjectAction){
     await CreateProject(action.proj, action.auth);
   }
+  if (action is UpdateProjectAction){
+    await UpdateProject(action.proj); 
+  }
   if (action is DeleteProjectAction){
-    await DeleteProject(action.proj);
+    if (!action.IsJoined())
+      await DeleteProject(action.proj);
   }
   if (action is UpdateTaskAction){
     await UpdateTask(action.proj,action.task);
   }
   if (action is CreateTaskAction){
-    await CreateTask(action.proj, action.task);
+    try{
+      await CreateTask(action.proj, action.task);
+    }catch(e){
+      
+    }
   }
   if (action is DeleteTaskAction){
     await DeleteTask(action.proj, action.task);
@@ -56,7 +64,8 @@ void appStateMiddleware(Store<AppState> store, action, NextDispatcher next) asyn
       
     }
     else {
-      store.dispatch(OnUpdatedAccount(account)); 
+      store.dispatch(OnUpdatedAccount(account));
+       
     }
   }
   

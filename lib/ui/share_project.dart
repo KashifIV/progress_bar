@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:progress_bar/data/LinkBuilder.dart';
 import 'package:progress_bar/data/Project.dart';
 import 'package:progress_bar/domain/redux.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
 import 'package:redux/redux.dart';
+import 'package:share/share.dart';
 
 class ShareProject extends StatefulWidget {
   final Project project;
@@ -17,7 +19,10 @@ class _ShareProject extends State<ShareProject> {
   final controller = TextEditingController();
   void initState() {
     expanded = false;
-    emails = [];
+    if (widget.project.users != null && widget.project.users.length > 0){
+      emails = []..addAll(widget.project.users.where((e) => e.contains('@')));
+      emails.forEach((email) => addChip(email)); 
+    }else emails =[]; 
   }
 
   List<Widget> getEmailChips() {
@@ -75,7 +80,11 @@ class _ShareProject extends State<ShareProject> {
                   icon: Icon(Icons.add),
                   color: widget.project.toColor(),
                   splashColor: widget.project.toColor(),
-                  onPressed: () => addChip(controller.text),
+                  onPressed: (){
+                    addChip(controller.text);
+                    //emails.add(controller.text); 
+                    controller.text = ""; 
+                  }
                 )
               ],
             ),
@@ -86,10 +95,10 @@ class _ShareProject extends State<ShareProject> {
                 'Share!',
                 style: TextStyle(color: Colors.white),
               ),
-              onPressed: () => expanded = true,
+              onPressed: () => CollabProjectLink(widget.project, emails, model).then((value) => Share.share(value.toString())),
               color: widget.project.toColor(),
             ),
-          )
+          ), 
         ],
       ),
     ));

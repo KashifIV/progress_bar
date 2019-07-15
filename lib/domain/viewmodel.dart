@@ -14,10 +14,10 @@ class ViewModel {
   final WhiteList whiteList;
   final Function(Project, Auth) onCreateProject;
   final Function(Auth) onGetProject;
-  final Function(Project) onRemoveProject;
+  final Function(Project, bool) onRemoveProject;
   final Function(Project) onUpdateProject;
   final Function(Project) onUpdateProjectSettings; 
-
+  final Function(PageType) onUpdatePage; 
   final Function(Project, Task) onAddTask;
   final Function(Project, Task) onUpdateTask;
   final Function(Project, Task) onDeleteTask;
@@ -53,6 +53,7 @@ class ViewModel {
     this.onCreateLog,
     this.onCloneProject, 
     this.onUpdateProjectSettings, 
+    this.onUpdatePage,
   });
   factory ViewModel.create(Store<AppState> store){
     _onCreateProject(Project proj, Auth auth){
@@ -61,8 +62,8 @@ class ViewModel {
     _onGetProject(Auth auth){
       store.dispatch(GetProjectsAction(auth));
     }
-    _onRemoveProject(Project proj){
-      store.dispatch(DeleteProjectAction(proj));
+    _onRemoveProject(Project proj, bool isJoined){
+      store.dispatch(DeleteProjectAction(proj, isJoined: isJoined));
     }
     _onUpdateProject(Project proj){
       store.dispatch(UpdateProjectAction(proj));
@@ -100,6 +101,9 @@ class ViewModel {
     _onCreateLog(Project project, Task task, Log log){
       store.dispatch(CreateLogAction(project, task, log)); 
     }
+    _onUpdatePage(PageType page){
+      store.dispatch(UpdatePageAction(page)); 
+    }
     return ViewModel(
       account: store.state.account,
       projects: store.state.projects,
@@ -121,6 +125,7 @@ class ViewModel {
       onFetchAccount: _onFetchAccount,
       onCloneProject: _onCloneProject,
       onCreateLog: _onCreateLog,
+      onUpdatePage: _onUpdatePage,
     );
   }
 }

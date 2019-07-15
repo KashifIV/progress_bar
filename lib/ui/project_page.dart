@@ -110,7 +110,7 @@ class _ProjectPage extends State<ProjectPage> {
     if (time.day == 1  || time.day == 21 || time.day == 31)suffix = 'st'; 
     else if (time.day == 2 || time.day == 22) suffix = 'nd';
     else if (time.day == 3 || time.day == 23) suffix = 'rd';
-    return months[time.month] + ' ' + time.day.toString() + suffix + ' ' + time.year.toString(); 
+    return months[time.month-1] + ' ' + time.day.toString() + suffix + ' ' + time.year.toString(); 
   }
   Widget _AppBar(ViewModel model) {
     return new Hero(

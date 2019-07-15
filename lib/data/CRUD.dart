@@ -41,6 +41,20 @@ Future<Account> CreateUser(Auth auth, Account account)async{
   });
   return account; 
 }
+Future<String> FindEmailID(String email)async{
+  String id; 
+  try{
+    await Firestore.instance.runTransaction((transaction) async{
+      CollectionReference ref = Firestore.instance.collection('Accounts');
+      QuerySnapshot doc = await ref.where('email', isEqualTo: email).getDocuments();
+      id = doc.documents[0].documentID;
+    }); 
+    return id; 
+  }
+catch(e){
+  print(e); 
+}
+}
 Future<Account> FetchAccount(String id) async{
   DocumentReference ref = Firestore.instance.collection('Accounts').document(id); 
   DocumentSnapshot snapshot = await ref.get(); 
@@ -87,8 +101,10 @@ Future<void> UpdateProject(Project proj) async{
       values.documents.forEach((doc){
         if (doc.exists){
           Task t = proj.tasks.firstWhere((test) => test.id == doc.documentID);
+          try{
           Firestore.instance.document('Projects/' + proj.id +'/tasks/' + doc.documentID)
             .updateData(t.mapTo()).catchError((e) => print('UPDATE FAILED'));
+          }catch(e){print(e);}
         }
       });
     });
@@ -125,9 +141,6 @@ Future<void> UpdateProject(Project proj) async{
     DocumentReference ref = Firestore.instance.document('Projects/' + id); 
     DocumentSnapshot snapshot = await ref.get(); 
     List<String> tags = []; 
-    if (snapshot.data.containsKey('tags') && snapshot.data['tags'] != null){
-            List<String> tags = new List<String>.from(snapshot.data['tags']); 
-          } 
     project = Project.fromMap(snapshot.data, tags, snapshot.documentID); 
     project.setTasks(await getProjectTasks(project.id)); 
     return project; 
@@ -152,6 +165,16 @@ Future<void> UpdateProject(Project proj) async{
     for (int i = 0; i < a.length; i++){
       await a[i].setTasks(await getProjectTasks(a[i].id));
     }
+
+    DocumentSnapshot ref = await Firestore.instance.document('Accounts/' + auth.getUID()).get(); 
+    if (ref.data['joinedProjects'] != null){
+      List<String> additional= new List<String>.from(ref.data['joinedProjects']); 
+      for (int i = 0; i < additional.length; i++){
+        print(additional[i]); 
+        await a.add(await getProject(additional[i])); 
+      }
+    }
+  
     //a.forEach((proj) async => proj.setTasks(await getProjectTasks(proj.id))); 
     return a;
   }

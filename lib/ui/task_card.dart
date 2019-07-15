@@ -96,6 +96,20 @@ class _TaskCard extends State<TaskCard>{
     else return [SizedBox(width: 10,)]; 
 
   }
+  String _getTimeDifference(){
+    int days = widget.task.deadline.difference(DateTime.now()).inDays; 
+    String prefix = "Deadline: "; 
+    if (days < 0){
+      prefix = "Late: "; 
+      if (days == -1) return prefix + "Yesterday"; 
+      else days = days.abs(); 
+    }
+    else if (days == 0) return prefix + "Today"; 
+    else if (days == 1) return prefix + "Tomorrow"; 
+
+    return prefix + days.toString() + "Days"; 
+
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -121,7 +135,7 @@ class _TaskCard extends State<TaskCard>{
           trailing: Column(
             children: <Widget> [
               Text(
-            (widget.color == Colors.red)? 'Deadline: ' + (widget.task.deadline.difference(DateTime.now()).inDays).toString() + ' Days':'',
+            (widget.color == Colors.red)? _getTimeDifference():'',
             style: TextStyle(color: widget.color),
               ), 
               SizedBox(height: 10,),

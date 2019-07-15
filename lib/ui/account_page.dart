@@ -36,7 +36,12 @@ class _AccountPage extends State<AccountPage> {
         FlatButton(
           child: Text('Delete Project'),
           onPressed: () {
-            model.onRemoveProject(project);
+            if (model.account.joinedProjects.contains(project.id)){
+              model.account.joinedProjects = []..addAll(model.account.joinedProjects.where((proj) => proj != project.id));
+              model.onUpdateAccount(widget.auth, model.account); 
+              model.onRemoveProject(project, true);
+            }
+            else model.onRemoveProject(project, false);
             Navigator.pop(context);
           },
         )
@@ -49,8 +54,12 @@ class _AccountPage extends State<AccountPage> {
       content: Text('Clone: Give them a Copy. \nCollaborate: Work Together.'),
       actions: <Widget>[
         FlatButton(child: Text('Clone'), onPressed: () => CloneProjectLink(project).then((value) => Share.share(value.toString())),), 
-        FlatButton(child: Text('Collab'), onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ShareProject(project)))),
-      ],
+        FlatButton(child: Text('Collab'), onPressed: (){
+          Navigator.pop(context); 
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ShareProject(project)));
+          }
+          ),
+        ],
     );
   }
   List<Widget> _getProjects(ViewModel model, BuildContext context) {
@@ -139,8 +148,7 @@ class _AccountPage extends State<AccountPage> {
                     }
                     setState(() {
                      isEditing = !isEditing;  
-                    });
-                    
+                    });                    
                   },
                   child: Icon(
                     (isEditing) ?Icons.save:Icons.edit,
@@ -193,6 +201,7 @@ class _AccountPage extends State<AccountPage> {
                                             color: Colors.white, fontSize: 15),
                                       )),
                                   onPressed: () {
+                                    model.onUpdatePage(PageType.UND); 
                                     widget.onSignedOut();
                                     Navigator.pop(context);
                                   }))))))));

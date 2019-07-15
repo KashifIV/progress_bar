@@ -33,7 +33,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
   Timer _timerLink;
   Project clonedProject, collabedProject; 
   Widget _logo(ViewModel model, BuildContext context) {
-    return ProgressOverview(model.projects[projIndex]); 
+    return ProgressOverview((projIndex < model.projects.length) ? model.projects[projIndex] : null, widget.auth, widget.onSignedOut); 
   }
     @override
   void initState() {
@@ -55,15 +55,23 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
      if (deepLink != null)
       if (deepLink.pathSegments[0] == 'cloneProject'){
         Project temp = await cloneProject(deepLink.toString(), widget.auth.getUID());
+        if (this.mounted){
         setState(() {
           clonedProject = temp; 
         });
+        }else clonedProject = temp; 
       }
       else if (deepLink.pathSegments[0] == 'collab'){
         Project temp = await collabProject(deepLink.toString(), widget.auth.getUID()); 
+        if (temp == null){
+          return; 
+        }
+        if (this.mounted){
         setState(() {
           collabedProject = temp;  
         });
+        }
+        else collabedProject = temp; 
       } 
      return; 
     
@@ -105,8 +113,9 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
       clonedProject = null; 
     }
     if (collabedProject != null){
-      model.account.joinedProjects.add(collabedProject.id); 
+      model.account.joinedProjects = []..addAll(model.account.joinedProjects)..add(collabedProject.id); 
       model.onCloneProject(collabedProject); 
+      model.onUpdateAccount(widget.auth, model.account); 
       collabedProject = null; 
     }
     switch (model.pageType) {
@@ -158,7 +167,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
         SizedBox(
           height: 110,
           child: PageView.builder(
-            itemCount: model.projects.length + 1,
+            itemCount: model.projects.length+1,
             controller: controller,
             onPageChanged: onPageChanged,
             itemBuilder: (BuildContext context, int index) {
@@ -212,7 +221,6 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
         rebuildOnChange: true,
         builder: (BuildContext context, ViewModel model) => Scaffold(
           backgroundColor: Colors.white,
-          drawer: MainDrawer(model.account.name, auth: widget.auth, onSignedOut: widget.onSignedOut,),
               body: SafeArea(
                 child: Column(
                   children: <Widget>[

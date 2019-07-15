@@ -56,6 +56,7 @@ class Project {
     dataMap['tags'] = tags;
     dataMap['deadline'] = deadline; 
     dataMap['dateCreated'] = dateCreated; 
+    dataMap['collab'] = users; 
     return dataMap;
   }
 
@@ -67,6 +68,7 @@ class Project {
     dataMap['tags'] = tags;
     dataMap['deadline'] = deadline; 
     dataMap['dateCreated'] = dateCreated; 
+    dataMap['collab'] = users; 
     return dataMap;
   }
 
@@ -80,7 +82,8 @@ class Project {
       id: documentID, 
       deadline: (map.containsKey('deadline')) ? map['deadline'] : null,
       dateCreated: (map.containsKey('dateCreated')) ? map['dateCreated']: DateTime.now(), 
-      index: count
+      index: count,
+      users: (map.containsKey('collab')) ? new List<String>.from(map['collab']) : [],
     );
   }
   double getPercentComplete(String tag) {
@@ -156,6 +159,7 @@ class Project {
     name = proj.name;
   }
   void updateSettings(Project proj){
+    users = proj.users; 
     description = proj.description; 
     projType = proj.projType; 
     deadline = proj.deadline; 

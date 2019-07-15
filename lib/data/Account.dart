@@ -7,7 +7,7 @@ class Account{
   String email; 
   Image profileImage; 
   String progressType; 
-  List<String> joinedProjects; 
+  List<String> joinedProjects = []; 
   Account({this.id, this.profileImageURL, this.name, this.email, this.joinedProjects, this.progressType}); 
   
   Map<String, dynamic> mapTo(){
