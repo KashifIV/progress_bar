@@ -42,7 +42,7 @@ class Task{
     DateTime created; 
     if (map.containsKey('dateCreated')) created = map['dateCreated']; 
     else created = DateTime.now(); 
-    bool completion = true; 
+    bool completion = map['complete']; 
     DateTime dead = (map.containsKey('deadline')? map['deadline']:null);
     if (map.containsKey('routine') && map['routine'] != null && map.containsKey('dateCompleted')){
      DateTime dateComp = map['dateCompleted']; 
@@ -52,13 +52,13 @@ class Task{
          completion = false; 
        }
        else if (routine == 1 ){
-         if (dead.difference(dateComp).inDays < 0 ){
+         if (dead.difference(dateComp).inDays > 0 ){
            completion = false; 
            dead.add(Duration(days: 7)); 
          }
        }
        else if (routine == 2){
-         if (dead.difference(dateComp).inDays < 0){
+         if (dead.difference(dateComp).inDays > 0){
            completion = false; 
            dead = new DateTime(dead.year, dead.month+1, dead.day); 
          }
@@ -74,7 +74,7 @@ class Task{
     return new Task(
       id: documentID,
       name: map['name'], 
-      complete: completion, 
+      complete:  completion,  
       tags: (map.containsKey('tags') &&map['tags'] != null) ? new List<String>.from(map['tags']):null, 
       notes:map['notes'], 
       order: map['order'], 

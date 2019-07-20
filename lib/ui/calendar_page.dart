@@ -34,13 +34,13 @@ class _CalendarPage extends State<CalendarPage>{
   void initState(){
     selectedDay = DateTime.now(); 
   }
-  Widget _title(String title) {
+  Widget _title(String title, ViewModel model) {
     return Container(
       padding: EdgeInsets.all(20),
       child: Text(
         title,
         softWrap: true,
-        style: TextStyle(fontSize: 60),
+        style: TextStyle(fontSize: 60,color: (model.account.darkTheme) ? Colors.white: Colors.black),
         textAlign: TextAlign.left,
       ),
     );
@@ -50,16 +50,18 @@ class _CalendarPage extends State<CalendarPage>{
     return StoreConnector<AppState, ViewModel>(
         converter: (Store<AppState> store) => ViewModel.create(store),
         builder: (BuildContext context, ViewModel model) => Scaffold(
+          backgroundColor:  (model.account.darkTheme) ? Colors.black: Colors.white,
       body: SafeArea(
         child: Column(
           children: <Widget>[
-            _title('Callendar'),
+            _title('Callendar', model),
         Container(
           height: 450,
         margin: EdgeInsets.symmetric(horizontal: 16.0),
         child: CalendarCarousel(
           selectedDateTime: selectedDay,
           markedDatesMap: _getDates(model),
+          daysTextStyle: TextStyle(color:  (model.account.darkTheme) ? Colors.white: Colors.black,),
           onDayPressed: (date, values){
             setState(() {
               selectedDay = date;  

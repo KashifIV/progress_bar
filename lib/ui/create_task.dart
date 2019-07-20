@@ -34,6 +34,12 @@ class _CreateTask extends State<CreateTask> with TickerProviderStateMixin {
         name: controller.text, complete: false, dateCreated: DateTime.now(), duration: duration, deadline: deadline, routine: routine);
     model.onAddTask(model.projects[widget.index], t);
     controller.text = "";
+  
+    setState(() {
+      deadline = null; 
+    routine = null; 
+    duration = null; 
+    });
   }
 
   void dispose() {
@@ -42,16 +48,25 @@ class _CreateTask extends State<CreateTask> with TickerProviderStateMixin {
   }
   Widget _expandedOptions(ViewModel model){
     if (isExpanded){
-      return DateOptions(
+      return Padding(
+        padding: EdgeInsets.only(right: 0),
+        child: DateOptions(
+        dark: model.account.darkTheme,
         deadline: deadline,
         duration: duration,
         routine: routine,
         onDeadlineChange: (value){
           if (routine == null || routine < 1){
-            deadline = value; 
+            setState(() {
+               deadline = value; 
+            });
+           
           }
           else{
-            deadline = value; 
+            setState(() {
+              deadline = value; 
+            });
+            
             if (routine == 1 && deadline.difference(DateTime.now()).inDays > 7){
               deadline = deadline.add(Duration(days: 7)); 
             } else if (routine == 2 &&
@@ -59,23 +74,34 @@ class _CreateTask extends State<CreateTask> with TickerProviderStateMixin {
                       .difference(DateTime.now().add(Duration(days: 31)))
                       .inDays <
                   31){
-                    deadline = DateTime(DateTime.now().year,
+                    setState(() {
+                       deadline = DateTime(DateTime.now().year,
                       (DateTime.now().month + 1) % 12, DateTime.now().day);
+                    });
+                   
                   }
           }
         },
         onRoutineChange: (value){
-          routine = value; 
+          setState(() {
+            routine = value; 
+          });
+          
           if (value == 1 && deadline.difference((DateTime.now())).inDays > 7){
-            deadline = DateTime.now().add(Duration(days: 7)); 
+            setState(() {
+              deadline = DateTime.now().add(Duration(days: 7)); 
+            });
+            
           }else if (value == 2 &&
             deadline.difference(DateTime.now()).inDays > 31) {
-          deadline = DateTime(DateTime.now().year,
+              setState(() {
+                deadline = DateTime(DateTime.now().year,
               (DateTime.now().month + 1) % 12, DateTime.now().day);
+              });
         }
         },
-        onDurationChange: (value) => duration= value,
-      ); 
+        onDurationChange: (value) => setState( () => duration= value,)
+      )); 
     }
     return SizedBox(); 
   }
@@ -90,10 +116,11 @@ class _CreateTask extends State<CreateTask> with TickerProviderStateMixin {
             left: 7,
             right: 7,
             child: Container(
-                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+              
+                padding: EdgeInsets.fromLTRB(2, 0, 10, 0),
                 decoration: BoxDecoration(
                     borderRadius: new BorderRadius.circular(20.0),
-                    color: Colors.white,
+                    color: (model.account.darkTheme) ? Colors.black: Colors.white,
                     border: Border.all(
                       color: model.projects[widget.index].toColor(),
                       width: 2.6,
@@ -101,16 +128,21 @@ class _CreateTask extends State<CreateTask> with TickerProviderStateMixin {
                 child:Column(
                   children: <Widget>
                   [ 
-                    Row(children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
                   Container(
+                     padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
                     width: MediaQuery.of(context).size.width - 110,
                     child: TextField(
+                      style: TextStyle(color: (model.account.darkTheme) ? Colors.white: Colors.black),
                       onSubmitted: (value) => _createNewTaskNew(model),
                       controller: controller,
                       focusNode: _focus,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Task Name',
+                        hintStyle: TextStyle(color: Colors.grey)
                       ),
                     ),
                   ),
@@ -134,8 +166,8 @@ class _CreateTask extends State<CreateTask> with TickerProviderStateMixin {
                       }), 
                   
                 ]),
+                SizedBox(height: 3,),
                 _expandedOptions(model),
-                SizedBox(height: 5,)
               ])
             )));
   }

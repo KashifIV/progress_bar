@@ -14,7 +14,7 @@ class AppState{
     this.account, this.projects, this.taskView, this.auth, this.page, this.whiteList, 
     );
 
-  factory AppState.initialState() => AppState(new Account(),List.unmodifiable([]), TaskViewType.empty, new Auth(), PageType.UND, WhiteList.incomplete);
+  factory AppState.initialState() => AppState(new Account(darkTheme: false),List.unmodifiable([]), TaskViewType.empty, new Auth(), PageType.UND, WhiteList.incomplete);
 }
 enum WhiteList{
   incomplete, complete,all,tag, emergency

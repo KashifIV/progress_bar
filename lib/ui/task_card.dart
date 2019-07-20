@@ -123,13 +123,13 @@ class _TaskCard extends State<TaskCard>{
       child: GestureDetector(
         onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TaskPage(widget.index,model.projects[widget.index].tasks.indexOf(widget.task), task: widget.task,))),
         child: new Container(
-        color: Colors.white,
+        color: (model.account.darkTheme) ? Colors.black : Colors.white,
         child:Column(children: <Widget>[ ListTile(
           dense: true,
           title: Text(widget.task.name,
             style: TextStyle(
               fontSize: 18,
-              color: (widget.color != null) ?widget.color: Colors.black,
+              color: (widget.color != null) ?widget.color: (model.account.darkTheme)? Colors.white: Colors.black,
             ),
           ),
           trailing: Column(

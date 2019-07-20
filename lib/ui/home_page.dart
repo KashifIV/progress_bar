@@ -221,7 +221,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
         converter: (Store<AppState> store) => ViewModel.create(store),
         rebuildOnChange: true,
         builder: (BuildContext context, ViewModel model) => Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: (model.account.darkTheme)? Colors.black: Colors.white,
               body: SafeArea(
                 child: Column(
                   children: <Widget>[

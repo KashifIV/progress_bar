@@ -40,11 +40,26 @@ class _SettingsPage extends State<SettingsPage>{
       ),
     );
   }
+  Widget darkTheme(ViewModel model){
+    return ListTile(
+      leading: Icon(Icons.brightness_medium),
+      title: Text('Dark Mode'),
+      trailing: Switch(
+        value: model.account.darkTheme,
+        onChanged: (value){
+          Account account = model.account; 
+          account.darkTheme = value; 
+          model.onUpdateAccount(widget.auth, account); 
+        },
+      ),
+    );
+  }
   Widget _options(ViewModel model){
     return Container(
       child: Column(
         children: <Widget>[
-          item(Icon(Icons.adjust), 'Progress Type', ['Task','Deadline', 'Time'], model, initialValue: model.account.progressType), 
+          item(Icon(Icons.adjust), 'Progress Type', ['Task','Deadline', 'Time'], model, initialValue: model.account.progressType),
+          darkTheme(model) 
         ],
       ),
     );

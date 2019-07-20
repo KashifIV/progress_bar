@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_duration_picker/flutter_duration_picker.dart';
+
 class DateOptions extends StatelessWidget {
   final DateTime deadline;
   int routine; 
@@ -7,8 +8,10 @@ class DateOptions extends StatelessWidget {
   final Function(DateTime value) onDeadlineChange;
   final Function(int value) onRoutineChange;
   final Function (Duration time) onDurationChange; 
+  bool dark; 
 
   void initState(){
+    if (this.dark == null) dark = false; 
   }
   DateOptions(
       {this.deadline,
@@ -16,12 +19,12 @@ class DateOptions extends StatelessWidget {
       this.duration,
       this.onDeadlineChange,
       this.onDurationChange,
-      this.onRoutineChange});
+      this.onRoutineChange,
+      this.dark,
+      });
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal:3),
-      child:Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         FlatButton(
@@ -32,13 +35,13 @@ class DateOptions extends StatelessWidget {
                     lastDate: DateTime(2030),
                     builder: (BuildContext context, Widget child) {
                       return Theme(
-                        data: ThemeData.light(),
+                        data: (dark) ? ThemeData.dark(): ThemeData.light(),
                         child: child,
                       );
                     }).then((onValue) => onDeadlineChange(onValue)),
           child: Row(
             children: <Widget>[
-              Icon(Icons.calendar_today),
+              Icon(Icons.calendar_today, color: (dark) ? Colors.white: Colors.black,),
               SizedBox(width: 8,),
               Text(
                 (deadline != null)
@@ -48,6 +51,7 @@ class DateOptions extends StatelessWidget {
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 14,
+                  color: (dark) ? Colors.white: Colors.black
                 ),
               )
             ],
@@ -60,7 +64,7 @@ class DateOptions extends StatelessWidget {
           ).then((onValue) => onDurationChange(onValue)),
           child: Row(
             children: <Widget>[
-              Icon(Icons.timer),
+              Icon(Icons.timer, color: (dark) ? Colors.white: Colors.black,),
               SizedBox(width: 8,),
               Text(
                 (duration != null)
@@ -69,6 +73,7 @@ class DateOptions extends StatelessWidget {
                     : 'Add a \nDuration.',
                 textAlign: TextAlign.left,
                 style: TextStyle(
+                  color: (dark) ? Colors.white: Colors.black,
                   fontSize: 14,
                 ),
               )
@@ -78,17 +83,18 @@ class DateOptions extends StatelessWidget {
         Container(
           child: Row(
             children: <Widget>[
-              Icon(Icons.access_time), 
+              Icon(Icons.access_time, color: (dark) ? Colors.white: Colors.black,), 
               SizedBox(width: 10,), 
               DropdownButton(
                 value: routine,
                 hint: Text('Add a \nRoutine'),
                 onChanged: (value) => onRoutineChange(value),
+                
                 items: <DropdownMenuItem>[
-                  DropdownMenuItem(child: Text('None'), value: null), 
-                  DropdownMenuItem(child: Text('Daily'),value: 0,), 
-                  DropdownMenuItem(child: Text('Weekly'),value: 1,),
-                  DropdownMenuItem(child: Text('Monthly'), value: 2)
+                  DropdownMenuItem(child: Text('None',style: TextStyle(color: (dark) ? Colors.grey: Colors.black),), value: null), 
+                  DropdownMenuItem(child: Text('Daily',style: TextStyle(color: (dark) ? Colors.grey: Colors.black),),value: 0,), 
+                  DropdownMenuItem(child: Text('Weekly',style: TextStyle(color: (dark) ? Colors.grey: Colors.black),),value: 1,),
+                  DropdownMenuItem(child: Text('Monthly',style: TextStyle(color: (dark) ? Colors.grey: Colors.black),), value: 2)
                 ],
               ),
             ],
@@ -96,6 +102,6 @@ class DateOptions extends StatelessWidget {
         )
 
       ],
-    ));
+    );
   }
 }

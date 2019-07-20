@@ -195,6 +195,7 @@ class _ProjectPage extends State<ProjectPage> {
         converter: (Store<AppState> store) => ViewModel.create(store),
         rebuildOnChange: true,
         builder: (BuildContext context, ViewModel model) => Scaffold(
+          backgroundColor: (model.account.darkTheme) ? Colors.black : Colors.white,
               body: RefreshIndicator(
                   onRefresh: () => _onRefresh(model),
                   child: Stack(children: <Widget>[

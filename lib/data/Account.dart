@@ -5,10 +5,11 @@ class Account{
   String profileImageURL; 
   String name; 
   String email; 
+  bool darkTheme; 
   Image profileImage; 
   String progressType; 
   List<String> joinedProjects = []; 
-  Account({this.id, this.profileImageURL, this.name, this.email, this.joinedProjects, this.progressType}); 
+  Account({this.id, this.profileImageURL, this.name, this.email, this.joinedProjects, this.progressType, this.darkTheme}); 
   
   Map<String, dynamic> mapTo(){
     var dataMap = new Map<String, dynamic>(); 
@@ -17,6 +18,7 @@ class Account{
     dataMap['email'] = this.email; 
     dataMap['joinedProjects'] = this.joinedProjects; 
     dataMap['progressType']  = this.progressType; 
+    dataMap['darkTheme'] = this.darkTheme;
     return dataMap; 
   }
   factory Account.fromMap(String id, Map<String, dynamic> map){
@@ -25,6 +27,7 @@ class Account{
       profileImageURL: map['profileImageURL'], 
       name: map['name'], 
       email: map['email'], 
+      darkTheme: (map.containsKey('darkTheme')) ?  map['darkTheme'] : false,
       joinedProjects: (map.containsKey('joinedProjects'))? map['joinedProjects'].cast<String>() : [],
       progressType: (map.containsKey('progressType')) ? map['progressType'] : 'Task', 
     ); 

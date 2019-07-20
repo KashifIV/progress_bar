@@ -112,7 +112,7 @@ class _AccountPage extends State<AccountPage> {
       return Text(
         (model.account.name == null) ? 'Username' : model.account.name,
         style: TextStyle(
-          color: Colors.black,
+          color: (model.account.darkTheme) ? Colors.white: Colors.black,
           fontSize: 32,
         ),
       );
@@ -123,7 +123,8 @@ class _AccountPage extends State<AccountPage> {
         controller: userControl,
         textAlign: TextAlign.center,
         style: TextStyle(
-          fontSize: 20
+          fontSize: 20,
+          color: (model.account.darkTheme) ? Colors.white: Colors.black
         ),
       ),
     );
@@ -135,6 +136,7 @@ class _AccountPage extends State<AccountPage> {
         converter: (Store<AppState> store) => ViewModel.create(store),
         rebuildOnChange: true,
         builder: (BuildContext context, ViewModel model) => Scaffold(
+          backgroundColor: (model.account.darkTheme) ? Colors.black: Colors.white,
             appBar: AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0,
@@ -155,7 +157,7 @@ class _AccountPage extends State<AccountPage> {
                   },
                   child: Icon(
                     (isEditing) ?Icons.save:Icons.edit,
-                    color: Colors.black,
+                    color: (model.account.darkTheme) ? Colors.white: Colors.black,
                   ),
                 )
               ],
@@ -179,7 +181,7 @@ class _AccountPage extends State<AccountPage> {
                       ? 'Username'
                       : model.account.name,
                   style: TextStyle(
-                    color: Colors.black,
+                    color: (model.account.darkTheme) ? Colors.white: Colors.black,
                     fontSize: 32,
                   ),
                 ),
@@ -187,7 +189,7 @@ class _AccountPage extends State<AccountPage> {
               Center(
                   child: Text(
                 (model.account.email == null) ? 'Email' : model.account.email,
-                style: TextStyle(color: Colors.black, fontSize: 20),
+                style: TextStyle(color: (model.account.darkTheme) ? Colors.white: Colors.black, fontSize: 20),
               )),
               SizedBox(
                 height: 20,

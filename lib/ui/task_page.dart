@@ -42,13 +42,15 @@ class _TaskPage extends State<TaskPage> {
           'Notes',
           style: TextStyle(
             fontSize: 18,
+            color: (model.account.darkTheme) ? Colors.white: Colors.black,
           ),
           textAlign: TextAlign.left,
         ),
       ),
       Container(
+        
         padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-        decoration: BoxDecoration(color: Colors.white),
+        decoration: BoxDecoration(color:  (model.account.darkTheme) ? Colors.black: Colors.white,),
         child: TextField(
           autocorrect: true,
           decoration: InputDecoration(
@@ -66,13 +68,13 @@ class _TaskPage extends State<TaskPage> {
     ]);
   }
 
-  Widget _title(String title) {
+  Widget _title(String title, Color color) {
     return Container(
       padding: EdgeInsets.all(20),
       child: Text(
         title,
         softWrap: true,
-        style: TextStyle(fontSize: 40),
+        style: TextStyle(fontSize: 40, color: color,)
       ),
     );
   }
@@ -91,6 +93,7 @@ class _TaskPage extends State<TaskPage> {
                 .toString()
                 .substring(0, 10);
     return DateOptions(
+      dark: model.account.darkTheme,
       deadline:
           model.projects[widget.projIndex].tasks[widget.taskIndex].deadline,
       onDeadlineChange: (value) {
@@ -174,13 +177,14 @@ class _TaskPage extends State<TaskPage> {
         builder: (BuildContext context, ViewModel model) => WillPopScope(
             onWillPop: () => onPop(model),
             child: Scaffold(
+              backgroundColor: (model.account.darkTheme) ? Colors.black : Colors.white,
                 body: SafeArea(
                     child: CustomScrollView(
               slivers: <Widget>[
                 SliverList(
                   delegate: SliverChildListDelegate(<Widget>[]
                     ..add(_title(model.projects[widget.projIndex]
-                        .tasks[widget.taskIndex].name))
+                        .tasks[widget.taskIndex].name, (model.account.darkTheme) ? Colors.white: Colors.black))
                     ..add(TaskTags(widget.projIndex, widget.taskIndex))
                     ..add(_datePicker(context, model))
                     ..add(TaskLog(widget.projIndex, widget.taskIndex))

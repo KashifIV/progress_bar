@@ -9,7 +9,7 @@ import 'package:progress_bar/domain/viewmodel.dart';
 class TaskLog extends StatelessWidget{
   final int projid, taskid; 
   TaskLog(this.projid, this.taskid); 
-  Widget createLogView(Log log){
+  Widget createLogView(Log log, ViewModel model){
     return Container(
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.symmetric(horizontal: 15),
@@ -25,6 +25,7 @@ class TaskLog extends StatelessWidget{
           title: Text(log.account.name + ', on ' +  ['January', 'February', 'March', 'April', 'May', 'June', 'July'
           'August', 'September', 'October', 'November', 'December'][log.dateWritten.month] + ' ' + log.dateWritten.day.toString(),
           style: TextStyle(
+            color: (model.account.darkTheme) ? Colors.white: Colors.black,
             fontSize: 20
           ),
           ),
@@ -39,7 +40,7 @@ class TaskLog extends StatelessWidget{
             softWrap: true,
             style: TextStyle(
               fontSize: 15, 
-              
+               color: (model.account.darkTheme) ? Colors.white: Colors.black,
             ),
           ),
         ))
@@ -87,6 +88,7 @@ Container(
           leading: CircleAvatar(child: Text((model.account.name == null)? 'U':model.account.name[0]),),
           title: Text('Create a New Log:',
           style: TextStyle(
+             color: (model.account.darkTheme) ? Colors.white: Colors.black,
             fontSize: 20
           ),
           ),
@@ -97,6 +99,8 @@ Container(
           margin: EdgeInsets.symmetric(horizontal: 15),
           child: TextField(
             controller: controller,
+            
+            style: TextStyle( color: (model.account.darkTheme) ? Colors.white: Colors.black,),
             onSubmitted: (value){
               Task task = model.projects[projid].tasks[taskid]; 
               if (task.logs == null) task.logs = []; 
@@ -110,7 +114,7 @@ Container(
       ],),
     );
   }
-  List<Widget> _getLogs(Task task){
+  List<Widget> _getLogs(Task task, ViewModel model){
     List<Widget> logs = [];
     if (task.logs == null) return [SizedBox(height: 5,)];
     logs.add(SizedBox(height: 10,)); 
@@ -125,7 +129,7 @@ Container(
       else temp = log.dateWritten;
        if (days == null) logs.add(SizedBox(height: 10,)); 
       else logs.add(Center(child:timeBetween(days))); 
-      logs.add(createLogView(log)); 
+      logs.add(createLogView(log, model)); 
     });
     if (temp != null){
       logs.add(timeBetween(DateTime.now().difference(temp).inDays)); 
@@ -138,7 +142,7 @@ Container(
         rebuildOnChange: true,
         converter: (Store<AppState> store) => ViewModel.create(store),
         builder: (BuildContext context, ViewModel model) => Column(
-      children: _getLogs(model.projects[projid].tasks[taskid])..add(newLogView(model)),
+      children: _getLogs(model.projects[projid].tasks[taskid], model)..add(newLogView(model)),
     )); 
   }
 }

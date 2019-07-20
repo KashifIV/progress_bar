@@ -10,4 +10,3 @@ List<Color> completionColors = [
   Colors.grey, Colors.green
 ];
 
-

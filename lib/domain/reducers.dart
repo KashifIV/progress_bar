@@ -79,8 +79,8 @@ List<Project> projectsReducer(List<Project> state, action){
   }
   if (action is LoadedTasksAction){
     List<Project> value = []..addAll(state);
-    value.firstWhere((test) => test == action.proj).tasks = action.tasks;
-    value.firstWhere((test) => test == action.proj).state = PageType.VAL;
+    value.firstWhere((test) => test.id == action.proj.id).tasks = action.tasks;
+    value.firstWhere((test) => test.id == action.proj.id).state = PageType.VAL;
     return value;
   }
   return state;

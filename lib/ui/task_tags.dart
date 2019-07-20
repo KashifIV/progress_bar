@@ -80,7 +80,7 @@ class _TaskTags extends State<TaskTags>{
       padding: EdgeInsets.only(left: 4, right: 4,),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20), 
-        color: Colors.white,
+        color: (model.account.darkTheme) ? Colors.black: Colors.white,
         border: Border.all(
           color: Colors.grey,
           width: 2,
@@ -95,10 +95,13 @@ class _TaskTags extends State<TaskTags>{
           model.onUpdateTask(model.projects[widget.projIndex], model.projects[widget.projIndex].tasks[widget.taskIndex]);
           model.onUpdateProject(model.projects[widget.projIndex]);
         },
+        style: TextStyle( color: (model.account.darkTheme) ? Colors.white: Colors.black,),
+        
         controller: newTagController,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(6),
           hintText: 'Add a Tag +',
+          hintStyle: TextStyle( color: (model.account.darkTheme) ? Colors.grey: Colors.grey,),
           border: InputBorder.none
         ),
       ),
@@ -120,7 +123,10 @@ class _TaskTags extends State<TaskTags>{
     List<String> options = (used != null) ? tags.where((tag) => !used.contains(tag)).toList(): tags;
     List<Widget> tagChips = []; 
     options.forEach((tag) => tagChips.add(_createGraidentChip(tag, model))); 
-    return ExpansionPanelList(
+    return Theme( 
+      data: ThemeData.dark(),
+      child: ExpansionPanelList(
+      
       expansionCallback: (int index, bool expanded){
         setState(() {
          isExpanded = !isExpanded;  
@@ -131,12 +137,14 @@ class _TaskTags extends State<TaskTags>{
           canTapOnHeader: true,
           headerBuilder: (BuildContext context, bool isExpanded) =>
             Container(
+              //color: (model.account.darkTheme) ? Colors.black: Colors.white,
               padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
               child: Row(
                 children: <Widget>[
                   Text('Tags',
                     style: TextStyle(
                       fontSize: 18,
+                      //color: (model.account.darkTheme) ? Colors.white: Colors.black,
                     ),
                   ),
                 ]
@@ -145,13 +153,13 @@ class _TaskTags extends State<TaskTags>{
             isExpanded: isExpanded,
           body: Container(
             width: MediaQuery.of(context).size.width,
-          color:Colors.white,
+          color:(model.account.darkTheme) ? Colors.black: Colors.white,
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Wrap(
             children: tagChips,
             spacing: 20.0,
           )
-    ))]); 
+    ))])); 
   }
   @override
   Widget build(BuildContext context) {
