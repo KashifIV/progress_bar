@@ -174,6 +174,7 @@ class _TaskCard extends State<TaskCard>{
           color: Colors.red,
           onTap: () => model.onDeleteTask(model.projects[widget.index],widget.task),
         ),
+        /*
         new IconSlideAction(
           caption: 'Settings',
           icon: Icons.settings,
@@ -181,7 +182,8 @@ class _TaskCard extends State<TaskCard>{
           onTap: (){
             showDialog(context: context, builder: (context)=> Dialog(child: dialog(model, context),));
           },
-        ),
+          
+        ),*/
       ],
     ));
   }

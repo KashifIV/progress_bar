@@ -9,6 +9,7 @@ import 'package:progress_bar/data/auth.dart';
 import 'package:progress_bar/ui/project_card.dart';
 import 'package:progress_bar/ui/share_project.dart';
 import 'package:redux/redux.dart';
+import 'package:progress_bar/ui/create_project.dart';
 import 'package:progress_bar/domain/redux.dart';
 import 'package:share/share.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
@@ -94,8 +95,10 @@ class _AccountPage extends State<AccountPage> {
               ),
               IconSlideAction(
                 color: Colors.grey,
-                icon: Icons.visibility,
-                caption: 'Hide Project',
+                icon: Icons.settings,
+                caption: 'Project Settings',
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CreateProject(project: model.projects[project.index],)))
+                      .then((onValue) => model.onUpdateProject(model.projects[project.index])),
               )
             ],
           )));

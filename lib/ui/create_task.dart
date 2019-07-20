@@ -18,6 +18,9 @@ class _CreateTask extends State<CreateTask> with TickerProviderStateMixin {
   bool isExpanded;
   AnimationController rotationController;
   FocusNode _focus;
+  DateTime deadline; 
+  int routine; 
+  Duration duration; 
   void initState() {
     isExpanded = false;
     _focus = new FocusNode();
@@ -28,7 +31,7 @@ class _CreateTask extends State<CreateTask> with TickerProviderStateMixin {
 
   void _createNewTaskNew(ViewModel model) {
     Task t = new Task(
-        name: controller.text, complete: false, dateCreated: DateTime.now());
+        name: controller.text, complete: false, dateCreated: DateTime.now(), duration: duration, deadline: deadline, routine: routine);
     model.onAddTask(model.projects[widget.index], t);
     controller.text = "";
   }
@@ -39,7 +42,40 @@ class _CreateTask extends State<CreateTask> with TickerProviderStateMixin {
   }
   Widget _expandedOptions(ViewModel model){
     if (isExpanded){
-      return DateOptions(); 
+      return DateOptions(
+        deadline: deadline,
+        duration: duration,
+        routine: routine,
+        onDeadlineChange: (value){
+          if (routine == null || routine < 1){
+            deadline = value; 
+          }
+          else{
+            deadline = value; 
+            if (routine == 1 && deadline.difference(DateTime.now()).inDays > 7){
+              deadline = deadline.add(Duration(days: 7)); 
+            } else if (routine == 2 &&
+              deadline
+                      .difference(DateTime.now().add(Duration(days: 31)))
+                      .inDays <
+                  31){
+                    deadline = DateTime(DateTime.now().year,
+                      (DateTime.now().month + 1) % 12, DateTime.now().day);
+                  }
+          }
+        },
+        onRoutineChange: (value){
+          routine = value; 
+          if (value == 1 && deadline.difference((DateTime.now())).inDays > 7){
+            deadline = DateTime.now().add(Duration(days: 7)); 
+          }else if (value == 2 &&
+            deadline.difference(DateTime.now()).inDays > 31) {
+          deadline = DateTime(DateTime.now().year,
+              (DateTime.now().month + 1) % 12, DateTime.now().day);
+        }
+        },
+        onDurationChange: (value) => duration= value,
+      ); 
     }
     return SizedBox(); 
   }
@@ -98,7 +134,8 @@ class _CreateTask extends State<CreateTask> with TickerProviderStateMixin {
                       }), 
                   
                 ]),
-                _expandedOptions(model)
+                _expandedOptions(model),
+                SizedBox(height: 5,)
               ])
             )));
   }

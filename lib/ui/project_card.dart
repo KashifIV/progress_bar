@@ -12,6 +12,7 @@ class ProjectCard extends StatelessWidget {
   final int index;
   ProjectCard(this.index);
   void _openProject(BuildContext context, ViewModel model) {
+    model.onUpdateWhiteList(WhiteList.incomplete); 
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => ProjectPage(index)));
   }

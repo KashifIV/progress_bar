@@ -173,13 +173,14 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
             itemBuilder: (BuildContext context, int index) {
               if (index == model.projects.length) {
                 return Container(child: GestureDetector(
-                  onTap: () => Navigator.push(
+                  onTap: () {
+                    Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => CreateProject(auth:widget.auth)))
                               .then((context) => Navigator.push(context, 
                               MaterialPageRoute(builder: (context) => ProjectPage(model.projects.last.index))
-                              )),
+                              ));},
                   child: Container(
                     height: 150,
                     width: MediaQuery.of(context).size.width * 0.80,

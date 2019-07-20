@@ -30,6 +30,7 @@ class _SettingsPage extends State<SettingsPage>{
       title: Text(title),
       trailing: DropdownButton(
         items: dropDown,
+        value: model.account.progressType,
         onChanged: (value){
           Account account = model.account; 
           account.progressType = value; 
@@ -43,7 +44,7 @@ class _SettingsPage extends State<SettingsPage>{
     return Container(
       child: Column(
         children: <Widget>[
-          item(Icon(Icons.input), 'Progress Type', ['Task','Deadline', 'Time'], model, initialValue: model.account.progressType), 
+          item(Icon(Icons.adjust), 'Progress Type', ['Task','Deadline', 'Time'], model, initialValue: model.account.progressType), 
         ],
       ),
     );

@@ -74,7 +74,7 @@ class Task{
     return new Task(
       id: documentID,
       name: map['name'], 
-      complete: (completion) ? map['complete']:false, 
+      complete: completion, 
       tags: (map.containsKey('tags') &&map['tags'] != null) ? new List<String>.from(map['tags']):null, 
       notes:map['notes'], 
       order: map['order'], 

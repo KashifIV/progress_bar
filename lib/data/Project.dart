@@ -42,7 +42,9 @@ class Project {
           if (!tags.contains(tag)) tags.add(tag);
         });
       }
-      if (task.complete) tasksComplete++; 
+      if (task.complete){
+        tasksComplete++;
+      } 
       else tasksToDo++;
     });
   }
