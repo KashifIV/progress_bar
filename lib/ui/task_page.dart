@@ -94,16 +94,19 @@ class _TaskPage extends State<TaskPage> {
       deadline:
           model.projects[widget.projIndex].tasks[widget.taskIndex].deadline,
       onDeadlineChange: (value) {
-        if (model.projects[widget.projIndex].tasks[widget.taskIndex].routine == null || model.projects[widget.projIndex].tasks[widget.taskIndex].routine <
-            1 ) {
+        if (model.projects[widget.projIndex].tasks[widget.taskIndex].routine ==
+                null ||
+            model.projects[widget.projIndex].tasks[widget.taskIndex].routine <
+                1) {
           model.projects[widget.projIndex].tasks[widget.taskIndex].deadline =
               value;
         } else {
           Task t = model.projects[widget.projIndex].tasks[widget.taskIndex];
-          t.deadline = value; 
-          if (t.routine == 1 && t.deadline.difference(DateTime.now()).inDays > 7) {
+          t.deadline = value;
+          if (t.routine == 1 &&
+              t.deadline.difference(DateTime.now()).inDays > 7) {
             t.deadline = DateTime.now().add(Duration(days: 7));
-          } else if (t.routine== 2 &&
+          } else if (t.routine == 2 &&
               t.deadline
                       .difference(DateTime.now().add(Duration(days: 31)))
                       .inDays <
@@ -111,7 +114,8 @@ class _TaskPage extends State<TaskPage> {
             t.deadline = DateTime(DateTime.now().year,
                 (DateTime.now().month + 1) % 12, DateTime.now().day);
           }
-          model.projects[widget.projIndex].tasks[widget.taskIndex].deadline = t.deadline; 
+          model.projects[widget.projIndex].tasks[widget.taskIndex].deadline =
+              t.deadline;
         }
         model.onUpdateTask(model.projects[widget.projIndex],
             model.projects[widget.projIndex].tasks[widget.taskIndex]);
@@ -123,42 +127,45 @@ class _TaskPage extends State<TaskPage> {
         if (value == 1 && t.deadline.difference(DateTime.now()).inDays > 7) {
           t.deadline = DateTime.now().add(Duration(days: 7));
         } else if (value == 2 &&
-            t.deadline
-                    .difference(DateTime.now())
-                    .inDays >
-                31) {
+            t.deadline.difference(DateTime.now()).inDays > 31) {
           t.deadline = DateTime(DateTime.now().year,
               (DateTime.now().month + 1) % 12, DateTime.now().day);
         }
         model.onUpdateTask(model.projects[widget.projIndex], t);
       },
-      duration: model.projects[widget.projIndex].tasks[widget.taskIndex].duration,
-      onDurationChange: (value){
-        Task t= model.projects[widget.projIndex].tasks[widget.taskIndex]; 
-        t.duration = value; 
-        model.onUpdateTask(model.projects[widget.projIndex], t); 
+      duration:
+          model.projects[widget.projIndex].tasks[widget.taskIndex].duration,
+      onDurationChange: (value) {
+        Task t = model.projects[widget.projIndex].tasks[widget.taskIndex];
+        t.duration = value;
+        model.onUpdateTask(model.projects[widget.projIndex], t);
       },
     );
   }
-  Widget _addToCalendar(ViewModel model){
-    return Container(height: 100,
-    child: FlatButton(
-      child: Text('Add to Google Calendar'),
-      color: Colors.blue,
-      onPressed: (){
-        final Event event = Event(
-          endDate: widget.task.deadline, 
-          startDate: widget.task.deadline,
-          location: 'nowhere',
-          title: widget.task.name, 
-          allDay: true,
-          description: model.projects[widget.task.parentIndex].name,
-        ); 
-        Add2Calendar.addEvent2Cal(event); 
-      },
-    ),
-    );
+
+  Widget _addToCalendar(ViewModel model) {
+    return new Padding(
+        padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 20),
+        child: new Material(
+            child: new MaterialButton(
+              minWidth: 200.0,
+              height: 42.0,
+              color: Colors.blue,
+              child: new Text('Add to Google Calendar',
+                  style: new TextStyle(fontSize: 20.0, color: Colors.white)),
+              onPressed: () {
+                final Event event = Event(
+                  endDate: (widget.task.duration != null) ? widget.task.deadline.add(widget.task.duration): widget.task.deadline,
+                  startDate: widget.task.deadline,
+                  title: widget.task.name,
+                  allDay: (widget.task.duration == null) ? true: false,
+                  description: model.projects[widget.task.parentIndex].name,
+                );
+                Add2Calendar.addEvent2Cal(event);
+              },
+            )));
   }
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
@@ -178,7 +185,8 @@ class _TaskPage extends State<TaskPage> {
                     ..add(_datePicker(context, model))
                     ..add(TaskLog(widget.projIndex, widget.taskIndex))
                     //..add(_addToCalendar(model))
-                    ..add(Notes(model, context))),
+                    ..add(Notes(model, context))
+                    ..add(_addToCalendar(model))),
                 )
               ],
             )))));

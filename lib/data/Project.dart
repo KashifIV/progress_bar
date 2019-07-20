@@ -83,7 +83,7 @@ class Project {
       deadline: (map.containsKey('deadline')) ? map['deadline'] : null,
       dateCreated: (map.containsKey('dateCreated')) ? map['dateCreated']: DateTime.now(), 
       index: count,
-      users: (map.containsKey('collab')) ? new List<String>.from(map['collab']) : [],
+      users: (map.containsKey('collab')  && map['collab'] != null) ? new List<String>.from(map['collab']) : [],
     );
   }
   double getPercentComplete(String tag) {

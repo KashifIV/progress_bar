@@ -13,12 +13,17 @@ class ProgressOverview extends StatefulWidget{
   _ProgressOverview createState() => _ProgressOverview(); 
 }
 class _ProgressOverview extends State<ProgressOverview>{
-  double currentState, nextState = 0; 
+  double currentState = 0;
+  double nextState = 0;  
   double height = 80; 
   void initState(){
     if (widget.project == null) {
       nextState = 1; 
       currentState = 1; 
+    }
+    else {
+      nextState = 0; 
+      currentState = 0; 
     }
   }
    Widget _line(){
