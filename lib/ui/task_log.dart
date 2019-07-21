@@ -105,7 +105,7 @@ Container(
               Task task = model.projects[projid].tasks[taskid]; 
               if (task.logs == null) task.logs = []; 
               task.logs.add(new Log(account: model.account, dateWritten: DateTime.now(), message: value)); 
-              model.onUpdateTask(model.projects[projid], task); 
+              model.onUpdateTask(model.account, model.projects[projid], task); 
               model.onUpdateProject(model.projects[projid]); 
               controller.text = ''; 
             },

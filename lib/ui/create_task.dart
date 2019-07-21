@@ -32,7 +32,7 @@ class _CreateTask extends State<CreateTask> with TickerProviderStateMixin {
   void _createNewTaskNew(ViewModel model) {
     Task t = new Task(
         name: controller.text, complete: false, dateCreated: DateTime.now(), duration: duration, deadline: deadline, routine: routine);
-    model.onAddTask(model.projects[widget.index], t);
+    model.onAddTask(model.account, model.projects[widget.index], t);
     controller.text = "";
   
     setState(() {

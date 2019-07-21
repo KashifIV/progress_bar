@@ -30,7 +30,7 @@ class _TaskPage extends State<TaskPage> {
 
   Future<bool> onPop(ViewModel model) {
     widget.task.notes = notes.text;
-    model.onUpdateTask(model.projects[widget.projIndex], widget.task);
+    model.onUpdateTask(model.account, model.projects[widget.projIndex], widget.task);
     return Future.value(true);
   }
 
@@ -61,7 +61,7 @@ class _TaskPage extends State<TaskPage> {
           controller: notes,
           onEditingComplete: () {
             widget.task.notes = notes.text;
-            model.onUpdateTask(model.projects[widget.projIndex], widget.task);
+            model.onUpdateTask(model.account, model.projects[widget.projIndex], widget.task);
           },
         ),
       )
@@ -120,7 +120,7 @@ class _TaskPage extends State<TaskPage> {
           model.projects[widget.projIndex].tasks[widget.taskIndex].deadline =
               t.deadline;
         }
-        model.onUpdateTask(model.projects[widget.projIndex],
+        model.onUpdateTask(model.account, model.projects[widget.projIndex],
             model.projects[widget.projIndex].tasks[widget.taskIndex]);
       },
       routine: model.projects[widget.projIndex].tasks[widget.taskIndex].routine,
@@ -134,14 +134,14 @@ class _TaskPage extends State<TaskPage> {
           t.deadline = DateTime(DateTime.now().year,
               (DateTime.now().month + 1) % 12, DateTime.now().day);
         }
-        model.onUpdateTask(model.projects[widget.projIndex], t);
+        model.onUpdateTask(model.account, model.projects[widget.projIndex], t);
       },
       duration:
           model.projects[widget.projIndex].tasks[widget.taskIndex].duration,
       onDurationChange: (value) {
         Task t = model.projects[widget.projIndex].tasks[widget.taskIndex];
         t.duration = value;
-        model.onUpdateTask(model.projects[widget.projIndex], t);
+        model.onUpdateTask(model.account,model.projects[widget.projIndex], t);
       },
     );
   }

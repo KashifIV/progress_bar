@@ -66,6 +66,53 @@ List<Project> projectsReducer(List<Project> state, action){
   if (action is ProjectsCrud){
     return action.doAction(state);
   }
+  if (action is UpdateSortingAction){
+    List<Project> projects = []; 
+    state.forEach((project){
+      List<Task> tasks = project.tasks;
+      if (action.sort == Account.SortingTypes[0]){
+        tasks.sort((previous, next) => previous.dateCreated.compareTo(next.dateCreated)); 
+      }
+      else if (action.sort == Account.SortingTypes[1]){
+        List<Task> upper = tasks.where((test) => test.deadline != null).toList();
+        upper.sort((previous, next) => previous.deadline.compareTo(next.deadline));
+        tasks = upper..addAll(tasks.where((test) => test.deadline == null)); 
+      }
+      else if (action.sort == Account.SortingTypes[2]){
+        List<Task> upper = tasks.where((test) => test.duration != null).toList();
+        upper.sort((previous, next) => previous.duration.compareTo(next.duration));
+        tasks = upper..addAll(tasks.where((test) => test.duration == null)); 
+      }
+      for (int i = 0; i < tasks.length; i++){
+        tasks[i].order = i; 
+      }
+      project.setTasks(tasks); 
+      projects.add(project); 
+    });
+    return projects; 
+  }
+  if (action is SortingAction){
+    List<Project> projects = []..addAll(state); 
+    List<Task> tasks= action.project.tasks; 
+    if (action.sort == Account.SortingTypes[0]){
+        tasks.sort((previous, next) => previous.dateCreated.compareTo(next.dateCreated)); 
+      }
+      else if (action.sort == Account.SortingTypes[1]){
+        List<Task> upper = tasks.where((test) => test.deadline != null).toList();
+        upper.sort((previous, next) => previous.deadline.compareTo(next.deadline));
+        tasks = upper..addAll(tasks.where((test) => test.deadline == null)); 
+      }
+      else if (action.sort == Account.SortingTypes[2]){
+        List<Task> upper = tasks.where((test) => test.duration != null).toList();
+        upper.sort((previous, next) => previous.duration.compareTo(next.duration));
+        tasks = upper..addAll(tasks.where((test) => test.duration == null)); 
+      }
+      for (int i = 0; i < tasks.length; i++){
+        tasks[i].order = i; 
+      }
+    projects.firstWhere((test) => test.id == action.project.id).setTasks(tasks); 
+    return projects;
+  }
   if (action is LoadedProjectsAction){
     return action.projects;
   }
@@ -75,7 +122,9 @@ List<Project> projectsReducer(List<Project> state, action){
     return []..addAll(state)..add(project); 
   }
   if (action is ProjectTaskCrud){
-    return action.doAction(state);
+    List<Project> projects = action.doAction(state);
+    projects.firstWhere((test) => test.id == action.proj.id);
+    
   }
   if (action is LoadedTasksAction){
     List<Project> value = []..addAll(state);

@@ -31,9 +31,11 @@ void appStateMiddleware(Store<AppState> store, action, NextDispatcher next) asyn
       await DeleteProject(action.proj);
   }
   if (action is UpdateTaskAction){
+    store.dispatch(SortingAction(action.proj,action.account.sortingType)); 
     await UpdateTask(action.proj,action.task);
   }
   if (action is CreateTaskAction){
+     store.dispatch(SortingAction(action.proj,action.account.sortingType)); 
     try{
       await CreateTask(action.proj, action.task);
     }catch(e){

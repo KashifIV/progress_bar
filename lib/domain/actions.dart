@@ -38,6 +38,10 @@ class UpdateProjectAction extends ProjectsCrud{
       return value;
     }
 }
+class UpdateSortingAction{
+  String sort; 
+  UpdateSortingAction(this.sort); 
+}
 class UpdateProjectSettingsAction extends ProjectsCrud{
   UpdateProjectSettingsAction(Project proj): super(proj); 
   List<Project> doAction(List<Project> state){
@@ -55,14 +59,15 @@ class GetProjectsAction{
   GetProjectsAction(this.auth);
 }
 abstract class ProjectTaskCrud{
+  final Account account;
   final Task task;
   final Project proj;
-  ProjectTaskCrud(this.task, this.proj);
+  ProjectTaskCrud(this.account,this.task, this.proj);
   List<Project> doAction(List<Project> state);
 }
 //Actions For Task Manipulation
 class CreateTaskAction extends ProjectTaskCrud{
-  CreateTaskAction(Task task, Project proj): super(task, proj);
+  CreateTaskAction(Account account, Task task, Project proj): super(account,task, proj);
   @override
     List<Project> doAction(List<Project> state) {
       List<Project> value = []..addAll(state);
@@ -71,7 +76,7 @@ class CreateTaskAction extends ProjectTaskCrud{
     }
 }
 class DeleteTaskAction extends ProjectTaskCrud{
-  DeleteTaskAction(Task task, Project proj): super(task, proj);
+  DeleteTaskAction(Account account, Task task, Project proj): super(account, task, proj);
   @override
   List<Project> doAction(List<Project> state) {
     List<Project> value = []..addAll(state);
@@ -79,13 +84,19 @@ class DeleteTaskAction extends ProjectTaskCrud{
     return value;
   }
 }
+class SortingAction{
+  String sort; 
+  Project project;
+  SortingAction(this.project,this.sort); 
+}
+
 class CompleteTaskAction{
   final Task task;
   final Project proj;
   CompleteTaskAction(this.task, this.proj);
 }
 class UpdateTaskAction extends ProjectTaskCrud{
-  UpdateTaskAction(Task task, Project proj): super(task, proj);
+  UpdateTaskAction(Account account, Task task, Project proj): super(account, task, proj);
   @override
     List<Project> doAction(List<Project> state) {
        List<Project> value = []..addAll(state);

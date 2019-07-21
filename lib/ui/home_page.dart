@@ -80,8 +80,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
     model.onFetchAccount(widget.auth.getUID()); 
     model.onGetProject(widget.auth); 
     if(model.projects != null  && model.projects.length>0)model.onGetProjectTask(model.projects[projIndex]); 
-    return Container(
-      alignment: Alignment.center,
+    return Center(
       child: CircularProgressIndicator(),
     );
   }
@@ -223,12 +222,11 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
         builder: (BuildContext context, ViewModel model) => Scaffold(
           backgroundColor: (model.account.darkTheme)? Colors.black: Colors.white,
               body: SafeArea(
-                child: Column(
-                  children: <Widget>[
-                    _pageHandler(context, model)
-                  ],
+
+                child:_pageHandler(context, model)
+                  
                 ),
               ),
-            ));
+            );
   }
 }

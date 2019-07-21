@@ -15,12 +15,13 @@ class ViewModel {
   final Function(Project, Auth) onCreateProject;
   final Function(Auth) onGetProject;
   final Function(Project, bool) onRemoveProject;
+  final Function(String) onUpdateSorting; 
   final Function(Project) onUpdateProject;
   final Function(Project) onUpdateProjectSettings; 
   final Function(PageType) onUpdatePage; 
-  final Function(Project, Task) onAddTask;
-  final Function(Project, Task) onUpdateTask;
-  final Function(Project, Task) onDeleteTask;
+  final Function(Account, Project, Task) onAddTask;
+  final Function(Account, Project, Task) onUpdateTask;
+  final Function(Account, Project, Task) onDeleteTask;
   final Function(Project) onGetProjectTask;
 
   final Function(WhiteList) onUpdateWhiteList;
@@ -53,6 +54,7 @@ class ViewModel {
     this.onCreateLog,
     this.onCloneProject, 
     this.onUpdateProjectSettings, 
+    this.onUpdateSorting,
     this.onUpdatePage,
   });
   factory ViewModel.create(Store<AppState> store){
@@ -71,14 +73,14 @@ class ViewModel {
     _onUpdateProjectSettings(Project proj){
       store.dispatch(UpdateProjectSettingsAction(proj)); 
     }
-    _onAddTask(Project proj, Task task){
-      store.dispatch(CreateTaskAction(task, proj));
+    _onAddTask(Account account, Project proj, Task task){
+      store.dispatch(CreateTaskAction(account, task, proj));
     }
-    _onUpdateTask(Project proj, Task task){
-      store.dispatch(UpdateTaskAction(task, proj));
+    _onUpdateTask(Account account,Project proj, Task task){
+      store.dispatch(UpdateTaskAction(account,task, proj));
     }
-    _onDeleteTask(Project proj, Task task){
-      store.dispatch(DeleteTaskAction(task, proj));
+    _onDeleteTask(Account account, Project proj, Task task){
+      store.dispatch(DeleteTaskAction(account, task, proj));
     }
     _onGetProjectTask(Project proj){
       store.dispatch(GetTasksAction(proj));
@@ -100,6 +102,9 @@ class ViewModel {
     }
     _onCreateLog(Project project, Task task, Log log){
       store.dispatch(CreateLogAction(project, task, log)); 
+    }
+    _onUpdateSorting(String sort){
+      store.dispatch(UpdateSortingAction(sort)); 
     }
     _onUpdatePage(PageType page){
       store.dispatch(UpdatePageAction(page)); 
@@ -124,6 +129,7 @@ class ViewModel {
       onUpdateAccount: _onUpdateAccount,
       onFetchAccount: _onFetchAccount,
       onCloneProject: _onCloneProject,
+      onUpdateSorting: _onUpdateSorting,
       onCreateLog: _onCreateLog,
       onUpdatePage: _onUpdatePage,
     );

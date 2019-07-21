@@ -25,7 +25,7 @@ class _TaskCard extends State<TaskCard>{
           color: Colors.green,
           onTap: (){
             widget.task.complete = true;
-            model.onUpdateTask(model.projects[widget.index], widget.task);
+            model.onUpdateTask(model.account, model.projects[widget.index], widget.task);
           },
         );
     }
@@ -36,7 +36,7 @@ class _TaskCard extends State<TaskCard>{
         color: Colors.blue,
         onTap: (){
           widget.task.complete = false;
-          model.onUpdateTask(model.projects[widget.index], widget.task);
+          model.onUpdateTask(model.account, model.projects[widget.index], widget.task);
         },
       );
     }
@@ -48,7 +48,7 @@ class _TaskCard extends State<TaskCard>{
         onDismissed: (action){
           if (action == SlideActionType.primary){
             widget.task.complete = !widget.task.complete;
-            model.onUpdateTask(model.projects[widget.index], widget.task);
+            model.onUpdateTask(model.account,model.projects[widget.index], widget.task);
           }
         }
       );
@@ -67,7 +67,7 @@ class _TaskCard extends State<TaskCard>{
           child: Icon(Icons.save),
           onPressed: (){
             //model.onUpdateProject(model.projects[widget.index]);
-            model.onUpdateTask(model.projects[widget.index], widget.task);
+            model.onUpdateTask(model.account, model.projects[widget.index], widget.task);
             Navigator.pop(context);
           },
         )
@@ -172,7 +172,7 @@ class _TaskCard extends State<TaskCard>{
           caption: 'Delete',
           icon: Icons.delete,
           color: Colors.red,
-          onTap: () => model.onDeleteTask(model.projects[widget.index],widget.task),
+          onTap: () => model.onDeleteTask(model.account, model.projects[widget.index],widget.task),
         ),
         /*
         new IconSlideAction(

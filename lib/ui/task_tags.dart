@@ -29,7 +29,7 @@ class _TaskTags extends State<TaskTags>{
             task.tags.add(tag); 
           }
           if (task.logs == null ) task.logs = []; 
-          model.onUpdateTask(model.projects[widget.projIndex], task); 
+          model.onUpdateTask(model.account,model.projects[widget.projIndex], task); 
       },
       child: Container(
         
@@ -68,7 +68,7 @@ class _TaskTags extends State<TaskTags>{
           else {
             task.tags.add(tag); 
           }
-          model.onUpdateTask(model.projects[widget.projIndex], task); 
+          model.onUpdateTask(model.account,model.projects[widget.projIndex], task); 
         },
         backgroundColor: Colors.yellow,      
     );
@@ -92,7 +92,7 @@ class _TaskTags extends State<TaskTags>{
             model.projects[widget.projIndex].tasks[widget.taskIndex].tags = []; 
           model.projects[widget.projIndex].tasks[widget.taskIndex].tags.add(value); 
           model.projects[widget.projIndex].tags.add(value);
-          model.onUpdateTask(model.projects[widget.projIndex], model.projects[widget.projIndex].tasks[widget.taskIndex]);
+          model.onUpdateTask(model.account,model.projects[widget.projIndex], model.projects[widget.projIndex].tasks[widget.taskIndex]);
           model.onUpdateProject(model.projects[widget.projIndex]);
         },
         style: TextStyle( color: (model.account.darkTheme) ? Colors.white: Colors.black,),

@@ -34,6 +34,7 @@ class Project {
     tasksComplete = 0; 
     tasksToDo = 0; 
     this.tasks = tasks;
+    this.tasks.sort((previous, next) => previous.order.compareTo(next.order)); 
     this.tasks.forEach((task) => task.parentIndex = index);
     if (tags == null) tags = [];
     tasks.forEach((task) {
