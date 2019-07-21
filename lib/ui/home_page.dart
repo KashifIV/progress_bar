@@ -86,22 +86,17 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
   }
 
   Widget _newUser(ViewModel model) {
-    return new Column(
+    return new Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        new Container(
-            padding: const EdgeInsets.all(34.0),
-            child: new Text('Progress Bar',
-                textAlign: TextAlign.start,
-                textScaleFactor: 2.0,
-                style: new TextStyle(color: Colors.grey))),
-        new Center(
-            child: Text(
-          'Tap the "+" icon to get started!',
-        )),
-        new IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () => model.onGetProject(widget.auth)),
+        new Icon(
+          Icons.arrow_downward
+        ),
+        Text(
+          'Tap below to get started!',
+          style: TextStyle(color: model.account.darkTheme ? Colors.white : Colors.black),
+        ),
+
       ],
     );
   }
@@ -144,7 +139,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
             width: 400,
             child:(projIndex != model.projects.length) ? CustomScrollView(
               slivers: <Widget>[EmergencyList(projIndex),TagList(projIndex),TaskList(projIndex, emergency: true,)],
-            ): Center(child: Text('Create a Project!'),)),
+            ): Center(child: Row( mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[Icon(Icons.arrow_downward, color: model.account.darkTheme? Colors.white:Colors.black,), SizedBox(width: 10,), Text('Create a Project!', style: TextStyle(color: model.account.darkTheme ? Colors.white: Colors.black),)])),),
         Center(
           child: _buildCarousel(context, model, controller),
         )

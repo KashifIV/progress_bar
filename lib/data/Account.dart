@@ -16,7 +16,7 @@ class Account{
   Map<String, dynamic> mapTo(){
     var dataMap = new Map<String, dynamic>(); 
     dataMap['name'] = this.name; 
-    dataMap['profileImageURL'] = this.profileImageURL; 
+    //dataMap['profileImageURL'] = this.profileImageURL; 
     dataMap['email'] = this.email; 
     dataMap['joinedProjects'] = this.joinedProjects; 
     dataMap['progressType']  = this.progressType; 

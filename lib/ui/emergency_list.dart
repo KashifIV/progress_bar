@@ -34,13 +34,14 @@ class EmergencyList extends StatelessWidget{
         markedDatesMap: times,
         height: 80,
         todayBorderColor: model.projects[index].toColor(),
+        
         daysHaveCircularBorder: true,
         daysTextStyle: TextStyle(color: (model.account.darkTheme) ? Colors.white: Colors.black),
         todayTextStyle: TextStyle(color:(model.account.darkTheme) ? Colors.white: Colors.black),
-        todayButtonColor: Colors.white,
+        todayButtonColor: Colors.transparent,
         selectedDayButtonColor: Colors.transparent,
         selectedDayBorderColor: Colors.teal[200],
-        selectedDayTextStyle: TextStyle(color: Colors.black),
+        selectedDayTextStyle: TextStyle(color: model.account.darkTheme ? Colors.white:Colors.black),
         
       )));
     }

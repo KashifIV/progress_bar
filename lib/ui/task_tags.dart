@@ -124,7 +124,7 @@ class _TaskTags extends State<TaskTags>{
     List<Widget> tagChips = []; 
     options.forEach((tag) => tagChips.add(_createGraidentChip(tag, model))); 
     return Theme( 
-      data: ThemeData.dark(),
+      data: (model.account.darkTheme) ? ThemeData.dark() : ThemeData.light(),
       child: ExpansionPanelList(
       
       expansionCallback: (int index, bool expanded){

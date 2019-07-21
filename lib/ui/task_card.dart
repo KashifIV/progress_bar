@@ -107,7 +107,7 @@ class _TaskCard extends State<TaskCard>{
     else if (days == 0) return prefix + "Today"; 
     else if (days == 1) return prefix + "Tomorrow"; 
 
-    return prefix + days.toString() + "Days"; 
+    return prefix + days.toString() + " Days"; 
 
   }
   @override

@@ -13,6 +13,12 @@ class TaskList extends StatelessWidget{
   final DateTime dayOf; 
   TaskList(this.index, {this.tag, this.emergency = false, this.dayOf});
   List<Widget> _getTaskCards(ViewModel model, Function whiteList){
+    if (emergency && (model.projects[index].tasks == null || model.projects[index].tasks.length == 0)){
+      return [
+        Center(child:Text('Click Below to Open the Project!', style: TextStyle(color: model.account.darkTheme ? Colors.white: Colors.black
+        ),))
+      ];
+    }
     if (index == -1){
       List<Task> tasks = []; 
       model.projects.forEach((project){

@@ -51,8 +51,8 @@ class _CreateProject extends State<CreateProject>{
             model.onUpdateProjectSettings(model.projects[widget.project.index]); 
           return true; 
         },
-      child: Scaffold(
-      backgroundColor: Colors.white,
+      child:Theme(data: ThemeData.dark(), child:Scaffold(
+      backgroundColor: model.account.darkTheme ? Colors.black:Colors.white,
       body: new ListView(
           //mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -90,6 +90,7 @@ class _CreateProject extends State<CreateProject>{
                         child: new TextField(
                           decoration: InputDecoration(
                             hintText: proj.name,
+                            hintStyle: TextStyle(color: Colors.grey)
                           ),
                           onChanged: (text) {
                             setName(text);
@@ -158,7 +159,7 @@ class _CreateProject extends State<CreateProject>{
               ),
         ]
       ),
-    )));
+    ))));
     }
 }
 typedef ColourOptionCallback = void Function(Color color);

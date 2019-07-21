@@ -120,8 +120,8 @@ class _ProjectPage extends State<ProjectPage> {
             decoration: new BoxDecoration(
               gradient: new LinearGradient(
                   colors: [
-                    model.projects[widget.index].toColor(),
-                    Colors.teal[400]
+                    Color.alphaBlend(model.projects[widget.index].toColor().withAlpha(210), Colors.black), 
+                    Colors.teal[600]
                   ],
                   begin: const FractionalOffset(0.0, 0.0),
                   end: const FractionalOffset(0.9, 0.3),
@@ -153,7 +153,7 @@ class _ProjectPage extends State<ProjectPage> {
                   ),
                 ), 
                 ),
-                SizedBox(height: 10,),
+                SizedBox(height: 13,),
                 ProgressBar(
                   widget.index,
                 ),

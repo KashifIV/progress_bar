@@ -49,7 +49,7 @@ class _ShareProject extends State<ShareProject> {
     return StoreConnector<AppState, ViewModel>(
         converter: (Store<AppState> store) => ViewModel.create(store),
         rebuildOnChange: true,
-        builder: (BuildContext context, ViewModel model) =>  Scaffold(
+        builder: (BuildContext context, ViewModel model) => Theme( data: ThemeData.dark(), child: Scaffold(
       appBar: AppBar(
         title: Text('Share your Project'),
       ),
@@ -101,7 +101,7 @@ class _ShareProject extends State<ShareProject> {
           ), 
         ],
       ),
-    ));
+    )));
   }
 }
 
