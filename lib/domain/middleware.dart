@@ -12,6 +12,7 @@ void appStateMiddleware(Store<AppState> store, action, NextDispatcher next) asyn
   if (action is GetProjectsAction){
     store.dispatch(UpdatePageAction(PageType.UND));
     List<Project> state = await getProjects(action.auth);
+    print('Getting Project' + state.length.toString()); 
     store.dispatch(LoadedProjectsAction(state));
     store.dispatch(UpdateTaskViewAction(TaskViewType.list));
     store.dispatch(UpdatePageAction(PageType.VAL));

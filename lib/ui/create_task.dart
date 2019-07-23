@@ -139,6 +139,7 @@ class _CreateTask extends State<CreateTask> with TickerProviderStateMixin {
                       onSubmitted: (value) => _createNewTaskNew(model),
                       controller: controller,
                       focusNode: _focus,
+                      textCapitalization: TextCapitalization.sentences,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Task Name',

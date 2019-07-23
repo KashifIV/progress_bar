@@ -70,7 +70,6 @@ class Task{
     String value; 
     if (map.containsKey('duration') && (value = map['duration']) != 'null'){
       duration = Duration(hours: int.parse(value.split(':')[0]), minutes: int.parse(value.split(':')[1])); 
-      print(duration.toString()); 
     }
     return new Task(
       id: documentID,

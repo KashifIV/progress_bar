@@ -51,7 +51,7 @@ class _CreateProject extends State<CreateProject>{
             model.onUpdateProjectSettings(model.projects[widget.project.index]); 
           return true; 
         },
-      child:Theme(data: ThemeData.dark(), child:Scaffold(
+      child:Theme(data: (model.account.darkTheme) ? ThemeData.dark() : ThemeData.light(), child:Scaffold(
       backgroundColor: model.account.darkTheme ? Colors.black:Colors.white,
       body: new ListView(
           //mainAxisAlignment: MainAxisAlignment.start,

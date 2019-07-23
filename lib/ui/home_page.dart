@@ -30,6 +30,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePage extends State<HomePage> with WidgetsBindingObserver{
   int projIndex = 0; 
+  bool initcall = false; 
   Timer _timerLink;
   Project clonedProject, collabedProject; 
   Widget _logo(ViewModel model, BuildContext context) {
@@ -77,9 +78,11 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
     
   }
   Widget _undUser(ViewModel model) {
-    model.onFetchAccount(widget.auth.getUID()); 
-    model.onGetProject(widget.auth); 
-    if(model.projects != null  && model.projects.length>0)model.onGetProjectTask(model.projects[projIndex]); 
+    if (!initcall){
+      model.onFetchAccount(widget.auth.getUID()); 
+      model.onGetProject(widget.auth); 
+      initcall = true; 
+    }
     return Center(
       child: CircularProgressIndicator(),
     );
