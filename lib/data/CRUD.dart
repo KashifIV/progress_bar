@@ -167,7 +167,7 @@ Future<void> UpdateProject(Project proj) async{
     }
 
     DocumentSnapshot ref = await Firestore.instance.document('Accounts/' + auth.getUID()).get(); 
-    if (ref.data['joinedProjects'] != null){
+    if (ref.data != null && ref.data['joinedProjects'] != null){
       List<String> additional= new List<String>.from(ref.data['joinedProjects']); 
       for (int i = 0; i < additional.length; i++){
         print(additional[i]); 

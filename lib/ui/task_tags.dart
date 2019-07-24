@@ -115,6 +115,7 @@ class _TaskTags extends State<TaskTags>{
     return Container(
       child: Wrap(
         children: tagChips,
+        runSpacing:20,
         spacing: 20.0, 
       ),
     );
@@ -157,6 +158,7 @@ class _TaskTags extends State<TaskTags>{
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Wrap(
             children: tagChips,
+            runSpacing: 10,
             spacing: 20.0,
           )
     ))])); 

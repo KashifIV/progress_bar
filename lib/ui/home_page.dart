@@ -79,7 +79,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
   }
   Widget _undUser(ViewModel model) {
     if (!initcall){
-      model.onFetchAccount(widget.auth.getUID()); 
+      model.onFetchAccount(widget.auth); 
       model.onGetProject(widget.auth); 
       initcall = true; 
     }
@@ -130,7 +130,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
     return
     RefreshIndicator(
       onRefresh: () async{
-        model.onFetchAccount(widget.auth.getUID()); 
+        model.onFetchAccount(widget.auth); 
         model.onGetProject(widget.auth); 
         return true; 
       },

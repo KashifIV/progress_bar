@@ -28,7 +28,7 @@ class ViewModel {
 
   final Function(Auth,Account) onCreateAccount; 
   final Function(Auth, Account) onUpdateAccount; 
-  final Function(String) onFetchAccount; 
+  final Function(Auth) onFetchAccount; 
 
   final Function(Project) onCloneProject; 
 
@@ -65,7 +65,7 @@ class ViewModel {
       store.dispatch(GetProjectsAction(auth));
     }
     _onRemoveProject(Project proj, bool isJoined){
-      store.dispatch(DeleteProjectAction(proj, isJoined: isJoined));
+      store.dispatch(DeleteProjectAction(proj, isJoined));
     }
     _onUpdateProject(Project proj){
       store.dispatch(UpdateProjectAction(proj));
@@ -94,8 +94,8 @@ class ViewModel {
     _onUpdateAccount(Auth auth, Account account){
       store.dispatch(UpdateAccountAction(auth, account)); 
     }
-    _onFetchAccount(String id){
-      store.dispatch(FetchAccountAction(id)); 
+    _onFetchAccount(Auth auth){
+      store.dispatch(FetchAccountAction(auth)); 
     }
     _onCloneProject(Project project){
       store.dispatch(CloneProjectAction(project)); 

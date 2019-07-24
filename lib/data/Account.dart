@@ -24,6 +24,19 @@ class Account{
     dataMap['sortingType'] = this.sortingType; 
     return dataMap; 
   }
+  factory Account.NewAccount(String id, String email){
+    return Account(
+      id: id, 
+      profileImageURL: '',
+      email: email,
+      darkTheme: false,
+      progressType: 'Time',
+      sortingType: SortingTypes[0],
+      joinedProjects: [],
+      name: 'Untitled'
+
+    );
+  }
   factory Account.fromMap(String id, Map<String, dynamic> map){
     return Account(
       id: id, 

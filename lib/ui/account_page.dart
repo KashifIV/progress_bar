@@ -38,6 +38,7 @@ class _AccountPage extends State<AccountPage> {
           child: Text('Delete Project'),
           onPressed: () {
             if (model.account.joinedProjects.contains(project.id)){
+              print('isLinked Project'); 
               model.account.joinedProjects = []..addAll(model.account.joinedProjects.where((proj) => proj != project.id));
               model.onUpdateAccount(widget.auth, model.account); 
               model.onRemoveProject(project, true);
@@ -148,7 +149,7 @@ class _AccountPage extends State<AccountPage> {
                   onPressed: (){
                     if (isEditing){
                       Account account = model.account; 
-                      account.name = (userControl.text.isNotEmpty)? userControl.text : 'Username';
+                      account.name = (userControl.text.isNotEmpty)? userControl.text : model.account.name;
                       model.onUpdateAccount(widget.auth, account);
                     }
                     setState(() {

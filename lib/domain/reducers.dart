@@ -99,7 +99,7 @@ List<Project> projectsReducer(List<Project> state, action){
       }
       else if (action.sort == Account.SortingTypes[1]){
         List<Task> upper = tasks.where((test) => test.deadline != null).toList();
-        upper.sort((previous, next) => previous.deadline.compareTo(next.deadline));
+        upper.sort((previous, next) => -previous.deadline.compareTo(next.deadline));
         tasks = upper..addAll(tasks.where((test) => test.deadline == null)); 
       }
       else if (action.sort == Account.SortingTypes[2]){

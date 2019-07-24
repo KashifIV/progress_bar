@@ -52,8 +52,10 @@ class _TaskPage extends State<TaskPage> {
         padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
         decoration: BoxDecoration(color:  (model.account.darkTheme) ? Colors.black: Colors.white,),
         child: TextField(
+          style: TextStyle(color: model.account.darkTheme ? Colors.white: Colors.black),
           autocorrect: true,
           decoration: InputDecoration(
+            
             hasFloatingPlaceholder: false,
           ),
           keyboardType: TextInputType.multiline,

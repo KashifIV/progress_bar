@@ -14,10 +14,16 @@ class EmergencyList extends StatelessWidget{
   List<Widget> _getTaskCards(ViewModel model){
     List<Widget> a = [];
     EventList<String> times = new EventList<String>(); 
+    int time = 0; 
+    int tasks = 0;
     if (model.projects[index].tasks != null){
     for (int i = 0; i < model.projects[index].tasks.length; i++){
       if (model.projects[index].tasks[i].deadline != null&& !model.projects[index].tasks[i].complete && model.projects[index].tasks[i].deadline.isBefore(DateTime.now().add(Duration(days: 7)))){
         a.add(TaskCard(model.projects[index].tasks[i], index, color: Colors.red,));
+        tasks++; 
+        if (model.projects[index].tasks[i].duration != null) {
+          time +=model.projects[index].tasks[i].deadline.minute; 
+        }
       }
       if (model.projects[index].tasks[i].deadline != null)
         times.add(model.projects[index].tasks[i].deadline, model.projects[index].tasks[i].name);
@@ -43,6 +49,23 @@ class EmergencyList extends StatelessWidget{
         selectedDayBorderColor: Colors.teal[200],
         selectedDayTextStyle: TextStyle(color: model.account.darkTheme ? Colors.white:Colors.black),
         
+      )));
+    }
+    if (a.isNotEmpty && a.length > 1){
+      a.insert(0, Theme(
+        data: model.account.darkTheme ? ThemeData.dark() : ThemeData.light(),
+        child:Card(
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Container(
+          height: 50,
+          child:Center(child:Text(
+          ((time == 0) ? '': time.toString() + ' minutes in ') + tasks.toString() + ' tasks during the next week.',
+          style: TextStyle(
+            fontSize: 18,
+          ),
+          
+        ))),
+        elevation: 3,
       )));
     }
     return a;

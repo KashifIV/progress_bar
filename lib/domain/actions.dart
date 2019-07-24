@@ -20,10 +20,14 @@ class CreateProjectAction extends ProjectsCrud{
 }
 class DeleteProjectAction extends ProjectsCrud{
   bool isJoined; 
-  DeleteProjectAction(Project proj, {isJoined = false}): super(proj);
+  DeleteProjectAction(Project proj, this.isJoined): super(proj);
   @override
     List<Project> doAction(List<Project> state) {
-      return []..addAll(state)..remove(super.proj);
+      List<Project> projects = []..addAll(state)..remove(super.proj);
+      for (int i = 0; i < projects.length; i++){
+        projects[i].index = i; 
+      }
+      return projects;
     }
   bool IsJoined(){
     return isJoined; 
@@ -171,8 +175,8 @@ class DeleteAccountAction{
   DeleteAccountAction(this.auth, this.account); 
 }
 class FetchAccountAction{
-  final String id; 
-  FetchAccountAction(this.id); 
+  final Auth auth; 
+  FetchAccountAction(this.auth); 
 }
 class OnUpdatedAccount{
   final Account account; 

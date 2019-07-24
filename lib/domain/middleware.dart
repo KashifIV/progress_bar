@@ -28,8 +28,9 @@ void appStateMiddleware(Store<AppState> store, action, NextDispatcher next) asyn
     await UpdateProject(action.proj); 
   }
   if (action is DeleteProjectAction){
-    if (!action.IsJoined())
+    if (!action.isJoined){
       await DeleteProject(action.proj);
+    }
   }
   if (action is UpdateTaskAction){
     store.dispatch(SortingAction(action.proj,action.account.sortingType)); 
@@ -62,14 +63,9 @@ void appStateMiddleware(Store<AppState> store, action, NextDispatcher next) asyn
     await UpdateUser(action.auth, action.account).then((state) => store.dispatch(OnUpdatedAccount(action.account))); 
   }
   if (action is FetchAccountAction){
-    Account account = await FetchAccount(action.id); 
-    if (account == null){
-      
-    }
-    else {
-      store.dispatch(OnUpdatedAccount(account));
-       
-    }
+    Account account = await FetchAccount(action.auth.getUID()); 
+    if (account == null) store.dispatch(CreateAccountAction(action.auth, new Account.NewAccount(action.auth.getUID(), action.auth.email))); 
+    else store.dispatch(OnUpdatedAccount(account));
   }
   
   if (action is CreateLogAction){

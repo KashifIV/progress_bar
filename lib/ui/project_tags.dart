@@ -34,7 +34,9 @@ class ProjectTags extends StatelessWidget{
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>( 
       converter:(Store<AppState> store) => ViewModel.create(store),
-      builder: (BuildContext context, ViewModel model) =>Slidable(
+      builder: (BuildContext context, ViewModel model) =>Theme(
+        data: model.account.darkTheme ? ThemeData.dark() : ThemeData.light(),
+        child: Slidable(
       key: new Key(tag), 
       delegate: SlidableBehindDelegate(),  
       slideToDismissDelegate: delegate(model),
@@ -54,7 +56,7 @@ class ProjectTags extends StatelessWidget{
       height: 90,
       //margin: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        //color: Colors.white,
         borderRadius: BorderRadius.circular(10), 
       ),
       child: Stack(
@@ -99,6 +101,6 @@ class ProjectTags extends StatelessWidget{
           )
         ],
       )),
-    ))));
+    )))));
   }
 }

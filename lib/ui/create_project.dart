@@ -18,7 +18,7 @@ class _CreateProject extends State<CreateProject>{
   void initState() {
     super.initState();
     if (widget.project == null)
-      proj = new Project('Untitled', 'description', Colors.pink.toString(), 'Project', users: [widget.auth.getUID()]);
+      proj = new Project('Untitled', 'description', Colors.pink.toString(), 'Project', users: [widget.auth.getUID()], dateCreated: DateTime.now());
     else proj = new Project(widget.project.name, widget.project.description, widget.project.color, widget.project.projType, id: widget.project.id, deadline: widget.project.deadline); 
   }
   void setName(String text){
@@ -88,6 +88,7 @@ class _CreateProject extends State<CreateProject>{
                     new Container(
                         padding: EdgeInsets.only(top: 30.0),
                         child: new TextField(
+                          textCapitalization: TextCapitalization.words,
                           decoration: InputDecoration(
                             hintText: proj.name,
                             hintStyle: TextStyle(color: Colors.grey)
