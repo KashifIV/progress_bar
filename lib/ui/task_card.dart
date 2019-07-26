@@ -25,6 +25,7 @@ class _TaskCard extends State<TaskCard>{
           color: Colors.green,
           onTap: (){
             widget.task.complete = true;
+            widget.task.dateCompleted= DateTime.now();
             model.onUpdateTask(model.account, model.projects[widget.index], widget.task);
           },
         );
@@ -36,6 +37,7 @@ class _TaskCard extends State<TaskCard>{
         color: Colors.blue,
         onTap: (){
           widget.task.complete = false;
+          widget.task.dateCompleted = DateTime.now();
           model.onUpdateTask(model.account, model.projects[widget.index], widget.task);
         },
       );

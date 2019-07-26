@@ -15,7 +15,7 @@ class ViewModel {
   final Function(Project, Auth) onCreateProject;
   final Function(Auth) onGetProject;
   final Function(Project, bool) onRemoveProject;
-  final Function(String) onUpdateSorting; 
+  final Function(Account) onUpdateSorting; 
   final Function(Project) onUpdateProject;
   final Function(Project) onUpdateProjectSettings; 
   final Function(PageType) onUpdatePage; 
@@ -103,8 +103,8 @@ class ViewModel {
     _onCreateLog(Project project, Task task, Log log){
       store.dispatch(CreateLogAction(project, task, log)); 
     }
-    _onUpdateSorting(String sort){
-      store.dispatch(UpdateSortingAction(sort)); 
+    _onUpdateSorting(Account account){
+      store.dispatch(UpdateSortingAction(account)); 
     }
     _onUpdatePage(PageType page){
       store.dispatch(UpdatePageAction(page)); 

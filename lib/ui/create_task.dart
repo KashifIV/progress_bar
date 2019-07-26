@@ -56,49 +56,16 @@ class _CreateTask extends State<CreateTask> with TickerProviderStateMixin {
         duration: duration,
         routine: routine,
         onDeadlineChange: (value){
-          if (routine == null || routine < 1){
-            setState(() {
-               deadline = value; 
-            });
-           
-          }
-          else{
-            setState(() {
-              deadline = value; 
-            });
-            
-            if (routine == 1 && deadline.difference(DateTime.now()).inDays > 7){
-              deadline = deadline.add(Duration(days: 7)); 
-            } else if (routine == 2 &&
-              deadline
-                      .difference(DateTime.now().add(Duration(days: 31)))
-                      .inDays <
-                  31){
-                    setState(() {
-                       deadline = DateTime(DateTime.now().year,
-                      (DateTime.now().month + 1) % 12, DateTime.now().day);
-                    });
-                   
-                  }
-          }
+
+          setState(() {
+            deadline = value;  
+          });
         },
         onRoutineChange: (value){
           setState(() {
             routine = value; 
           });
           
-          if (value == 1 && deadline.difference((DateTime.now())).inDays > 7){
-            setState(() {
-              deadline = DateTime.now().add(Duration(days: 7)); 
-            });
-            
-          }else if (value == 2 &&
-            deadline.difference(DateTime.now()).inDays > 31) {
-              setState(() {
-                deadline = DateTime(DateTime.now().year,
-              (DateTime.now().month + 1) % 12, DateTime.now().day);
-              });
-        }
         },
         onDurationChange: (value) => setState( () => duration= value,)
       )); 

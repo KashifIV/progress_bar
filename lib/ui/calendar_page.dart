@@ -54,7 +54,7 @@ class _CalendarPage extends State<CalendarPage>{
       body: SafeArea(
         child: Column(
           children: <Widget>[
-            _title('Callendar', model),
+            _title('Calendar', model),
         Container(
           height: 450,
         margin: EdgeInsets.symmetric(horizontal: 16.0),

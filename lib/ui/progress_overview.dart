@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:progress_bar/data/Project.dart';
 import 'package:progress_bar/data/auth.dart';
 import 'package:animator/animator.dart';
+import 'package:progress_bar/domain/redux.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:progress_bar/domain/viewmodel.dart';
+import 'package:progress_bar/domain/redux.dart';
+import 'package:progress_bar/ui/project_page.dart';
 import 'package:progress_bar/ui/account_page.dart';
 import 'package:progress_bar/ui/calendar_page.dart';
 import 'package:progress_bar/ui/settings_page.dart';
@@ -29,10 +35,15 @@ class _ProgressOverview extends State<ProgressOverview>{
    Widget _line(){
       return Container(height: height*0.7, width: 2, color: Colors.white54);
     }
-    Widget _infoBox(int number, String subtext, IconData menuItem, String menuSubtext, Function callback){
+    Widget _infoBox(int number, String subtext, IconData menuItem, String menuSubtext, Function callback, WhiteList whitelist, ViewModel model){
       return GestureDetector(
         onTap: (){
           if (nextState == 1) callback(); 
+          else{
+            model.onUpdateWhiteList(whitelist); 
+            Navigator.push(
+              context, MaterialPageRoute(builder: (context) => ProjectPage(widget.project.index)));
+          }
         },
         child: Container(
         padding: EdgeInsets.all(10),
@@ -66,7 +77,10 @@ class _ProgressOverview extends State<ProgressOverview>{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Column(
+    return StoreConnector<AppState, ViewModel>(
+        converter: (Store<AppState> store) => ViewModel.create(store),
+        rebuildOnChange: true,
+        builder: (BuildContext context, ViewModel model) => Column(
       children: <Widget>[
         SizedBox(height: 20,), 
         Animator(
@@ -109,7 +123,7 @@ class _ProgressOverview extends State<ProgressOverview>{
                 'Account', () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AccountPage(auth: widget.auth, onSignedOut: widget.onSignedOut,)))),
+                              builder: (context) => AccountPage(auth: widget.auth, onSignedOut: widget.onSignedOut,))), WhiteList.complete, model),
               _line(),
               _infoBox(
                 (widget.project == null) ? 0 :widget.project.tasksToDo,
@@ -120,26 +134,26 @@ class _ProgressOverview extends State<ProgressOverview>{
                           context,
                           MaterialPageRoute(
                               builder: (context) => CalendarPage()))
-                 ),
+                 ,WhiteList.incomplete, model),
               _line(),
               (widget.project == null) ? _infoBox(0, 'Days', Icons.settings, 'Settings', () =>  Navigator.push(
                 context, 
                 MaterialPageRoute(builder: (context) => SettingsPage(auth: widget.auth,))
-              )) :
+              ), WhiteList.all, model) :
               (widget.project.deadline == null)? 
               _infoBox(DateTime.now().difference(widget.project.dateCreated).inDays, 'Days', Icons.settings, 'Settings', () => Navigator.push(
                 context, 
                 MaterialPageRoute(builder: (context) => SettingsPage(auth: widget.auth,))
-              )): 
+               ), WhiteList.all, model): 
               _infoBox(widget.project.deadline.difference(DateTime.now()).inDays, 'Days Left', Icons.settings, 'Settings', () =>  Navigator.push(
                 context, 
                 MaterialPageRoute(builder: (context) => SettingsPage(auth: widget.auth,))
-              )),
+              , ), WhiteList.all, model),
           ],),
 
         )),
         SizedBox(height: 20,)
       ],
-    );
+    ));
   }
 }

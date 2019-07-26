@@ -22,7 +22,7 @@ class EmergencyList extends StatelessWidget{
         a.add(TaskCard(model.projects[index].tasks[i], index, color: Colors.red,));
         tasks++; 
         if (model.projects[index].tasks[i].duration != null) {
-          time +=model.projects[index].tasks[i].deadline.minute; 
+          time +=model.projects[index].tasks[i].duration.inMinutes;
         }
       }
       if (model.projects[index].tasks[i].deadline != null)
@@ -51,7 +51,7 @@ class EmergencyList extends StatelessWidget{
         
       )));
     }
-    if (a.isNotEmpty && a.length > 1){
+    if (a.isNotEmpty && a.length > 2){
       a.insert(0, Theme(
         data: model.account.darkTheme ? ThemeData.dark() : ThemeData.light(),
         child:Card(

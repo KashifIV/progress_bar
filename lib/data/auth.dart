@@ -36,6 +36,7 @@ class Auth implements AuthImpl {
     if (user == null)
       return null;
     else {
+      email = user.email;
       uid = user.uid;
       return user.uid;
     }

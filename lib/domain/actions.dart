@@ -43,8 +43,8 @@ class UpdateProjectAction extends ProjectsCrud{
     }
 }
 class UpdateSortingAction{
-  String sort; 
-  UpdateSortingAction(this.sort); 
+  Account account; 
+  UpdateSortingAction(this.account); 
 }
 class UpdateProjectSettingsAction extends ProjectsCrud{
   UpdateProjectSettingsAction(Project proj): super(proj); 

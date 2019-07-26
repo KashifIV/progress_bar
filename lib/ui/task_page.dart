@@ -99,43 +99,15 @@ class _TaskPage extends State<TaskPage> {
       deadline:
           model.projects[widget.projIndex].tasks[widget.taskIndex].deadline,
       onDeadlineChange: (value) {
-        if (model.projects[widget.projIndex].tasks[widget.taskIndex].routine ==
-                null ||
-            model.projects[widget.projIndex].tasks[widget.taskIndex].routine <
-                1) {
-          model.projects[widget.projIndex].tasks[widget.taskIndex].deadline =
-              value;
-        } else {
-          Task t = model.projects[widget.projIndex].tasks[widget.taskIndex];
-          t.deadline = value;
-          if (t.routine == 1 &&
-              t.deadline.difference(DateTime.now()).inDays > 7) {
-            t.deadline = DateTime.now().add(Duration(days: 7));
-          } else if (t.routine == 2 &&
-              t.deadline
-                      .difference(DateTime.now().add(Duration(days: 31)))
-                      .inDays <
-                  31) {
-            t.deadline = DateTime(DateTime.now().year,
-                (DateTime.now().month + 1) % 12, DateTime.now().day);
-          }
-          model.projects[widget.projIndex].tasks[widget.taskIndex].deadline =
-              t.deadline;
-        }
+        Task t=  model.projects[widget.projIndex].tasks[widget.taskIndex];
+        t.deadline = value; 
         model.onUpdateTask(model.account, model.projects[widget.projIndex],
-            model.projects[widget.projIndex].tasks[widget.taskIndex]);
+            t);
       },
       routine: model.projects[widget.projIndex].tasks[widget.taskIndex].routine,
       onRoutineChange: (value) {
         Task t = model.projects[widget.projIndex].tasks[widget.taskIndex];
         t.routine = value;
-        if (value == 1 && t.deadline.difference(DateTime.now()).inDays > 7) {
-          t.deadline = DateTime.now().add(Duration(days: 7));
-        } else if (value == 2 &&
-            t.deadline.difference(DateTime.now()).inDays > 31) {
-          t.deadline = DateTime(DateTime.now().year,
-              (DateTime.now().month + 1) % 12, DateTime.now().day);
-        }
         model.onUpdateTask(model.account, model.projects[widget.projIndex], t);
       },
       duration:

@@ -50,10 +50,10 @@ class _SettingsPage extends State<SettingsPage> {
     model.onUpdateAccount(widget.auth, account);
   }
   void SortingUpdate(String value, ViewModel model){
-    model.onUpdateSorting(value); 
     model.projects.forEach((project) => model.onUpdateProject(project)); 
     Account account = model.account; 
     account.sortingType = value; 
+    model.onUpdateSorting(account); 
     model.onUpdateAccount(widget.auth,account); 
   }
   Widget about(ViewModel model){

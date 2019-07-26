@@ -145,13 +145,16 @@ class _ProjectPage extends State<ProjectPage> {
                 ),
                 Material(
                   color: Colors.transparent,
-                  child:Text(
+                  child: Container(
+                    height: 35,
+                    child:Text(
                   model.projects[widget.index].name,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: (model.projects[widget.index].name.length > 23) ? 25:30,
                     color: Colors.white,
                   ),
-                ), 
+                )), 
                 ),
                 SizedBox(height: 13,),
                 ProgressBar(

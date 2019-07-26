@@ -52,13 +52,12 @@ class Task{
          completion = false; 
        }
        else if (routine == 1 ){
-         if (dead.difference(dateComp).inDays > 0 ){
+         if (created.add(Duration(days: 7)).difference(dateComp).inDays > 0 ){
            completion = false; 
-           dead.add(Duration(days: 7)); 
          }
        }
        else if (routine == 2){
-         if (dead.difference(dateComp).inDays > 0){
+         if (created.add(Duration(days: 30)).difference(dateComp).inDays > 0){
            completion = false; 
            dead = new DateTime(dead.year, dead.month+1, dead.day); 
          }

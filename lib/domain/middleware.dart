@@ -20,6 +20,9 @@ void appStateMiddleware(Store<AppState> store, action, NextDispatcher next) asyn
   if (action is GetTasksAction){
     await getProjectTasks(action.proj.id).then((state) => store.dispatch(LoadedTasksAction(action.proj, state)));
     store.dispatch(UpdateTaskViewAction(TaskViewType.list));
+    if (!store.state.account.joinedProjects.contains(action.proj.id)){
+      store.dispatch(SortingAction(action.proj, store.state.account.sortingType));
+    }
   }
   if (action is CreateProjectAction){
     await CreateProject(action.proj, action.auth);
@@ -33,11 +36,15 @@ void appStateMiddleware(Store<AppState> store, action, NextDispatcher next) asyn
     }
   }
   if (action is UpdateTaskAction){
-    store.dispatch(SortingAction(action.proj,action.account.sortingType)); 
+    if (!store.state.account.joinedProjects.contains(action.proj.id)){
+      store.dispatch(SortingAction(action.proj,action.account.sortingType)); 
+    }
     await UpdateTask(action.proj,action.task);
   }
   if (action is CreateTaskAction){
-     store.dispatch(SortingAction(action.proj,action.account.sortingType)); 
+    if (!store.state.account.joinedProjects.contains(action.proj.id)){
+     store.dispatch(SortingAction(action.proj,action.account.sortingType));
+    } 
     try{
       await CreateTask(action.proj, action.task);
     }catch(e){

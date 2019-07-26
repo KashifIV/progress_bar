@@ -69,25 +69,27 @@ List<Project> projectsReducer(List<Project> state, action){
   if (action is UpdateSortingAction){
     List<Project> projects = []; 
     state.forEach((project){
-      List<Task> tasks = project.tasks;
-      if (action.sort == Account.SortingTypes[0]){
-        tasks.sort((previous, next) => previous.dateCreated.compareTo(next.dateCreated)); 
+      if (!action.account.joinedProjects.contains(project.id)){
+        List<Task> tasks = project.tasks;
+        if (action.account.sortingType == Account.SortingTypes[0]){
+          tasks.sort((previous, next) => previous.dateCreated.compareTo(next.dateCreated)); 
+        }
+        else if (action.account.sortingType == Account.SortingTypes[1]){
+          List<Task> upper = tasks.where((test) => test.deadline != null).toList();
+          upper.sort((previous, next) => previous.deadline.compareTo(next.deadline));
+          tasks = upper..addAll(tasks.where((test) => test.deadline == null)); 
+        }
+        else if (action.account.sortingType == Account.SortingTypes[2]){
+          List<Task> upper = tasks.where((test) => test.duration != null).toList();
+          upper.sort((previous, next) => previous.duration.compareTo(next.duration));
+          tasks = upper..addAll(tasks.where((test) => test.duration == null)); 
+        }
+        for (int i = 0; i < tasks.length; i++){
+          tasks[i].order = i; 
+        }
+        project.setTasks(tasks); 
+        projects.add(project); 
       }
-      else if (action.sort == Account.SortingTypes[1]){
-        List<Task> upper = tasks.where((test) => test.deadline != null).toList();
-        upper.sort((previous, next) => previous.deadline.compareTo(next.deadline));
-        tasks = upper..addAll(tasks.where((test) => test.deadline == null)); 
-      }
-      else if (action.sort == Account.SortingTypes[2]){
-        List<Task> upper = tasks.where((test) => test.duration != null).toList();
-        upper.sort((previous, next) => previous.duration.compareTo(next.duration));
-        tasks = upper..addAll(tasks.where((test) => test.duration == null)); 
-      }
-      for (int i = 0; i < tasks.length; i++){
-        tasks[i].order = i; 
-      }
-      project.setTasks(tasks); 
-      projects.add(project); 
     });
     return projects; 
   }
@@ -99,7 +101,7 @@ List<Project> projectsReducer(List<Project> state, action){
       }
       else if (action.sort == Account.SortingTypes[1]){
         List<Task> upper = tasks.where((test) => test.deadline != null).toList();
-        upper.sort((previous, next) => -previous.deadline.compareTo(next.deadline));
+        upper.sort((previous, next) => previous.deadline.compareTo(next.deadline));
         tasks = upper..addAll(tasks.where((test) => test.deadline == null)); 
       }
       else if (action.sort == Account.SortingTypes[2]){

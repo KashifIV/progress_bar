@@ -59,14 +59,18 @@ class ProjectCard extends StatelessWidget {
                         children: <Widget>[
                           new Material (
                             color: Colors.transparent,
-                            child: Text(
+                            child:Container(
+                              height: 35, 
+                            child: Center(child:Text(
                             model.projects[index].name,
+                            textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 30,
+                              fontSize: (model.projects[index].name.length > 23) ? 25:30,
                               color: Colors.white,
                               
+                              
                             ),
-                          )),
+                          )))),
                           SizedBox(height: 10,),
                           ProgressBar(index)
                         ],

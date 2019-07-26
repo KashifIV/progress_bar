@@ -88,6 +88,8 @@ class _CreateProject extends State<CreateProject>{
                     new Container(
                         padding: EdgeInsets.only(top: 30.0),
                         child: new TextField(
+                          maxLength: 30,
+                          maxLengthEnforced: true,
                           textCapitalization: TextCapitalization.words,
                           decoration: InputDecoration(
                             hintText: proj.name,
