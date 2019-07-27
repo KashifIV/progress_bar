@@ -123,7 +123,7 @@ class _TaskCard extends State<TaskCard>{
       slideToDismissDelegate: adjustDelegate(model),
       actionExtentRatio: 0.25,
       child: GestureDetector(
-        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TaskPage(widget.index,model.projects[widget.index].tasks.indexOf(widget.task), task: widget.task,))),
+        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => TaskPage(widget.index, task: widget.task,))),
         child: new Container(
         color: (model.account.darkTheme) ? Colors.black : Colors.white,
         child:Column(children: <Widget>[ ListTile(
@@ -137,7 +137,7 @@ class _TaskCard extends State<TaskCard>{
           trailing: Column(
             children: <Widget> [
               Text(
-            (widget.color == Colors.red)? _getTimeDifference():'',
+            (widget.color != null)? _getTimeDifference():'',
             style: TextStyle(color: widget.color),
               ), 
               SizedBox(height: 10,),

@@ -7,8 +7,9 @@ import 'package:progress_bar/ui/task_tags.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
 class TaskLog extends StatelessWidget{
-  final int projid, taskid; 
-  TaskLog(this.projid, this.taskid); 
+  final int projid;
+  Task task;  
+  TaskLog(this.projid, this.task); 
   Widget createLogView(Log log, ViewModel model){
     return Container(
       padding: EdgeInsets.all(10),
@@ -102,7 +103,6 @@ Container(
             
             style: TextStyle( color: (model.account.darkTheme) ? Colors.white: Colors.black,),
             onSubmitted: (value){
-              Task task = model.projects[projid].tasks[taskid]; 
               if (task.logs == null) task.logs = []; 
               task.logs.add(new Log(account: model.account, dateWritten: DateTime.now(), message: value)); 
               model.onUpdateTask(model.account, model.projects[projid], task); 
@@ -142,7 +142,7 @@ Container(
         rebuildOnChange: true,
         converter: (Store<AppState> store) => ViewModel.create(store),
         builder: (BuildContext context, ViewModel model) => Column(
-      children: _getLogs(model.projects[projid].tasks[taskid], model)..add(newLogView(model)),
+      children: _getLogs(task, model)..add(newLogView(model)),
     )); 
   }
 }

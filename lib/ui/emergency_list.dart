@@ -8,39 +8,57 @@ import 'package:progress_bar/ui/task_card.dart';
 import 'package:progress_bar/data/Task.dart';
 import 'package:progress_bar/ui/project_tags.dart';
 
-class EmergencyList extends StatelessWidget{
+class EmergencyList extends StatefulWidget{
   final int index; 
-  EmergencyList(this.index);
+  EmergencyList(this.index); 
+  _EmergencyList createState() => _EmergencyList(); 
+}
+class _EmergencyList extends State<EmergencyList>{
+  DateTime date; 
   List<Widget> _getTaskCards(ViewModel model){
     List<Widget> a = [];
     EventList<String> times = new EventList<String>(); 
     int time = 0; 
     int tasks = 0;
-    if (model.projects[index].tasks != null){
-    for (int i = 0; i < model.projects[index].tasks.length; i++){
-      if (model.projects[index].tasks[i].deadline != null&& !model.projects[index].tasks[i].complete && model.projects[index].tasks[i].deadline.isBefore(DateTime.now().add(Duration(days: 7)))){
-        a.add(TaskCard(model.projects[index].tasks[i], index, color: Colors.red,));
+    if (model.projects[widget.index].tasks != null){
+    for (int i = 0; i < model.projects[widget.index].tasks.length; i++){
+      if (model.projects[widget.index].tasks[i].deadline != null&& (date == null ? true: model.projects[widget.index].tasks[i].deadline.difference(date).inDays == 0) &&!model.projects[widget.index].tasks[i].complete && model.projects[widget.index].tasks[i].deadline.isBefore(DateTime.now().add(Duration(days: 7)))){
+        Task t = model.projects[widget.index].tasks[i]; 
+        Color color; 
+        if (t.deadline.difference(DateTime.now()).inDays < 0){
+          color = Colors.red;
+        }
+        else if (t.deadline.isBefore(DateTime.now().add(Duration(days: 3)))){
+          color= Colors.orange; 
+        }
+        else color = Colors.green;
+        a.add(TaskCard(model.projects[widget.index].tasks[i], widget.index, color: color,));
         tasks++; 
-        if (model.projects[index].tasks[i].duration != null) {
-          time +=model.projects[index].tasks[i].duration.inMinutes;
+        if (model.projects[widget.index].tasks[i].duration != null) {
+          time +=model.projects[widget.index].tasks[i].duration.inMinutes;
         }
       }
-      if (model.projects[index].tasks[i].deadline != null)
-        times.add(model.projects[index].tasks[i].deadline, model.projects[index].tasks[i].name);
+      if (model.projects[widget.index].tasks[i].deadline != null)
+        times.add(model.projects[widget.index].tasks[i].deadline, model.projects[widget.index].tasks[i].name);
     }
     }
-    if (!a.isEmpty){
+    if (!a.isEmpty || date != null){
       a..add(SizedBox(height: 10,))..add(Card(color: (model.account.darkTheme) ? Colors.black: Colors.white, elevation: 3, child: 
         CalendarCarousel(
         weekFormat: true,
+        isScrollable: false,
         weekDayFormat: WeekdayFormat.standaloneShort,    
         weekdayTextStyle: TextStyle(color: Colors.grey),
         showHeader: false,
         headerMargin: EdgeInsets.all(4),
         markedDatesMap: times,
         height: 80,
-        todayBorderColor: model.projects[index].toColor(),
-        
+        todayBorderColor: model.projects[widget.index].toColor(),
+        onDayPressed: (selectedDate , tasks){
+          setState(() {
+           (selectedDate.day == DateTime.now().day) ? date = null: date = selectedDate;  
+          });
+        },
         daysHaveCircularBorder: true,
         daysTextStyle: TextStyle(color: (model.account.darkTheme) ? Colors.white: Colors.black),
         todayTextStyle: TextStyle(color:(model.account.darkTheme) ? Colors.white: Colors.black),

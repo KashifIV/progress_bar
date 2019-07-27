@@ -18,6 +18,7 @@ import 'package:progress_bar/domain/viewmodel.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:progress_bar/data/server_functions.dart';
 import 'package:progress_bar/ui/progress_overview.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:progress_bar/ui/account_page.dart';
 import 'package:progress_bar/ui/calendar_page.dart';
 
@@ -138,13 +139,21 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
       children: <Widget>[
          _logo(model, context),
         SizedBox(
-            height: MediaQuery.of(context).size.height - 280,
-            width: 400,
+            height: MediaQuery.of(context).size.height - 300,
+            width: MediaQuery.of(context).size.width,
             child:(projIndex != model.projects.length) ? CustomScrollView(
               slivers: <Widget>[EmergencyList(projIndex),TagList(projIndex),TaskList(projIndex, emergency: true,)],
             ): Center(child: Row( mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[Icon(Icons.arrow_downward, color: model.account.darkTheme? Colors.white:Colors.black,), SizedBox(width: 10,), Text('Create a Project!', style: TextStyle(color: model.account.darkTheme ? Colors.white: Colors.black),)])),),
         Center(
           child: _buildCarousel(context, model, controller),
+        ), 
+        DotsIndicator(
+          dotsCount: model.projects.length+1,
+          position: projIndex,
+          decorator: DotsDecorator(
+            spacing: const EdgeInsets.all(5),
+            activeColor: model.projects[projIndex].toColor()
+          ),
         )
       ],
     ));

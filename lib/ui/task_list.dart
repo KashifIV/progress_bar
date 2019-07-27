@@ -50,7 +50,7 @@ class TaskList extends StatelessWidget{
       }
     }
     }
-    if (!a.isEmpty) a.add(SizedBox(height: 20)); 
+    if (!a.isEmpty) a.add(SizedBox(height: 30)); 
     return a;
   }
   bool _showIncompleteTask(Task task) {
@@ -75,6 +75,18 @@ class TaskList extends StatelessWidget{
     else if (!task.complete&&task.deadline.isAfter(DateTime.now().add(Duration(days: 7)))) return true;
     return false; 
   }
+  bool _showRoutineDaily(Task task){
+    if (task.routine == 0 && !task.complete) return true; 
+    return false;  
+  }
+  bool _showRoutineWeekly(Task task){
+    if (task.routine == 1 && !task.complete) return true; 
+    return false;
+  }
+  bool _showRoutineMonthly(Task task){
+    if (task.routine == 2 && !task.complete) return true; 
+    return false;  
+  }
   Function getWhiteList(WhiteList whiteList){
     if (emergency){
       return _showLaterTasks; 
@@ -90,6 +102,13 @@ class TaskList extends StatelessWidget{
         return _showTasksWithTag;
       case WhiteList.emergency: 
         return _showLaterTasks;
+      case WhiteList.routine_daily:
+        return _showRoutineDaily; 
+      case WhiteList.routine_monthly:
+        return _showRoutineMonthly; 
+      case WhiteList.routine_weekly: 
+        return _showRoutineWeekly;
+      default: return _showIncompleteTask;
     }
   }
   @override

@@ -8,17 +8,21 @@ import 'package:progress_bar/data/Task.dart';
 import 'package:progress_bar/domain/redux.dart';
 
 class TaskTags extends StatefulWidget{
-  final int projIndex, taskIndex; 
-  TaskTags(this.projIndex, this.taskIndex); 
+  final int projIndex;
+  final Task task;  
+  TaskTags(this.projIndex, this.task); 
   _TaskTags createState() => _TaskTags(); 
 }
 class _TaskTags extends State<TaskTags>{
   bool isExpanded = false; 
-
+  Task task; 
+  void initState(){
+    task = widget.task; 
+  }
   Widget _createGraidentChip(String tag, ViewModel model){
     return Hero(child: GestureDetector(
       onTap: (){
-        Task task = model.projects[widget.projIndex].tasks[widget.taskIndex]; 
+        Task task = widget.task; 
           if (task.tags == null){
             task.tags = [tag]; 
           }
@@ -58,7 +62,7 @@ class _TaskTags extends State<TaskTags>{
           ),
         ),
         onPressed: (){
-          Task task = model.projects[widget.projIndex].tasks[widget.taskIndex]; 
+          Task task = widget.task; 
           if (task.tags == null){
             task.tags = [tag]; 
           }
@@ -88,11 +92,11 @@ class _TaskTags extends State<TaskTags>{
       ),
       child: Center(child: TextField(
         onSubmitted: (value) {
-          if (model.projects[widget.projIndex].tasks[widget.taskIndex].tags == null)
-            model.projects[widget.projIndex].tasks[widget.taskIndex].tags = []; 
-          model.projects[widget.projIndex].tasks[widget.taskIndex].tags.add(value); 
-          model.projects[widget.projIndex].tags.add(value);
-          model.onUpdateTask(model.account,model.projects[widget.projIndex], model.projects[widget.projIndex].tasks[widget.taskIndex]);
+          if (task.tags == null)
+            task.tags = []; 
+          task.tags.add(value); 
+          task.tags.add(value);
+          model.onUpdateTask(model.account,model.projects[widget.projIndex],task);
           model.onUpdateProject(model.projects[widget.projIndex]);
         },
         style: TextStyle( color: (model.account.darkTheme) ? Colors.white: Colors.black,),
@@ -170,10 +174,10 @@ class _TaskTags extends State<TaskTags>{
       builder: (BuildContext context, ViewModel model)=> Container(
         child: Column(
           children: <Widget>[
-            _taskTags(model.projects[widget.projIndex].tasks[widget.taskIndex].tags, model),
+            _taskTags(task.tags, model),
             SizedBox(height: 30,),
             _projectTags(model.projects[widget.projIndex].tags, 
-            model.projects[widget.projIndex].tasks[widget.taskIndex].tags,
+            task.tags,
             model)
           ],
         )

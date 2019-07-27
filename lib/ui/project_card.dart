@@ -23,7 +23,7 @@ class ProjectCard extends StatelessWidget {
         converter: (Store<AppState> store) => ViewModel.create(store),
         builder: (BuildContext context, ViewModel model) => Hero(
           transitionOnUserGestures: true,
-          tag:model.projects[index].name,
+          tag:model.projects[index].id,
           child: Container(
             child: GestureDetector(
                 onTap: () => _openProject(context, model),
@@ -60,7 +60,7 @@ class ProjectCard extends StatelessWidget {
                           new Material (
                             color: Colors.transparent,
                             child:Container(
-                              height: 35, 
+                              //height: 35, 
                             child: Center(child:Text(
                             model.projects[index].name,
                             textAlign: TextAlign.center,

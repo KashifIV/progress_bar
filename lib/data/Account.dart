@@ -4,6 +4,7 @@ class Account{
   static const ProgressTypes = ['Task','Deadline', 'Time'];
   static const SortingTypes = ['Date Created', 'Deadline', 'Duration'];
   String id; 
+  bool swapActivationSide; 
   String profileImageURL; 
   String name; 
   String email; 
@@ -11,7 +12,7 @@ class Account{
   Image profileImage; 
   String progressType, sortingType; 
   List<String> joinedProjects = []; 
-  Account({this.id, this.profileImageURL, this.name, this.email, this.joinedProjects, this.sortingType, this.progressType, this.darkTheme}); 
+  Account({this.id, this.profileImageURL, this.name, this.email, this.swapActivationSide, this.joinedProjects, this.sortingType, this.progressType, this.darkTheme}); 
   
   Map<String, dynamic> mapTo(){
     var dataMap = new Map<String, dynamic>(); 
@@ -22,6 +23,7 @@ class Account{
     dataMap['progressType']  = this.progressType; 
     dataMap['darkTheme'] = this.darkTheme;
     dataMap['sortingType'] = this.sortingType; 
+    dataMap['swapActivationSide'] = this.swapActivationSide; 
     return dataMap; 
   }
   factory Account.NewAccount(String id, String email){
@@ -33,8 +35,8 @@ class Account{
       progressType: 'Time',
       sortingType: SortingTypes[0],
       joinedProjects: [],
-      name: 'Untitled'
-
+      name: 'Untitled',
+      swapActivationSide: false,
     );
   }
   factory Account.fromMap(String id, Map<String, dynamic> map){
@@ -47,6 +49,7 @@ class Account{
       joinedProjects: (map.containsKey('joinedProjects'))? map['joinedProjects'].cast<String>() : [],
       progressType: (map.containsKey('progressType')) ? map['progressType'] : 'Task', 
       sortingType: (map.containsKey('sortingType')) ? map['sortingType'] : SortingTypes[0],
+      swapActivationSide: (map.containsKey('swapActivationSide')) ? map['swapActivationSide'] : false
     ); 
   }
 }

@@ -98,7 +98,12 @@ progressbarhelp@gmail.com
       ),
     );
   }
-
+  Widget swapActivation(ViewModel model){
+    return ListTile(
+      leading: Icon(Icons.swap_horizontal_circle, color:  model.account.darkTheme ? Colors.white:Colors.black,),
+      title: Text('Change Sliding Side'),
+    );
+  }
   Widget _options(ViewModel model) {
     return Container(
       child: Column(

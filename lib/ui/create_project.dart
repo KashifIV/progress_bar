@@ -153,8 +153,10 @@ class _CreateProject extends State<CreateProject>{
                 child: new FloatingActionButton(
                   child: new Icon(Icons.keyboard_arrow_right),
                   onPressed: (){
-                    if (widget.project == null)
+                    if (widget.project == null){
+                      proj.index = model.projects.length; 
                       model.onCreateProject(proj,widget.auth);
+                    }
                     else model.onUpdateProjectSettings(proj); 
                     Navigator.pop(context, true);
                   },

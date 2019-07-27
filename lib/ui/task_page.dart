@@ -12,9 +12,8 @@ import 'date_options.dart';
 
 class TaskPage extends StatefulWidget {
   final int projIndex;
-  final int taskIndex;
   final Task task;
-  TaskPage(this.projIndex, this.taskIndex, {this.task});
+  TaskPage(this.projIndex,{this.task});
   _TaskPage createState() => _TaskPage();
 }
 
@@ -83,37 +82,37 @@ class _TaskPage extends State<TaskPage> {
 
   Widget _datePicker(BuildContext context, ViewModel model) {
     String ans = (model
-                .projects[widget.projIndex].tasks[widget.taskIndex].deadline ==
+                .projects[widget.projIndex].tasks[widget.task.order].deadline ==
             null)
         ? 'Add a Deadline.'
-        : model.projects[widget.projIndex].tasks[widget.taskIndex].deadline
+        : model.projects[widget.projIndex].tasks[widget.task.order].deadline
                 .difference(DateTime.now())
                 .inDays
                 .toString() +
             ' Day(s) Remaining \n' +
-            model.projects[widget.projIndex].tasks[widget.taskIndex].deadline
+            model.projects[widget.projIndex].tasks[widget.task.order].deadline
                 .toString()
                 .substring(0, 10);
     return DateOptions(
       dark: model.account.darkTheme,
       deadline:
-          model.projects[widget.projIndex].tasks[widget.taskIndex].deadline,
+          widget.task.deadline,
       onDeadlineChange: (value) {
-        Task t=  model.projects[widget.projIndex].tasks[widget.taskIndex];
+        Task t=  widget.task;
         t.deadline = value; 
         model.onUpdateTask(model.account, model.projects[widget.projIndex],
             t);
       },
-      routine: model.projects[widget.projIndex].tasks[widget.taskIndex].routine,
+      routine: widget.task.routine,
       onRoutineChange: (value) {
-        Task t = model.projects[widget.projIndex].tasks[widget.taskIndex];
+        Task t = widget.task;
         t.routine = value;
         model.onUpdateTask(model.account, model.projects[widget.projIndex], t);
       },
       duration:
-          model.projects[widget.projIndex].tasks[widget.taskIndex].duration,
+          widget.task.duration,
       onDurationChange: (value) {
-        Task t = model.projects[widget.projIndex].tasks[widget.taskIndex];
+        Task t = widget.task;
         t.duration = value;
         model.onUpdateTask(model.account,model.projects[widget.projIndex], t);
       },
@@ -146,7 +145,6 @@ class _TaskPage extends State<TaskPage> {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
-        rebuildOnChange: true,
         converter: (Store<AppState> store) => ViewModel.create(store),
         builder: (BuildContext context, ViewModel model) => WillPopScope(
             onWillPop: () => onPop(model),
@@ -157,11 +155,10 @@ class _TaskPage extends State<TaskPage> {
               slivers: <Widget>[
                 SliverList(
                   delegate: SliverChildListDelegate(<Widget>[]
-                    ..add(_title(model.projects[widget.projIndex]
-                        .tasks[widget.taskIndex].name, (model.account.darkTheme) ? Colors.white: Colors.black))
-                    ..add(TaskTags(widget.projIndex, widget.taskIndex))
+                    ..add(_title(widget.task.name, (model.account.darkTheme) ? Colors.white: Colors.black))
+                    ..add(TaskTags(widget.projIndex, widget.task))
                     ..add(_datePicker(context, model))
-                    ..add(TaskLog(widget.projIndex, widget.taskIndex))
+                    ..add(TaskLog(widget.projIndex, widget.task))
                     //..add(_addToCalendar(model))
                     ..add(Notes(model, context))
                     ..add(_addToCalendar(model))),

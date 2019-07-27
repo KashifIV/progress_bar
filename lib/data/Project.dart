@@ -12,7 +12,7 @@ class Project {
   int index;
   List<Task> tasks = [];
   List<String> tags;
-  int tasksComplete, tasksToDo; 
+  int tasksComplete = 0, tasksToDo = 0; 
   PageType state = PageType.UND;
   Project(this.name, this.description, this.color, this.projType,
       {this.tags, this.id, this.tasks, this.index, this.users, this.deadline, this.dateCreated}) {

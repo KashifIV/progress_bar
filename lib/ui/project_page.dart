@@ -55,7 +55,7 @@ class _ProjectPage extends State<ProjectPage> {
     showModalBottomSheet<void>(
         context: context,
         builder: (BuildContext context) {
-          return Column(
+          return ListView(
             children: <Widget>[
               ListTile(
                 leading: checkSelect(model, WhiteList.incomplete),
@@ -84,6 +84,33 @@ class _ProjectPage extends State<ProjectPage> {
                   Navigator.pop(context);
                 },
               ), 
+              ListTile(
+                leading: checkSelect(model, WhiteList.routine_daily),
+                title: Text('Daily Tasks'),
+                onTap: (){
+                  model.onUpdateWhiteList(WhiteList.routine_daily); 
+                  whiteListTag = null; 
+                  Navigator.pop(context); 
+                },
+              ),
+              ListTile(
+                leading: checkSelect(model, WhiteList.routine_weekly),
+                title: Text('Weekly Tasks'),
+                onTap: (){
+                  model.onUpdateWhiteList(WhiteList.routine_weekly); 
+                  whiteListTag = null; 
+                  Navigator.pop(context); 
+                },
+              ),
+              ListTile(
+                leading: checkSelect(model, WhiteList.routine_monthly),
+                title: Text('Monthly Tasks'),
+                onTap: (){
+                  model.onUpdateWhiteList(WhiteList.routine_monthly); 
+                  whiteListTag = null; 
+                  Navigator.pop(context); 
+                },
+              ),
             ]..addAll(tags),
           );
         });
@@ -114,7 +141,7 @@ class _ProjectPage extends State<ProjectPage> {
   }
   Widget _AppBar(ViewModel model) {
     return new Hero(
-      tag: model.projects[widget.index].name,
+      tag: model.projects[widget.index].id,
         child: SingleChildScrollView(
           child: Container(
             decoration: new BoxDecoration(
@@ -146,7 +173,7 @@ class _ProjectPage extends State<ProjectPage> {
                 Material(
                   color: Colors.transparent,
                   child: Container(
-                    height: 35,
+                    //height: 35,
                     child:Text(
                   model.projects[widget.index].name,
                   textAlign: TextAlign.center,

@@ -17,7 +17,7 @@ class AppState{
   factory AppState.initialState() => AppState(new Account(darkTheme: false),List.unmodifiable([]), TaskViewType.empty, new Auth(), PageType.UND, WhiteList.incomplete);
 }
 enum WhiteList{
-  incomplete, complete,all,tag, emergency
+  incomplete, complete,all,tag, emergency, routine_daily, routine_weekly, routine_monthly
 }
 enum PageType{
   VAL, UND, NEW
