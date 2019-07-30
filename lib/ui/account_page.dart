@@ -11,6 +11,7 @@ import 'package:progress_bar/ui/share_project.dart';
 import 'package:redux/redux.dart';
 import 'package:progress_bar/ui/create_project.dart';
 import 'package:progress_bar/domain/redux.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:share/share.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
 
@@ -66,22 +67,34 @@ class _AccountPage extends State<AccountPage> {
   }
   List<Widget> _getProjects(ViewModel model, BuildContext context) {
     List<Widget> a = [];
+    int count = -1; 
     model.projects.forEach((project) {
+      count++; 
       a.add(Container(
           margin: EdgeInsets.symmetric(horizontal: 10),
           child: Slidable(
             key: new Key(project.id),
-            child: ProjectCard(project.index),
+            child: ProjectCard(count),
             delegate: SlidableBehindDelegate(),
             actionExtentRatio: 0.25,
             actions: <Widget>[
               IconSlideAction(
                 icon: Icons.share,
                 color: Colors.blue,
-                onTap: () => showDialog(
-                  context: context, 
-                  builder: (context) => _shareProjectDialog(context, model, project)
-                )
+                onTap: () =>(Connectivity().checkConnectivity()).then((onValue){
+                  if (onValue  == ConnectivityResult.mobile ||  onValue == ConnectivityResult.wifi){
+                    showDialog(
+                      context: context, 
+                      builder: (context) => _shareProjectDialog(context, model, project)
+                    );
+                  }
+                  else {
+                    showDialog(
+                      context: context, 
+                      builder: (context) => AlertDialog(title: Text('Please ensure you have a valid Internet Connection'),)
+                    );
+                  }
+                })
               )
             ],
             secondaryActions: <Widget>[

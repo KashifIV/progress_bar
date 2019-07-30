@@ -49,11 +49,11 @@ class _ShareProject extends State<ShareProject> {
     return StoreConnector<AppState, ViewModel>(
         converter: (Store<AppState> store) => ViewModel.create(store),
         rebuildOnChange: true,
-        builder: (BuildContext context, ViewModel model) => Theme( data: ThemeData.dark(), child: Scaffold(
+        builder: (BuildContext context, ViewModel model) => Theme( data: (model.account.darkTheme)? ThemeData.dark() : ThemeData.light(), child: Scaffold(
       appBar: AppBar(
         title: Text('Share your Project'),
       ),
-      body: Column(
+      body: ListView(
         children: <Widget>[
           Container(
             child: Text(
@@ -64,6 +64,7 @@ class _ShareProject extends State<ShareProject> {
           ),
           Container(
               height: 200,
+              padding: EdgeInsets.all(20),
               child: Wrap(
                 children: getEmailChips(),
               )),
@@ -73,7 +74,16 @@ class _ShareProject extends State<ShareProject> {
               children: <Widget>[
                 Flexible(
                     child: TextField(
-                  onSubmitted: (value) => addChip(value),
+                  onSubmitted: (value){
+                    if (value.contains('@') && value.split('@').length < 3){
+                    addChip(value);
+                    controller.text ="";
+                    }
+                    else {
+                      controller.text =""; 
+                      showDialog(context: context, builder: (context) => AlertDialog(title: Text('Please enter a valid email address.'), actions: <Widget>[FlatButton(child: Text('Continue'), onPressed: () => Navigator.pop(context),)],),);
+                    }
+                  },
                   controller: controller,
                 )),
                 IconButton(
@@ -81,9 +91,14 @@ class _ShareProject extends State<ShareProject> {
                   color: widget.project.toColor(),
                   splashColor: widget.project.toColor(),
                   onPressed: (){
+                    if (controller.text.contains('@') && controller.text.split('@').length < 3){
                     addChip(controller.text);
-                    //emails.add(controller.text); 
-                    controller.text = ""; 
+                    controller.text ="";
+                    }
+                    else {
+                      controller.text =""; 
+                      showDialog(context: context, builder: (context) => AlertDialog(title: Text('Please enter a valid email address.'), actions: <Widget>[FlatButton(child: Text('Continue'), onPressed: () => Navigator.pop(context),)],),);
+                    }
                   }
                 )
               ],

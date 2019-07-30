@@ -48,7 +48,7 @@ void appStateMiddleware(Store<AppState> store, action, NextDispatcher next) asyn
     try{
       await CreateTask(action.proj, action.task);
     }catch(e){
-      
+      print(e);
     }
   }
   if (action is DeleteTaskAction){

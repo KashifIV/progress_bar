@@ -21,8 +21,10 @@ Future<Uri> CloneProjectLink(Project project)async{
 
 Future<Uri> CollabProjectLink(Project project, List<String> emails, ViewModel model)async {
   List<String> ids = []; 
-  await emails.forEach((email)async => (email.contains('@') ? ids.add(await FindEmailID(email)):null)); 
-  //project.users.addAll(ids.where((id) => !project.users.contains(id))); 
+  //await emails.forEach((email)async => (email.contains('@')) ? ids.add(await FindEmailID(email)):null); 
+  for (int i = 0; i < emails.length; i++){
+    await ids.add(await FindEmailID(emails[i]));
+  }
   if (project.users == null) project.users = []; 
   for (int i =0 ;i < ids.length; i++){
     print(emails[i]); 

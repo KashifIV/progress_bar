@@ -54,6 +54,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
     
      final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance.retrieveDynamicLink(); 
      final Uri deepLink = data?.link;
+     print(deepLink.toString());
      if (deepLink != null)
       if (deepLink.pathSegments[0] == 'cloneProject'){
         Project temp = await cloneProject(deepLink.toString(), widget.auth.getUID());
@@ -111,6 +112,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
       clonedProject = null; 
     }
     if (collabedProject != null){
+      print('Running Collab sequence');
       model.account.joinedProjects = []..addAll(model.account.joinedProjects)..add(collabedProject.id); 
       model.onCloneProject(collabedProject); 
       model.onUpdateAccount(widget.auth, model.account); 
@@ -152,7 +154,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
           position: projIndex,
           decorator: DotsDecorator(
             spacing: const EdgeInsets.all(5),
-            activeColor: model.projects[projIndex].toColor()
+            activeColor: (projIndex < model.projects.length) ? model.projects[projIndex].toColor() : Colors.white,
           ),
         )
       ],

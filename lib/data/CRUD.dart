@@ -47,7 +47,9 @@ Future<String> FindEmailID(String email)async{
     await Firestore.instance.runTransaction((transaction) async{
       CollectionReference ref = Firestore.instance.collection('Accounts');
       QuerySnapshot doc = await ref.where('email', isEqualTo: email).getDocuments();
-      id = doc.documents[0].documentID;
+      id = doc.documents[1].documentID;
+      //doc.documents.forEach((d) => print(d.documentID));
+      //print('ID: '+ id); 
     }); 
     return id; 
   }
@@ -77,7 +79,7 @@ Future<void> CreateTask(Project proj, Task t) async{
       CollectionReference a = Firestore.instance.collection('Projects/' + proj.id +'/tasks');
       DocumentReference ref = a.document(); 
       t.id = ref.documentID; 
-      await transaction.set(ref, t.mapTo()); 
+      await transaction.set(ref, t.mapTo());
     }
   );
 }
@@ -97,14 +99,12 @@ Future<void> UpdateProject(Project proj) async{
   }
   Future<void> UpdateTasks(Project proj)async{
     CollectionReference ref = Firestore.instance.collection('Projects/' + proj.id +'/tasks'); 
-    await ref.getDocuments().then((values){
-      values.documents.forEach((doc){
+    await ref.getDocuments().then((values)async {
+      await values.documents.forEach((doc)async{
         if (doc.exists){
           Task t = proj.tasks.firstWhere((test) => test.id == doc.documentID);
-          try{
-          Firestore.instance.document('Projects/' + proj.id +'/tasks/' + doc.documentID)
+          await Firestore.instance.document('Projects/' + proj.id +'/tasks/' + doc.documentID)
             .updateData(t.mapTo()).catchError((e) => print('UPDATE FAILED'));
-          }catch(e){print(e);}
         }
       });
     });
@@ -141,8 +141,12 @@ Future<void> UpdateProject(Project proj) async{
     DocumentReference ref = Firestore.instance.document('Projects/' + id); 
     DocumentSnapshot snapshot = await ref.get(); 
     List<String> tags = []; 
+    try {
     project = Project.fromMap(snapshot.data, tags, snapshot.documentID); 
-    project.setTasks(await getProjectTasks(project.id)); 
+    project.setTasks(await getProjectTasks(project.id));
+    }catch(e){
+      print(e); 
+    } 
     return project; 
   }
   Future<List<Project>> getProjects(Auth auth) async {
@@ -171,7 +175,14 @@ Future<void> UpdateProject(Project proj) async{
       List<String> additional= new List<String>.from(ref.data['joinedProjects']); 
       for (int i = 0; i < additional.length; i++){
         print(additional[i]); 
-        await a.add(await getProject(additional[i])); 
+        Project project = await getProject(additional[i]); 
+        if (project == null){
+            additional.remove(additional[i]); 
+            Map<String, dynamic> map = ref.data; 
+            map['joinedProjects'] = additional; 
+           await Firestore.instance.document('Accounts/' + auth.getUID()).updateData(map); 
+        }
+        else a.add(project); 
       }
     }
   

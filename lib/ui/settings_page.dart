@@ -101,7 +101,15 @@ progressbarhelp@gmail.com
   Widget swapActivation(ViewModel model){
     return ListTile(
       leading: Icon(Icons.swap_horizontal_circle, color:  model.account.darkTheme ? Colors.white:Colors.black,),
-      title: Text('Change Sliding Side'),
+      title: Text('Change Sliding Side', style: TextStyle(color:  model.account.darkTheme ? Colors.white:Colors.black,),),
+      trailing: Switch(
+        value: model.account.swapActivationSide,
+        onChanged: (value){
+          Account account = model.account; 
+          account.swapActivationSide = value; 
+          model.onUpdateAccount(widget.auth,account);
+        },
+      ),
     );
   }
   Widget _options(ViewModel model) {
@@ -113,7 +121,8 @@ progressbarhelp@gmail.com
               initialValue: model.account.progressType),
           item(Icon(Icons.sort,color: model.account.darkTheme ? Colors.white:Colors.black), 'Task Sorting', Account.SortingTypes, SortingUpdate, model,
               initialValue: model.account.sortingType),
-          darkTheme(model)
+          darkTheme(model), 
+          swapActivation(model),
         ],
       ),
     );

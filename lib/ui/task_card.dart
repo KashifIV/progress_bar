@@ -17,9 +17,9 @@ class TaskCard extends StatefulWidget{
   _TaskCard createState() => _TaskCard();
 }
 class _TaskCard extends State<TaskCard>{
-  Widget GetPrimarySlideAction(ViewModel model) {
+  List<Widget> GetPrimarySlideAction(ViewModel model) {
     if (widget.task.complete == false){
-      return new IconSlideAction(
+      return <Widget>[ IconSlideAction(
           caption: 'Done',
           icon: Icons.check,
           color: Colors.green,
@@ -28,10 +28,10 @@ class _TaskCard extends State<TaskCard>{
             widget.task.dateCompleted= DateTime.now();
             model.onUpdateTask(model.account, model.projects[widget.index], widget.task);
           },
-        );
+        )];
     }
     else if (widget.task.complete == true){
-      return new IconSlideAction(
+      return <Widget> [IconSlideAction(
         caption: 'Unfinished',
         icon: Icons.undo,
         color: Colors.blue,
@@ -40,17 +40,26 @@ class _TaskCard extends State<TaskCard>{
           widget.task.dateCompleted = DateTime.now();
           model.onUpdateTask(model.account, model.projects[widget.index], widget.task);
         },
-      );
+      )];
     }
   }
   SlideToDismissDelegate adjustDelegate(ViewModel model){
     if (model.whiteList == WhiteList.all) return null;
-    return SlideToDismissDrawerDelegate(
+    return (!model.account.swapActivationSide) ? SlideToDismissDrawerDelegate(
         dismissThresholds: <SlideActionType, double>{SlideActionType.secondary: 1.0},
         onDismissed: (action){
           if (action == SlideActionType.primary){
             widget.task.complete = !widget.task.complete;
             model.onUpdateTask(model.account,model.projects[widget.index], widget.task);
+          }
+        }
+      ):
+      SlideToDismissDrawerDelegate(
+        dismissThresholds: <SlideActionType, double>{SlideActionType.primary : 1.0}, 
+        onDismissed: (action){
+          if (action == SlideActionType.secondary){
+            widget.task.complete = !widget.task.complete; 
+            model.onUpdateTask(model.account, model.projects[widget.index], widget.task); 
           }
         }
       );
@@ -112,9 +121,18 @@ class _TaskCard extends State<TaskCard>{
     return prefix + days.toString() + " Days"; 
 
   }
+  List<Widget> _secondaryActions(ViewModel model){
+    return <Widget>[
+      new IconSlideAction(
+          caption: 'Delete',
+          icon: Icons.delete,
+          color: Colors.red,
+          onTap: () => model.onDeleteTask(model.account, model.projects[widget.index],widget.task),
+        ),
+    ];
+  }
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return StoreConnector<AppState, ViewModel>( 
       converter:(Store<AppState> store) => ViewModel.create(store),
       builder: (BuildContext context, ViewModel model) =>Slidable(
@@ -153,40 +171,10 @@ class _TaskCard extends State<TaskCard>{
             ),
           ),
         ),
-        /*
-         Container(
-              height: 5,
-              width: double.infinity,
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: (widget.task.complete) ? Colors.green.withOpacity(0.4) : (widget.task.deadline == null) ? Colors.grey.withOpacity(0.4) : Colors.orange.withOpacity(0.4),
-              )
-            ),
-            */
         ])
       )),     
-      actions: <Widget>[
-        GetPrimarySlideAction(model),
-      ],
-      secondaryActions: <Widget>[
-        new IconSlideAction(
-          caption: 'Delete',
-          icon: Icons.delete,
-          color: Colors.red,
-          onTap: () => model.onDeleteTask(model.account, model.projects[widget.index],widget.task),
-        ),
-        /*
-        new IconSlideAction(
-          caption: 'Settings',
-          icon: Icons.settings,
-          color: Colors.grey,
-          onTap: (){
-            showDialog(context: context, builder: (context)=> Dialog(child: dialog(model, context),));
-          },
-          
-        ),*/
-      ],
+      actions: (model.account.swapActivationSide) ? _secondaryActions(model) : GetPrimarySlideAction(model),
+      secondaryActions: (model.account.swapActivationSide) ? GetPrimarySlideAction(model) : _secondaryActions(model),
     ));
   }
 }
