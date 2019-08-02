@@ -140,35 +140,18 @@ class _ProjectPage extends State<ProjectPage> {
     return months[time.month-1] + ' ' + time.day.toString() + suffix + ' ' + time.year.toString(); 
   }
   Widget _AppBar(ViewModel model) {
-    return new Hero(
+    return new PreferredSize( 
+      preferredSize: Size.fromHeight(140),
+      child:Hero(
       tag: model.projects[widget.index].id,
         child: SingleChildScrollView(
           child: Container(
-            decoration: new BoxDecoration(
-              gradient: new LinearGradient(
-                  colors: [
-                    Color.alphaBlend(model.projects[widget.index].toColor().withAlpha(210), Colors.black), 
-                    Colors.teal[600]
-                  ],
-                  begin: const FractionalOffset(0.0, 0.0),
-                  end: const FractionalOffset(0.9, 0.3),
-                  stops: [0.0, 1.0],
-                  tileMode: TileMode.clamp),
-              color: model.projects[widget.index].toColor(),
-              shape: BoxShape.rectangle,
-              borderRadius: new BorderRadius.circular(8.0),
-              boxShadow: <BoxShadow>[
-                new BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 10.0,
-                  offset: new Offset(0.0, 10.0),
-                ),
-              ],
-            ),
+            height: 160,
+            //color: Colors.transparent,
             child: Column(
               children: <Widget>[
                 SizedBox(
-                  height: 90,
+                  height: 30,
                 ),
                 Material(
                   color: Colors.transparent,
@@ -194,7 +177,8 @@ class _ProjectPage extends State<ProjectPage> {
                     child: Text(_convertToReadableTime(model.projects[widget.index].deadline), style: TextStyle(fontSize: 20, color: Colors.white),)):
                     SizedBox(height: 23,),
                 ),
-                Row(
+                Flexible(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     FlatButton(
@@ -207,9 +191,10 @@ class _ProjectPage extends State<ProjectPage> {
                       .then((onValue) => model.onUpdateProject(model.projects[widget.index])),
                     )
                   ],
-                ), 
+                )), 
+                //SizedBox(height: 10,),
               ],
-            ))));
+            )))));
   }
 
   Future<bool> _onRefresh(ViewModel model) async {
@@ -232,13 +217,37 @@ class _ProjectPage extends State<ProjectPage> {
                     CustomScrollView(
                       slivers: <Widget>[
                         SliverAppBar(
-                          expandedHeight: 180,
+                          expandedHeight: 205,
                           backgroundColor:
                               model.projects[widget.index].toColor(),
+                              
                           flexibleSpace: new FlexibleSpaceBar(
                             centerTitle: true,
-                            background: _AppBar(model),
+                            background:  Container(
+                              decoration: new BoxDecoration(
+                                gradient: new LinearGradient(
+                                    colors: [
+                                      Color.alphaBlend(model.projects[widget.index].toColor().withAlpha(210), Colors.black), 
+                                      Colors.teal[600]
+                                    ],
+                                    begin: const FractionalOffset(0.0, 0.0),
+                                    end: const FractionalOffset(0.9, 0.3),
+                                    stops: [0.0, 1.0],
+                                    tileMode: TileMode.clamp),
+                                color: model.projects[widget.index].toColor(),
+                                shape: BoxShape.rectangle,
+                                borderRadius: new BorderRadius.circular(8.0),
+                                boxShadow: <BoxShadow>[
+                                  new BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 10.0,
+                                    offset: new Offset(0.0, 10.0),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
+                          bottom: _AppBar(model),
                         ),
                         LoadPage(model), 
                       ],

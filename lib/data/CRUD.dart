@@ -47,7 +47,12 @@ Future<String> FindEmailID(String email)async{
     await Firestore.instance.runTransaction((transaction) async{
       CollectionReference ref = Firestore.instance.collection('Accounts');
       QuerySnapshot doc = await ref.where('email', isEqualTo: email).getDocuments();
-      id = doc.documents[1].documentID;
+      for (int i = 0; i < doc.documents.length; i++){
+        if (doc.documents[i].documentID != '---'){
+          id = doc.documents[i].documentID; 
+          break; 
+        }
+      }
       //doc.documents.forEach((d) => print(d.documentID));
       //print('ID: '+ id); 
     }); 

@@ -15,7 +15,8 @@ class ProgressOverview extends StatefulWidget{
   final Project project; 
   final Auth auth; 
   final VoidCallback onSignedOut;
-  ProgressOverview(this.project, this.auth, this.onSignedOut); 
+  final int index; 
+  ProgressOverview(this.project, this.auth, this.onSignedOut, this.index); 
   _ProgressOverview createState() => _ProgressOverview(); 
 }
 class _ProgressOverview extends State<ProgressOverview>{
@@ -42,7 +43,7 @@ class _ProgressOverview extends State<ProgressOverview>{
           else{
             model.onUpdateWhiteList(whitelist); 
             Navigator.push(
-              context, MaterialPageRoute(builder: (context) => ProjectPage(widget.project.index)));
+              context, MaterialPageRoute(builder: (context) => ProjectPage(widget.index)));
           }
         },
         child: Container(

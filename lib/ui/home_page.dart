@@ -35,7 +35,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
   Timer _timerLink;
   Project clonedProject, collabedProject; 
   Widget _logo(ViewModel model, BuildContext context) {
-    return ProgressOverview((projIndex < model.projects.length) ? model.projects[projIndex] : null, widget.auth, widget.onSignedOut); 
+    return ProgressOverview((projIndex < model.projects.length) ? model.projects[projIndex] : null, widget.auth, widget.onSignedOut, projIndex); 
   }
     @override
   void initState() {
@@ -135,6 +135,9 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
       onRefresh: () async{
         model.onFetchAccount(widget.auth); 
         model.onGetProject(widget.auth); 
+        setState(() {
+          projIndex = 0; 
+        });
         return true; 
       },
       child: Column(
