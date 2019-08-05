@@ -22,13 +22,15 @@ class _EmergencyList extends State<EmergencyList>{
     int tasks = 0;
     if (model.projects[widget.index].tasks != null){
     for (int i = 0; i < model.projects[widget.index].tasks.length; i++){
+      DateTime now = DateTime.now(); 
+      DateTime today = DateTime(now.year, now.month, now.day); 
       if (model.projects[widget.index].tasks[i].deadline != null&& (date == null ? true: model.projects[widget.index].tasks[i].deadline.difference(date).inDays == 0) &&!model.projects[widget.index].tasks[i].complete && model.projects[widget.index].tasks[i].deadline.isBefore(DateTime.now().add(Duration(days: 7)))){
         Task t = model.projects[widget.index].tasks[i]; 
         Color color; 
-        if (t.deadline.difference(DateTime.now()).inDays < 0){
+        if (t.deadline.difference(today).inDays < 0){
           color = Colors.red;
         }
-        else if (t.deadline.isBefore(DateTime.now().add(Duration(days: 3)))){
+        else if (t.deadline.isBefore(today.add(Duration(days: 3)))){
           color= Colors.orange; 
         }
         else color = Colors.green;

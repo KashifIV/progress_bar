@@ -70,7 +70,7 @@ class _SettingsPage extends State<SettingsPage> {
           """
 ,\n \n My name is Kashif and I am the developer of Progress Bar! I developed this app to manage both my school work and my projects. This is something I have been working on throughout my second year and I hope it is something you wil find useful as well! 
 
-If there are any of you wondering, no your data will not be sold. I have done my best to try to keep this app as secure as possible to my knowledge however I would advise you to keep sensitive data off of this platform. If you have any questions are would like to request any features please email me at 
+\nIf you have any questions or would like to request any features please email me at: 
 
 progressbarhelp@gmail.com
 

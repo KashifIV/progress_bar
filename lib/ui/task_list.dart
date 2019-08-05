@@ -38,7 +38,7 @@ class TaskList extends StatelessWidget{
       List<Widget> cards = []; 
 
       for (int i = 0; i < tasks.length; i++){
-        cards.add(TaskCard(tasks[i], tasks[i].parentIndex, color: model.projects[tasks[i].parentIndex].toColor(),)); 
+        cards.add(TaskCard(tasks[i], model.projects.indexWhere((test) => tasks[i].parentID == test.id) , color: model.projects.firstWhere((test) => tasks[i].parentID == test.id).toColor(),)); 
       }
       return cards; 
     }
@@ -50,7 +50,20 @@ class TaskList extends StatelessWidget{
       }
     }
     }
-    if (!a.isEmpty) a.add(SizedBox(height: 30)); 
+    if (a.isNotEmpty ) a.add(SizedBox(height: 30)); 
+    if (a.isEmpty && emergency) a.add(
+      Center(
+        child: Text(
+          'Congratulations!\nAll your tasks are complete!',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: (model.account.darkTheme) ? Colors.white : Colors.black, 
+            fontSize: 20,
+
+          ),
+        ),
+      )
+    );
     return a;
   }
   bool _showIncompleteTask(Task task) {

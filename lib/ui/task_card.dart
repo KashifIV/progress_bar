@@ -108,7 +108,8 @@ class _TaskCard extends State<TaskCard>{
 
   }
   String _getTimeDifference(){
-    int days = widget.task.deadline.difference(DateTime.now()).inDays; 
+    DateTime now = DateTime.now();
+    int days = widget.task.deadline.difference(DateTime(now.year, now.month, now.day)).inDays; 
     String prefix = "Deadline: "; 
     if (days < 0){
       prefix = "Late: "; 

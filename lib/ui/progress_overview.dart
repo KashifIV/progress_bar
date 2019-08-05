@@ -146,7 +146,7 @@ class _ProgressOverview extends State<ProgressOverview>{
                 context, 
                 MaterialPageRoute(builder: (context) => SettingsPage(auth: widget.auth,))
                ), WhiteList.all, model): 
-              _infoBox(widget.project.deadline.difference(DateTime.now()).inDays, 'Days Left', Icons.settings, 'Settings', () =>  Navigator.push(
+              _infoBox(widget.project.deadline.difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)).inDays, 'Days Left', Icons.settings, 'Settings', () =>  Navigator.push(
                 context, 
                 MaterialPageRoute(builder: (context) => SettingsPage(auth: widget.auth,))
               , ), WhiteList.all, model),

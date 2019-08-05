@@ -20,7 +20,7 @@ class _ShareProject extends State<ShareProject> {
   void initState() {
     expanded = false;
     if (widget.project.users != null && widget.project.users.length > 0){
-      emails = []..addAll(widget.project.users.where((e) => e.contains('@')));
+      emails = []..addAll(widget.project.emails.where((e) => e != null && e.contains('@')));
       emails.forEach((email) => addChip(email)); 
     }else emails =[]; 
   }
@@ -75,7 +75,7 @@ class _ShareProject extends State<ShareProject> {
                 Flexible(
                     child: TextField(
                   onSubmitted: (value){
-                    if (value.contains('@') && value.split('@').length < 3){
+                    if (value != null && value.isNotEmpty && value.contains('@') && value.split('@').length < 3){
                     addChip(value);
                     controller.text ="";
                     }
@@ -91,9 +91,9 @@ class _ShareProject extends State<ShareProject> {
                   color: widget.project.toColor(),
                   splashColor: widget.project.toColor(),
                   onPressed: (){
-                    if (controller.text.contains('@') && controller.text.split('@').length < 3){
-                    addChip(controller.text);
-                    controller.text ="";
+                    if (controller.text != null && controller.text.contains('@') && controller.text.split('@').length < 3){
+                      addChip(controller.text);
+                      controller.text ="";
                     }
                     else {
                       controller.text =""; 

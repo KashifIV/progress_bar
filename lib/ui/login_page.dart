@@ -33,7 +33,7 @@ class _LoginPage extends State<LoginPage>{
     }
     return false;
   }
-  void validateAndSubmit() async {
+  void validateAndSubmit(BuildContext context) async {
     if (validateAndSave()) {
       try {
         if (_formMode == FormMode.SIGNIN) {
@@ -48,8 +48,12 @@ class _LoginPage extends State<LoginPage>{
         widget.onSignedIn();
       } catch (e) {
         print('Error: $e');
-      }
+        showDialog(
+          context: context, 
+          builder: (context) => AlertDialog(title: Text('Please ensure your email and password are correct.',), actions: <Widget>[FlatButton(child: Text('Ok'),onPressed: () => Navigator.pop(context),)],)
+        );
     }
+  }
   }
   Widget _logo(){
     return Text('Progress Bar',
@@ -60,7 +64,7 @@ class _LoginPage extends State<LoginPage>{
   }
   Widget _emailInput() {
     return new Container(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(15),
       child: TextFormField(
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
@@ -111,7 +115,7 @@ class _LoginPage extends State<LoginPage>{
         );
     }
   }
-  Widget _submitButton() {
+  Widget _submitButton(BuildContext context) {
     if (_formMode == FormMode.SIGNIN) {
       return
         new Padding(
@@ -119,7 +123,6 @@ class _LoginPage extends State<LoginPage>{
             child: new Material(
                 borderRadius: BorderRadius.circular(30.0),
                 shadowColor: Colors.blueAccent.shade100,
-                elevation: 5.0,
                 child: new MaterialButton(
                   minWidth: 200.0,
                   height: 42.0,
@@ -127,7 +130,7 @@ class _LoginPage extends State<LoginPage>{
                   child: new Text('Login',
                       style:
                       new TextStyle(fontSize: 20.0, color: Colors.white)),
-                  onPressed: validateAndSubmit,
+                  onPressed:() => validateAndSubmit(context),
                 )));
     } else {
       return
@@ -136,7 +139,6 @@ class _LoginPage extends State<LoginPage>{
             child: new Material(
                 borderRadius: BorderRadius.circular(30.0),
                 shadowColor: Colors.lightBlueAccent.shade100,
-                elevation: 5.0,
                 child: new MaterialButton(
                   minWidth: 200.0,
                   height: 42.0,
@@ -144,7 +146,7 @@ class _LoginPage extends State<LoginPage>{
                   child: new Text('Create account',
                       style:
                       new TextStyle(fontSize: 20.0, color: Colors.white)),
-                  onPressed: validateAndSubmit,
+                  onPressed: () => validateAndSubmit(context),
                 )));
     }
   }
@@ -155,7 +157,7 @@ class _LoginPage extends State<LoginPage>{
         key: formKey,
         child: new Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[_logo(), _emailInput(), _passwordInput(), _label(), _submitButton()],
+        children: <Widget>[_logo(), _emailInput(), _passwordInput(), _label(), _submitButton(context)],
       ),
       ),
     );

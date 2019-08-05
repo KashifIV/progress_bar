@@ -50,7 +50,7 @@ class ProjectTags extends StatelessWidget{
       ],
       child: GestureDetector(
       onTap:() => Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ProjectPage(project.index, tag: tag,))),
+        context, MaterialPageRoute(builder: (context) => ProjectPage(model.projects.indexWhere((test) => project.id == test.id), tag: tag,))),
       child: Card( elevation: 2, child: Container(
       
       height: 90,
@@ -64,7 +64,7 @@ class ProjectTags extends StatelessWidget{
           Positioned(
             bottom: 10,
             left: 18,
-            child: ProgressBar(project.index, tag: tag, color: appcolor.tagColors[project.tags.indexOf(tag)],),
+            child: ProgressBar(model.projects.indexWhere((test) => project.id == test.id), tag: tag, color: appcolor.tagColors[project.tags.indexOf(tag)],),
           ), 
           Positioned(
             right: 10,

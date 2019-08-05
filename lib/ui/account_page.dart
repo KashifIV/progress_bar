@@ -81,20 +81,36 @@ class _AccountPage extends State<AccountPage> {
               IconSlideAction(
                 icon: Icons.share,
                 color: Colors.blue,
-                onTap: () =>(Connectivity().checkConnectivity()).then((onValue){
-                  if (onValue  == ConnectivityResult.mobile ||  onValue == ConnectivityResult.wifi){
+                onTap: () {
+                  if (model.account.joinedProjects.contains(project.id)){
                     showDialog(
                       context: context, 
-                      builder: (context) => _shareProjectDialog(context, model, project)
+                      builder: (context) => AlertDialog(title: Text('Only the creator of this project may share this project with others.'),)
                     );
                   }
-                  else {
+                  else if (project.sharingEnabled){
+                    ( Connectivity().checkConnectivity()).then((onValue){
+                    if (onValue  == ConnectivityResult.mobile ||  onValue == ConnectivityResult.wifi){
+                      showDialog(
+                        context: context, 
+                        builder: (context) => _shareProjectDialog(context, model, project)
+                      );
+                    }
+                    else {
+                      showDialog(
+                        context: context, 
+                        builder: (context) => AlertDialog(title: Text('Please ensure you have a valid Internet Connection'),)
+                      );
+                    }
+                  });
+                  }
+                  else{
                     showDialog(
                       context: context, 
-                      builder: (context) => AlertDialog(title: Text('Please ensure you have a valid Internet Connection'),)
+                      builder: (context) => AlertDialog(title: Text('Sharing for this Project has been disabled. Please enable it in the project settings to continue.'),),
                     );
                   }
-                })
+                }
               )
             ],
             secondaryActions: <Widget>[
@@ -111,8 +127,8 @@ class _AccountPage extends State<AccountPage> {
                 color: Colors.grey,
                 icon: Icons.settings,
                 caption: 'Project Settings',
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CreateProject(project: model.projects[project.index],)))
-                      .then((onValue) => model.onUpdateProject(model.projects[project.index])),
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => CreateProject(project: model.projects.firstWhere((test)=> test.id == project.id),)))
+                      .then((onValue) => model.onUpdateProject(model.projects.firstWhere((test) => project.id == test.id))),
               )
             ],
           )));

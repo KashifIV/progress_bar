@@ -9,13 +9,16 @@ class Project {
   String description;
   DateTime deadline, dateCreated; 
   String color, projType;
-  int index;
+
   List<Task> tasks = [];
   List<String> tags;
+  bool sharingEnabled; 
   int tasksComplete = 0, tasksToDo = 0; 
+  List<String> emails; 
   PageType state = PageType.UND;
   Project(this.name, this.description, this.color, this.projType,
-      {this.tags, this.id, this.tasks, this.index, this.users, this.deadline, this.dateCreated}) {
+      {this.tags, this.id, this.tasks, this.users, this.deadline, 
+      this.dateCreated, this.sharingEnabled}) {
     if (this.tasks == null) {
       tasks = [];
       tags = ["Important"];
@@ -35,7 +38,7 @@ class Project {
     tasksToDo = 0; 
     this.tasks = tasks;
     this.tasks.sort((previous, next) => previous.order.compareTo(next.order)); 
-    this.tasks.forEach((task) => task.parentIndex = index);
+    this.tasks.forEach((task) => task.parentID = id);
     if (tags == null) tags = [];
     tasks.forEach((task) {
       if (task.tags != null) {
@@ -60,6 +63,7 @@ class Project {
     dataMap['deadline'] = deadline; 
     dataMap['dateCreated'] = dateCreated; 
     dataMap['collab'] = users; 
+    dataMap['sharingEnabled'] = sharingEnabled; 
     return dataMap;
   }
 
@@ -72,6 +76,7 @@ class Project {
     dataMap['deadline'] = deadline; 
     dataMap['dateCreated'] = dateCreated; 
     dataMap['collab'] = users; 
+    dataMap['sharingEnabled'] = sharingEnabled; 
     return dataMap;
   }
 
@@ -85,8 +90,8 @@ class Project {
       id: documentID, 
       deadline: (map.containsKey('deadline')) ? map['deadline'] : null,
       dateCreated: (map.containsKey('dateCreated')) ? map['dateCreated']: DateTime.now(), 
-      index: count,
       users: (map.containsKey('collab')  && map['collab'] != null) ? new List<String>.from(map['collab']) : [],
+      sharingEnabled: (map.containsKey('sharingEnabled')) ? map['sharingEnabled'] : true,
     );
   }
   double getPercentComplete(String tag) {
@@ -167,6 +172,7 @@ class Project {
     projType = proj.projType; 
     deadline = proj.deadline; 
     color = proj.color; 
+    sharingEnabled = proj.sharingEnabled;
     name = proj.name; 
   }
 }

@@ -26,7 +26,9 @@ Future<Project> collabProject(String link, String id)async{
     print(e);
     return null;
   }
-  return proj; 
+  if (proj.sharingEnabled && proj.users.contains(id))
+    return proj; 
+  return null; 
 }
 
 

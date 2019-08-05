@@ -60,14 +60,18 @@ class _CreateTask extends State<CreateTask> with TickerProviderStateMixin {
           setState(() {
             deadline = value;  
           });
+          FocusScope.of(context).requestFocus(_focus); 
         },
         onRoutineChange: (value){
           setState(() {
             routine = value; 
           });
-          
+          FocusScope.of(context).requestFocus(_focus); 
         },
-        onDurationChange: (value) => setState( () => duration= value,)
+        onDurationChange: (value){
+          setState( () => duration= value,);
+          FocusScope.of(context).requestFocus(_focus); 
+        }
       )); 
     }
     return SizedBox(); 

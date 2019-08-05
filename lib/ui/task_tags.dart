@@ -47,7 +47,7 @@ class _TaskTags extends State<TaskTags>{
         padding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20), 
-         color: appcolor.tagColors[model.projects[widget.projIndex].tags.indexOf(tag)],
+         color: appcolor.tagColors[model.projects[widget.projIndex].tags.indexOf(tag)%appcolor.tagColors.length],
 
         )
       ),
@@ -94,7 +94,6 @@ class _TaskTags extends State<TaskTags>{
         onSubmitted: (value) {
           if (task.tags == null)
             task.tags = []; 
-          task.tags.add(value); 
           task.tags.add(value);
           model.onUpdateTask(model.account,model.projects[widget.projIndex],task);
           model.onUpdateProject(model.projects[widget.projIndex]);

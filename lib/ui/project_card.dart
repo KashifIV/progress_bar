@@ -23,7 +23,7 @@ class ProjectCard extends StatelessWidget {
         converter: (Store<AppState> store) => ViewModel.create(store),
         builder: (BuildContext context, ViewModel model) => Hero(
           transitionOnUserGestures: true,
-          tag:model.projects[index].id,
+          tag:(model.projects[index].id != null) ? model.projects[index].id : index,
           child: Container(
             child: GestureDetector(
                 onTap: () => _openProject(context, model),

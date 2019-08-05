@@ -173,8 +173,9 @@ Future<void> UpdateProject(Project proj) async{
     });
     for (int i = 0; i < a.length; i++){
       await a[i].setTasks(await getProjectTasks(a[i].id));
+      a[i].emails = await getEmailsFromID(a[i].users);
     }
-
+    
     DocumentSnapshot ref = await Firestore.instance.document('Accounts/' + auth.getUID()).get(); 
     if (ref.data != null && ref.data['joinedProjects'] != null){
       List<String> additional= new List<String>.from(ref.data['joinedProjects']); 
@@ -187,12 +188,20 @@ Future<void> UpdateProject(Project proj) async{
             map['joinedProjects'] = additional; 
            await Firestore.instance.document('Accounts/' + auth.getUID()).updateData(map); 
         }
-        else a.add(project); 
+        else if (project.sharingEnabled && project.users.contains(auth.getUID())) a.add(project); 
       }
     }
   
     //a.forEach((proj) async => proj.setTasks(await getProjectTasks(proj.id))); 
     return a;
+  }
+  Future<List<String>> getEmailsFromID(List<String> ids) async{
+    List<String> emails = []; 
+    for (int i = 0; i < ids.length; i++){
+      Account account = await FetchAccount(ids[i]); 
+      if (account != null) emails.add(account.email); 
+    }
+    return emails;
   }
   Future<bool> DeleteProject(Project proj) async{
     await Firestore.instance.collection('Projects').document(proj.id).delete();

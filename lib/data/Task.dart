@@ -2,7 +2,7 @@ import 'package:progress_bar/data/Log.dart';
 
 class Task{
   String id;
-  int parentIndex; 
+  String parentID; 
   String name = 'Untitled'; 
   List<String> tags; 
   String notes;
@@ -47,19 +47,24 @@ class Task{
     if (map.containsKey('routine') && map['routine'] != null && map.containsKey('dateCompleted')){
      DateTime dateComp = map['dateCompleted']; 
      int routine = map['routine']; 
+     DateTime now = DateTime.now(); 
+     DateTime today = DateTime(now.year, now.month, now.day); 
      if (dateComp != null){
-       if (routine == 0 && dateComp.day != DateTime.now().day){
+       int difference = dateComp.difference(today).inDays; 
+       if (routine == 0 && difference != 0){
          completion = false; 
        }
        else if (routine == 1 ){
-         if (created.add(Duration(days: 7)).difference(dateComp).inDays > 0 ){
+         if (created.add(Duration(days: 7)).difference(today).inDays > 0 ){
            completion = false; 
+           created = today; 
          }
        }
        else if (routine == 2){
-         if (created.add(Duration(days: 30)).difference(dateComp).inDays > 0){
+         if (created.add(Duration(days: 30)).difference(today).inDays > 0){
            completion = false; 
            dead = new DateTime(dead.year, dead.month+1, dead.day); 
+           created = today;
          }
        }
      }

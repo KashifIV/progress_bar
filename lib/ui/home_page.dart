@@ -157,7 +157,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
           position: projIndex,
           decorator: DotsDecorator(
             spacing: const EdgeInsets.all(5),
-            activeColor: (projIndex < model.projects.length) ? model.projects[projIndex].toColor() : Colors.white,
+            activeColor: (projIndex < model.projects.length) ? model.projects[projIndex].toColor() : (model.account.darkTheme) ? Colors.white : Colors.black,
           ),
         )
       ],
@@ -190,7 +190,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
                           MaterialPageRoute(
                               builder: (context) => CreateProject(auth:widget.auth)))
                               .then((context) => Navigator.push(context, 
-                              MaterialPageRoute(builder: (context) => ProjectPage(model.projects.last.index))
+                              MaterialPageRoute(builder: (context) => ProjectPage(model.projects.length))
                               ));},
                   child: Container(
                     height: 150,

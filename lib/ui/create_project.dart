@@ -14,12 +14,14 @@ class CreateProject extends StatefulWidget{
 }
 class _CreateProject extends State<CreateProject>{
   Project proj;
+  bool sharing; 
   @override
   void initState() {
     super.initState();
+    
     if (widget.project == null)
-      proj = new Project('Untitled', 'description', Colors.pink.toString(), 'Project', users: [widget.auth.getUID()], dateCreated: DateTime.now());
-    else proj = new Project(widget.project.name, widget.project.description, widget.project.color, widget.project.projType, id: widget.project.id, deadline: widget.project.deadline); 
+      proj = new Project('Untitled', 'description', Colors.pink.toString(), 'Project', users: [widget.auth.getUID()], dateCreated: DateTime.now(), sharingEnabled: false);
+    else proj = new Project(widget.project.name, widget.project.description, widget.project.color, widget.project.projType, id: widget.project.id, sharingEnabled: widget.project.sharingEnabled, deadline: widget.project.deadline); 
   }
   void setName(String text){
     setState(() {
@@ -48,7 +50,7 @@ class _CreateProject extends State<CreateProject>{
       builder: (BuildContext context, ViewModel model) => WillPopScope(
         onWillPop: () async{
           if (widget.project != null)
-            model.onUpdateProjectSettings(model.projects[widget.project.index]); 
+            model.onUpdateProjectSettings(model.projects.firstWhere((test) => widget.project.id == test.id));  
           return true; 
         },
       child:Theme(data: (model.account.darkTheme) ? ThemeData.dark() : ThemeData.light(), child:Scaffold(
@@ -109,31 +111,49 @@ class _CreateProject extends State<CreateProject>{
                     ),
                     SizedBox(height: 10,),
                     
-                    new FlatButton(
-                      child: Row(children: <Widget>[
-                        Icon(Icons.calendar_today), 
-                        Text(
-                          (proj.deadline == null) ? 'Add a deadline' : proj.deadline.toString().split(' ')[0]
+                    new Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        FlatButton(
+                          child: Row(children: <Widget>[
+                            Icon(Icons.calendar_today), 
+                            Text(
+                              (proj.deadline == null) ? 'Add a deadline' : proj.deadline.toString().split(' ')[0]
+                            )
+                          ],),
+                          onPressed: () => showDatePicker(
+                            context: context, 
+                            initialDate: DateTime.now(), 
+                            firstDate: DateTime(2019), 
+                            lastDate: DateTime(2030), 
+                            builder: (BuildContext context, Widget child){
+                              return Theme(
+                                data: ThemeData.light(),
+                                child: child,
+                              );
+                            }
+                          ).then((onValue){
+                            setState(() {
+                              proj.deadline = onValue; 
+                            });
+                          }),
+                        ), 
+
+                        Container(
+                          child: Row(
+                            children: <Widget>[
+                              Text('Sharing'), 
+                              Switch(
+                                value: proj.sharingEnabled, 
+                                onChanged: (ans) => setState(()=> proj.sharingEnabled = ans),
+                                activeColor: proj.toColor(),
+                              )
+                            ],
+                          ),
                         )
-                      ],),
-                      onPressed: () => showDatePicker(
-                        context: context, 
-                        initialDate: DateTime.now(), 
-                        firstDate: DateTime(2019), 
-                        lastDate: DateTime(2030), 
-                        builder: (BuildContext context, Widget child){
-                          return Theme(
-                            data: ThemeData.light(),
-                            child: child,
-                          );
-                        }
-                      ).then((onValue){
-                        setState(() {
-                          proj.deadline = onValue; 
-                        });
-                      }),
+                        
+                      ]
                     )
-                    
                   ]
                 )
               ),
@@ -154,10 +174,14 @@ class _CreateProject extends State<CreateProject>{
                   child: new Icon(Icons.keyboard_arrow_right),
                   onPressed: (){
                     if (widget.project == null){
-                      proj.index = model.projects.length; 
                       model.onCreateProject(proj,widget.auth);
                     }
-                    else model.onUpdateProjectSettings(proj); 
+                    else {
+                      if (proj.sharingEnabled == false){
+                        proj.users = []; 
+                      }
+                      model.onUpdateProjectSettings(proj);
+                    } 
                     Navigator.pop(context, true);
                   },
                 ),

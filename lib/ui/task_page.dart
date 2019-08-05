@@ -135,7 +135,7 @@ class _TaskPage extends State<TaskPage> {
                   startDate: widget.task.deadline,
                   title: widget.task.name,
                   allDay: (widget.task.duration == null) ? true: false,
-                  description: model.projects[widget.task.parentIndex].name,
+                  description: model.projects.firstWhere((test) => widget.task.parentID == test.id).name,
                 );
                 Add2Calendar.addEvent2Cal(event);
               },

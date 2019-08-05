@@ -24,9 +24,6 @@ class DeleteProjectAction extends ProjectsCrud{
   @override
     List<Project> doAction(List<Project> state) {
       List<Project> projects = []..addAll(state)..remove(super.proj);
-      for (int i = 0; i < projects.length; i++){
-        projects[i].index = i; 
-      }
       return projects;
     }
   bool IsJoined(){

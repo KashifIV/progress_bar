@@ -22,7 +22,10 @@ class _ProgressBar extends State<ProgressBar>{
     if (screenWidth == null){
       screenWidth = (widget.width == null) ? MediaQuery.of(context).size.width*0.8 : widget.width;
     }
-    currentPercent = _getPercent(model); 
+    currentPercent = anim.value;
+    if (currentPercent == _getPercent(model)){
+      originalPosition = _getPercent(model);
+    } 
     return screenWidth*(1- anim.value);
   }
   double _getPercent(ViewModel model){
@@ -54,6 +57,9 @@ class _ProgressBar extends State<ProgressBar>{
           setState(() {
            originalPosition = currentPercent;  
           });
+        },
+        onDidChange: (ViewModel model){
+          
         },
         builder: (BuildContext context, ViewModel model) =>
         Container(
