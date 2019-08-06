@@ -23,7 +23,7 @@ class ViewModel {
   final Function(Account, Project, Task) onUpdateTask;
   final Function(Account, Project, Task) onDeleteTask;
   final Function(Project) onGetProjectTask;
-
+  final Function () onResetAccount;
   final Function(WhiteList) onUpdateWhiteList;
 
   final Function(Auth,Account) onCreateAccount; 
@@ -56,6 +56,7 @@ class ViewModel {
     this.onUpdateProjectSettings, 
     this.onUpdateSorting,
     this.onUpdatePage,
+    this.onResetAccount, 
   });
   factory ViewModel.create(Store<AppState> store){
     _onCreateProject(Project proj, Auth auth){
@@ -109,6 +110,9 @@ class ViewModel {
     _onUpdatePage(PageType page){
       store.dispatch(UpdatePageAction(page)); 
     }
+    _onResetAccount(){
+      store.dispatch(OnResetAccount);
+    }
     return ViewModel(
       account: store.state.account,
       projects: store.state.projects,
@@ -132,6 +136,7 @@ class ViewModel {
       onUpdateSorting: _onUpdateSorting,
       onCreateLog: _onCreateLog,
       onUpdatePage: _onUpdatePage,
+      onResetAccount: _onResetAccount,
     );
   }
 }

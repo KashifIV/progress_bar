@@ -26,9 +26,11 @@ Future<Uri> CollabProjectLink(Project project, List<String> emails, ViewModel mo
     await ids.add(await FindEmailID(emails[i]));
   }
   project.users = []; 
+  project.emails = []; 
   for (int i =0 ;i < ids.length; i++){
-    if (!project.users.contains(ids[i])){
+    if ( ids[i] != null &&!project.users.contains(ids[i])){
       project.users.add(ids[i]); 
+      project.emails.add(emails[i]);
     }
   }
   model.onUpdateProjectSettings(project); 

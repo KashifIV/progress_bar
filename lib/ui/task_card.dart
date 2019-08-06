@@ -150,7 +150,10 @@ class _TaskCard extends State<TaskCard>{
           title: Text(widget.task.name,
             style: TextStyle(
               fontSize: 18,
-              color: (widget.color != null) ?widget.color: (model.account.darkTheme)? Colors.white: Colors.black,
+              decoration: (widget.task.complete) ? TextDecoration.lineThrough : TextDecoration.none,
+              decorationColor: Colors.grey,
+              //decorationStyle: TextDecorationStyle.solid,
+              color: (widget.color != null) ?widget.color: (widget.task.complete) ? Colors.grey : (model.account.darkTheme)? Colors.white: Colors.black,
             ),
           ),
           trailing: Column(

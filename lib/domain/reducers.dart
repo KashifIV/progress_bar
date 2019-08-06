@@ -19,6 +19,9 @@ Account accountReducer(Account state, action){
   if (action is OnUpdatedAccount){
     return action.account; 
   }
+  if (action is OnResetAccount){
+    return Account(darkTheme: false); 
+  }
   return state; 
 }
 WhiteList whiteListReduer(WhiteList state, action){

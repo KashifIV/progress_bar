@@ -218,7 +218,7 @@ class _AccountPage extends State<AccountPage> {
               ),
               Center(
                   child: Text(
-                (model.account.email == null) ? 'Email' : model.account.email,
+                 widget.auth.getEmail(),
                 style: TextStyle(color: (model.account.darkTheme) ? Colors.white: Colors.black, fontSize: 20),
               )),
               SizedBox(
@@ -236,6 +236,7 @@ class _AccountPage extends State<AccountPage> {
                                             color: Colors.white, fontSize: 15),
                                       )),
                                   onPressed: () {
+                                    model.onResetAccount();
                                     model.onUpdatePage(PageType.UND); 
                                     widget.onSignedOut();
                                     Navigator.pop(context);

@@ -14,7 +14,7 @@ class Project {
   List<String> tags;
   bool sharingEnabled; 
   int tasksComplete = 0, tasksToDo = 0; 
-  List<String> emails; 
+  List<String> emails = []; 
   PageType state = PageType.UND;
   Project(this.name, this.description, this.color, this.projType,
       {this.tags, this.id, this.tasks, this.users, this.deadline, 
@@ -168,6 +168,7 @@ class Project {
   }
   void updateSettings(Project proj){
     users = proj.users; 
+    emails = proj.emails;
     description = proj.description; 
     projType = proj.projType; 
     deadline = proj.deadline; 

@@ -13,7 +13,7 @@ Future<Account> UpdateUser(Auth auth, Account account) async{
   DocumentReference ref = Firestore.instance.document('Accounts/' +auth.getUID()); 
   ref.get().then((snapshot){
     if (snapshot.exists){
-      ref.updateData(account.mapTo()); 
+      ref.updateData(account.mapTo(auth: auth)); 
     }
     else{
       CreateUser(auth, account); 
@@ -37,7 +37,7 @@ Future<Account> CreateUser(Auth auth, Account account)async{
   await Firestore.instance.runTransaction((transaction) async{
     CollectionReference a = Firestore.instance.collection('Accounts'); 
     DocumentReference ref = a.document(auth.getUID()); 
-    await transaction.set(ref, account.mapTo()); 
+    await transaction.set(ref, account.mapTo(auth: auth)); 
   });
   return account; 
 }

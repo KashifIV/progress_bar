@@ -20,8 +20,8 @@ class _CreateProject extends State<CreateProject>{
     super.initState();
     
     if (widget.project == null)
-      proj = new Project('Untitled', 'description', Colors.pink.toString(), 'Project', users: [widget.auth.getUID()], dateCreated: DateTime.now(), sharingEnabled: false);
-    else proj = new Project(widget.project.name, widget.project.description, widget.project.color, widget.project.projType, id: widget.project.id, sharingEnabled: widget.project.sharingEnabled, deadline: widget.project.deadline); 
+      proj = new Project('Untitled',  'description', Colors.pink.toString(), 'Project', users: [widget.auth.getUID()], dateCreated: DateTime.now(), sharingEnabled: false, );
+    else proj = new Project(widget.project.name, widget.project.description, widget.project.color, widget.project.projType, id: widget.project.id, sharingEnabled: widget.project.sharingEnabled, deadline: widget.project.deadline,); 
   }
   void setName(String text){
     setState(() {

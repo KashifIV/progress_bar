@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:progress_bar/data/auth.dart';
 
 class Account{
   static const ProgressTypes = ['Task','Deadline', 'Time'];
@@ -14,11 +15,11 @@ class Account{
   List<String> joinedProjects = []; 
   Account({this.id, this.profileImageURL, this.name, this.email, this.swapActivationSide, this.joinedProjects, this.sortingType, this.progressType, this.darkTheme}); 
   
-  Map<String, dynamic> mapTo(){
+  Map<String, dynamic> mapTo({Auth auth}){
     var dataMap = new Map<String, dynamic>(); 
     dataMap['name'] = this.name; 
     //dataMap['profileImageURL'] = this.profileImageURL; 
-    dataMap['email'] = this.email; 
+    dataMap['email'] =(auth != null) ? auth.email :  this.email; 
     dataMap['joinedProjects'] = this.joinedProjects; 
     dataMap['progressType']  = this.progressType; 
     dataMap['darkTheme'] = this.darkTheme;

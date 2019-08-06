@@ -31,7 +31,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePage extends State<HomePage> with WidgetsBindingObserver{
   int projIndex = 0; 
-  bool initcall = false; 
+  bool initcall; 
   Timer _timerLink;
   Project clonedProject, collabedProject; 
   Widget _logo(ViewModel model, BuildContext context) {
@@ -39,6 +39,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
   }
     @override
   void initState() {
+    initcall = false; 
     super.initState();
      WidgetsBinding.instance.addObserver(this);
   }
@@ -81,6 +82,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
   }
   Widget _undUser(ViewModel model) {
     if (!initcall){
+      print('Fetching Account');
       model.onFetchAccount(widget.auth); 
       model.onGetProject(widget.auth); 
       initcall = true; 
@@ -111,7 +113,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
       model.onCloneProject(clonedProject); 
       clonedProject = null; 
     }
-    if (collabedProject != null){
+    if (collabedProject != null && !model.projects.any((test) => test.id == collabedProject.id)){
       print('Running Collab sequence');
       model.account.joinedProjects = []..addAll(model.account.joinedProjects)..add(collabedProject.id); 
       model.onCloneProject(collabedProject); 

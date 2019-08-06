@@ -19,7 +19,7 @@ class _ShareProject extends State<ShareProject> {
   final controller = TextEditingController();
   void initState() {
     expanded = false;
-    if (widget.project.users != null && widget.project.users.length > 0){
+    if (widget.project.users != null && widget.project.users.length > 0 && widget.project.emails != null && widget.project.emails.length > 0){
       emails = []..addAll(widget.project.emails.where((e) => e != null && e.contains('@')));
       emails.forEach((email) => addChip(email)); 
     }else emails =[]; 
@@ -104,6 +104,16 @@ class _ShareProject extends State<ShareProject> {
               ],
             ),
           ),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            child: Text(
+            'Clicking "Share" will give the emails added access to your project.', 
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.grey, 
+              fontSize: 14,
+            ),
+          )),
           Center(
             child: FlatButton(
               child: Text(

@@ -119,7 +119,7 @@ class _TaskPage extends State<TaskPage> {
     );
   }
 
-  Widget _addToCalendar(ViewModel model) {
+  Widget _addToCalendar(BuildContext context, ViewModel model) {
     return new Padding(
         padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 20),
         child: new Material(
@@ -130,6 +130,13 @@ class _TaskPage extends State<TaskPage> {
               child: new Text('Add to Google Calendar',
                   style: new TextStyle(fontSize: 20.0, color: Colors.white)),
               onPressed: () {
+                if (widget.task.deadline == null){
+                  showDialog(
+                    context: context, 
+                    builder: (context) => AlertDialog(title: Text('Please add a Date to your task.'),)
+                  );
+                }
+                else{
                 final Event event = Event(
                   endDate: (widget.task.duration != null) ? widget.task.deadline.add(widget.task.duration): widget.task.deadline,
                   startDate: widget.task.deadline,
@@ -138,6 +145,7 @@ class _TaskPage extends State<TaskPage> {
                   description: model.projects.firstWhere((test) => widget.task.parentID == test.id).name,
                 );
                 Add2Calendar.addEvent2Cal(event);
+                }
               },
             )));
   }
@@ -158,10 +166,10 @@ class _TaskPage extends State<TaskPage> {
                     ..add(_title(widget.task.name, (model.account.darkTheme) ? Colors.white: Colors.black))
                     ..add(TaskTags(widget.projIndex, widget.task))
                     ..add(_datePicker(context, model))
-                    ..add(TaskLog(widget.projIndex, widget.task))
+                    //..add(TaskLog(widget.projIndex, widget.task))
                     //..add(_addToCalendar(model))
                     ..add(Notes(model, context))
-                    ..add(_addToCalendar(model))),
+                    ..add(_addToCalendar(context, model))),
                 )
               ],
             )))));
