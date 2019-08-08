@@ -7,7 +7,7 @@ import 'package:progress_bar/domain/redux.dart';
 import 'package:progress_bar/domain/actions.dart';
 import 'package:progress_bar/ui/project_page.dart';
 import 'package:progress_bar/data/Project.dart';
-
+import 'package:auto_size_text/auto_size_text.dart';
 class ProjectCard extends StatelessWidget {
   final int index;
   ProjectCard(this.index);
@@ -61,8 +61,11 @@ class ProjectCard extends StatelessWidget {
                             color: Colors.transparent,
                             child:Container(
                               //height: 35, 
-                            child: Center(child:Text(
+                            child: Center(child:
+                            
+                            AutoSizeText(
                             model.projects[index].name,
+                            maxLines: 1,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: (model.projects[index].name.length > 23) ? 25:30,

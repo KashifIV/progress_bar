@@ -38,6 +38,7 @@ class _ShareProject extends State<ShareProject> {
   }
 
   void addChip(String email) {
+    email = email.toLowerCase();
     if (emails.contains(email)) return;
     setState(() {
       emails.add(email);

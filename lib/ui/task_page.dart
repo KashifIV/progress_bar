@@ -120,9 +120,12 @@ class _TaskPage extends State<TaskPage> {
   }
 
   Widget _addToCalendar(BuildContext context, ViewModel model) {
-    return new Padding(
+    return new Theme(
+      data: (model.account.darkTheme) ? ThemeData.dark() : ThemeData.light(),
+      child: Padding(
         padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 20),
         child: new Material(
+          
             child: new MaterialButton(
               minWidth: 200.0,
               height: 42.0,
@@ -147,7 +150,7 @@ class _TaskPage extends State<TaskPage> {
                 Add2Calendar.addEvent2Cal(event);
                 }
               },
-            )));
+            ))));
   }
 
   @override

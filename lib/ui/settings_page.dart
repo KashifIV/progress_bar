@@ -66,16 +66,9 @@ class _SettingsPage extends State<SettingsPage> {
       Container(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Text(
-          'Hello ' + ((model.account.name == null) ? 'user' : model.account.name) + 
-          """
-,\n \n My name is Kashif and I am the developer of Progress Bar! I developed this app to manage both my school work and my projects. This is something I have been working on throughout my second year and I hope it is something you wil find useful as well! 
+          'Progress Bar\n\nVersion: 1.0.0\n \nIf you have any questions or would like to request any features please email me at: \n\n progressbarhelp@gmail.com'
+          ,
 
-\nIf you have any questions or would like to request any features please email me at: 
-
-progressbarhelp@gmail.com
-
-
-          """,
           style: TextStyle(
             fontSize: 14,
             color: model.account.darkTheme ? Colors.white:Colors.black

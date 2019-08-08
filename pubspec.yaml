@@ -26,6 +26,7 @@ dependencies:
   connectivity: ^0.4.3+6
   share: ^0.6.1+1
   flutter_chips_input: ^1.2.0
+  auto_size_text: ^2.0.2+1
   dots_indicator: ^1.0.0
   flutter_duration_picker: ^1.0.4
   firebase_core: ^0.2.5+1
