@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -10,8 +11,8 @@ import 'package:redux/redux.dart';
 class CalendarPage extends StatefulWidget{
   _CalendarPage createState() => _CalendarPage(); 
 }
-EventList<String> _getDates(ViewModel model){
-  EventList<String> times = new EventList<String>(); 
+EventList<Event> _getDates(ViewModel model){
+  EventList<Event> times = new EventList<Event>(); 
   model.projects.forEach((project) {
       project.tasks.forEach((task){
         if (task.deadline != null){
@@ -19,11 +20,11 @@ EventList<String> _getDates(ViewModel model){
             int counter = 0; 
             while(task.deadline.difference(task.dateCreated.add(Duration(days: counter))).isNegative)
             {
-              times.add(task.dateCreated.add(Duration(days: counter)), task.name + counter.toString());
+              times.add(task.dateCreated.add(Duration(days: counter)), Event(title:task.name + counter.toString()));
             } 
-            times.add(task.deadline, task.name);         
+            times.add(task.deadline,Event(title: task.name));         
           }
-          else times.add(task.deadline, task.name);
+          else times.add(task.deadline, Event(title:task.name));
         }
       });
   }); 

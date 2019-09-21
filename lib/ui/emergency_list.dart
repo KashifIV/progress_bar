@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:progress_bar/domain/redux.dart';
 import 'package:progress_bar/domain/viewmodel.dart';
@@ -17,7 +18,7 @@ class _EmergencyList extends State<EmergencyList>{
   DateTime date; 
   List<Widget> _getTaskCards(ViewModel model){
     List<Widget> a = [];
-    EventList<String> times = new EventList<String>(); 
+    EventList<Event> times = new EventList<Event>(); 
     int time = 0; 
     int tasks = 0;
     if (model.projects[widget.index].tasks != null){
@@ -41,7 +42,7 @@ class _EmergencyList extends State<EmergencyList>{
         }
       }
       if (model.projects[widget.index].tasks[i].deadline != null)
-        times.add(model.projects[widget.index].tasks[i].deadline, model.projects[widget.index].tasks[i].name);
+        times.add(model.projects[widget.index].tasks[i].deadline, Event(title:model.projects[widget.index].tasks[i].name));
     }
     }
     if (!a.isEmpty || date != null){
