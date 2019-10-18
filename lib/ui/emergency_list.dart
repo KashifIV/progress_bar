@@ -41,8 +41,10 @@ class _EmergencyList extends State<EmergencyList>{
           time +=model.projects[widget.index].tasks[i].duration.inMinutes;
         }
       }
-      if (model.projects[widget.index].tasks[i].deadline != null)
-        times.add(model.projects[widget.index].tasks[i].deadline, Event(title:model.projects[widget.index].tasks[i].name));
+      if (model.projects[widget.index].tasks[i].deadline != null){
+        print(model.projects[widget.index].tasks[i].deadline.toString());
+        //times.add(model.projects[widget.index].tasks[i].deadline, Event(title:model.projects[widget.index].tasks[i].name));
+      }
     }
     }
     if (!a.isEmpty || date != null){

@@ -160,6 +160,7 @@ class _TaskPage extends State<TaskPage> {
         builder: (BuildContext context, ViewModel model) => WillPopScope(
             onWillPop: () => onPop(model),
             child: Scaffold(
+              appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0, iconTheme: IconThemeData(color: (model.account.darkTheme) ? Colors.white : Colors.black),),
               backgroundColor: (model.account.darkTheme) ? Colors.black : Colors.white,
                 body: SafeArea(
                     child: CustomScrollView(

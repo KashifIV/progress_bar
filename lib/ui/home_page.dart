@@ -53,7 +53,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
   }
   Future<void> _retrieveDynamicLink() async{
     
-     final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance.retrieveDynamicLink(); 
+     final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance.getInitialLink(); 
      final Uri deepLink = data?.link;
      print(deepLink.toString());
      if (deepLink != null)
@@ -145,8 +145,8 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
       child: Column(
       children: <Widget>[
          _logo(model, context),
-        SizedBox(
-            height: MediaQuery.of(context).size.height - 300,
+        Container(
+            height: MediaQuery.of(context).size.height - 327,
             width: MediaQuery.of(context).size.width,
             child:(projIndex != model.projects.length) ? CustomScrollView(
               slivers: <Widget>[EmergencyList(projIndex),TagList(projIndex),TaskList(projIndex, emergency: true,)],

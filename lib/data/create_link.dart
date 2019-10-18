@@ -8,7 +8,7 @@ Future<Uri> CloneProjectLink(Project project)async{
   
   final DynamicLinkParameters params = DynamicLinkParameters(
     link: Uri.parse("https://kashifhussa.in/cloneProject?projectID=" + project.id),
-    domain: 'progressbar.page.link',
+    uriPrefix: 'progressbar.page.link',
     socialMetaTagParameters:  SocialMetaTagParameters(
       title: 'Copy of ' + project.name,
       description: 'Click the Link to clone the project!',
@@ -27,7 +27,7 @@ Future<Uri> CollabProjectLink(Account account,Project project, List<String> auth
   await createAuthenticationDoc(account, project, authenticatedUsers); 
   final DynamicLinkParameters params = DynamicLinkParameters(
     link: Uri.parse("https://kashifhussa.in/collab?projectID=" + project.id), 
-    domain: 'progressbar.page.link',
+    uriPrefix: 'progressbar.page.link',
     socialMetaTagParameters:  SocialMetaTagParameters(
       title: 'Copy of ' + project.name,
       description: 'Click the Link to Join the Project!',

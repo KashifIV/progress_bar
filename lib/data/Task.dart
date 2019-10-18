@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:progress_bar/data/Log.dart';
-
+import 'dart:io';
 class Task{
   String id;
   String parentID; 
@@ -39,13 +40,17 @@ class Task{
      return dataMap; 
   }
   factory Task.fromMap(String documentID, Map<String, dynamic> map){
+    DateTime parseTime(dynamic date) {
+      if (date == null) return null; 
+      return Platform.isIOS ? (date as Timestamp).toDate() : (date as DateTime);
+    }
     DateTime created; 
-    if (map.containsKey('dateCreated')) created = map['dateCreated']; 
+    if (map.containsKey('dateCreated')) created = parseTime(map['dateCreated']); 
     else created = DateTime.now(); 
     bool completion = map['complete']; 
-    DateTime dead = (map.containsKey('deadline')? map['deadline']:null);
+    DateTime dead = (map.containsKey('deadline')? parseTime( map['deadline']):null);
     if (map.containsKey('routine') && map['routine'] != null && map.containsKey('dateCompleted')){
-     DateTime dateComp = map['dateCompleted']; 
+     DateTime dateComp = parseTime(map['dateCompleted']); 
      int routine = map['routine']; 
      DateTime now = DateTime.now(); 
      DateTime today = DateTime(now.year, now.month, now.day); 

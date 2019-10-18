@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'Task.dart';
+import 'dart:io'; 
 import 'package:flutter/material.dart';
 import 'package:progress_bar/domain/redux.dart';
 
@@ -79,8 +82,11 @@ class Project {
     dataMap['sharingEnabled'] = sharingEnabled; 
     return dataMap;
   }
-
+  
   factory Project.fromMap(Map<String, dynamic> map, List<String> tags, String documentID, {int count}) {
+    DateTime parseTime(dynamic date) {
+      return Platform.isIOS ? (date as Timestamp).toDate() : (date as DateTime);
+    }
     return Project(
       map['name'],
       map['description'], 
@@ -88,8 +94,8 @@ class Project {
       'Project', 
       tags: tags,
       id: documentID, 
-      deadline: (map.containsKey('deadline')) ? map['deadline'] : null,
-      dateCreated: (map.containsKey('dateCreated')) ? map['dateCreated']: DateTime.now(), 
+      deadline: (map.containsKey('deadline') && map['deadline'] != null) ? parseTime(map['deadline']): null,
+      dateCreated: (map.containsKey('dateCreated') && map['dateCreated'] != null) ? parseTime( map['dateCreated']): DateTime.now(), 
       users: (map.containsKey('collab')  && map['collab'] != null) ? new List<String>.from(map['collab']) : [],
       sharingEnabled: (map.containsKey('sharingEnabled')) ? map['sharingEnabled'] : true,
     );

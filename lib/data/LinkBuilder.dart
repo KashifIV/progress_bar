@@ -7,7 +7,7 @@ import 'package:progress_bar/domain/viewmodel.dart';
 Future<Uri> CloneProjectLink(Project project)async{
   final DynamicLinkParameters params = DynamicLinkParameters(
     link: Uri.parse("kashifhussa.in/cloneProject?projectID=" + project.id),
-    domain: 'https://progressbar.page.link',
+    uriPrefix: 'https://progressbar.page.link',
     socialMetaTagParameters:  SocialMetaTagParameters(
       title: 'Copy of ' + project.name,
       description: 'Click the Link to clone the project!',
@@ -36,7 +36,7 @@ Future<Uri> CollabProjectLink(Project project, List<String> emails, ViewModel mo
   model.onUpdateProjectSettings(project); 
   final DynamicLinkParameters params = DynamicLinkParameters(
     link: Uri.parse("https://kashifhussa.in/collab?projectID=" + project.id), 
-    domain: 'progressbar.page.link',
+    uriPrefix: 'progressbar.page.link',
     socialMetaTagParameters:  SocialMetaTagParameters(
       title: 'Copy of ' + project.name,
       description: 'Click the Link to Join the Project!',
