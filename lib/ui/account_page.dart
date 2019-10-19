@@ -56,7 +56,7 @@ class _AccountPage extends State<AccountPage> {
       title: Text('How would you like to Share your Project?'),
       content: Text('Clone: Give them a Copy. \nCollaborate: Work Together.'),
       actions: <Widget>[
-        FlatButton(child: Text('Clone'), onPressed: () => CloneProjectLink(project).then((value) => Share.share(value.toString())),), 
+        FlatButton(child: Text('Clone'), onPressed: () => CloneProjectLink(project).then((value) {print(value); Share.share(value.toString());}),), 
         FlatButton(child: Text('Collab'), onPressed: (){
           Navigator.pop(context); 
           Navigator.push(context, MaterialPageRoute(builder: (context) => ShareProject(project)));

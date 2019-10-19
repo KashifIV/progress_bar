@@ -23,7 +23,9 @@ class _ProgressOverview extends State<ProgressOverview>{
   double currentState = 0;
   double nextState = 0;  
   double height = 80; 
+  Auth autho; 
   void initState(){
+    this.autho = widget.auth; 
     if (widget.project == null) {
       nextState = 1; 
       currentState = 1; 
@@ -124,7 +126,7 @@ class _ProgressOverview extends State<ProgressOverview>{
                 'Account', () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AccountPage(auth: widget.auth, onSignedOut: widget.onSignedOut,))), WhiteList.complete, model),
+                              builder: (context) => AccountPage(auth: this.autho, onSignedOut: widget.onSignedOut,))), WhiteList.complete, model),
               _line(),
               _infoBox(
                 (widget.project == null) ? 0 :widget.project.tasksToDo,
@@ -139,16 +141,16 @@ class _ProgressOverview extends State<ProgressOverview>{
               _line(),
               (widget.project == null) ? _infoBox(0, 'Days', Icons.settings, 'Settings', () =>  Navigator.push(
                 context, 
-                MaterialPageRoute(builder: (context) => SettingsPage(auth: widget.auth,))
+                MaterialPageRoute(builder: (context) => SettingsPage(auth: this.autho,))
               ), WhiteList.all, model) :
               (widget.project.deadline == null)? 
               _infoBox(DateTime.now().difference(widget.project.dateCreated).inDays, 'Days', Icons.settings, 'Settings', () => Navigator.push(
                 context, 
-                MaterialPageRoute(builder: (context) => SettingsPage(auth: widget.auth,))
+                MaterialPageRoute(builder: (context) => SettingsPage(auth: this.autho,))
                ), WhiteList.all, model): 
               _infoBox(widget.project.deadline.difference(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)).inDays, 'Days Left', Icons.settings, 'Settings', () =>  Navigator.push(
                 context, 
-                MaterialPageRoute(builder: (context) => SettingsPage(auth: widget.auth,))
+                MaterialPageRoute(builder: (context) => SettingsPage(auth: this.autho,))
               , ), WhiteList.all, model),
           ],),
 
