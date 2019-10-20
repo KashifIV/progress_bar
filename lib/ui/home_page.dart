@@ -146,7 +146,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver{
       children: <Widget>[
          _logo(model, context),
         SizedBox(
-            height: MediaQuery.of(context).size.height - 300,
+            height: MediaQuery.of(context).size.height - 327,
             width: MediaQuery.of(context).size.width,
             child:(projIndex != model.projects.length) ? CustomScrollView(
               slivers: <Widget>[EmergencyList(projIndex),TagList(projIndex),TaskList(projIndex, emergency: true,)],

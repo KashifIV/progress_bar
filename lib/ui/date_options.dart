@@ -25,7 +25,7 @@ class DateOptions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         FlatButton(
           onPressed: () => showDatePicker(
@@ -79,7 +79,8 @@ class DateOptions extends StatelessWidget {
               )
             ],
           ),
-        ),  
+        ), 
+        /* 
         Container(
           child: Row(
             children: <Widget>[
@@ -100,7 +101,7 @@ class DateOptions extends StatelessWidget {
             ],
           ),
         )
-
+*/
       ],
     );
   }

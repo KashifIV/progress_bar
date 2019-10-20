@@ -97,7 +97,7 @@ class Project {
   double getPercentComplete(String tag) {
     if (tag == null) {
       if (tasks == null || tasks.isEmpty) {
-        return 0.1;
+        return 0;
       }
       int count = 0;
       tasks.forEach((task) {

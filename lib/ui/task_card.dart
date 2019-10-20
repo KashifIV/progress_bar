@@ -150,6 +150,7 @@ class _TaskCard extends State<TaskCard>{
           title: Text(widget.task.name,
             style: TextStyle(
               fontSize: 18,
+              fontWeight: (widget.task.tags != null && widget.task.tags.any((test) => test == "Important")) ? FontWeight.bold : FontWeight.normal,
               decoration: (widget.task.complete) ? TextDecoration.lineThrough : TextDecoration.none,
               decorationColor: Colors.grey,
               //decorationStyle: TextDecorationStyle.solid,

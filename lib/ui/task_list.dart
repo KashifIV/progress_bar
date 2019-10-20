@@ -51,7 +51,7 @@ class TaskList extends StatelessWidget{
     }
     }
     if (a.isNotEmpty ) a.add(SizedBox(height: 30)); 
-    if (a.isEmpty && emergency) a.add(
+    if (a.isEmpty && emergency && model.projects[this.index].getPercentComplete(null) == 1) a.add(
       Center(
         child: Text(
           'Congratulations!\nAll your tasks are complete!',
